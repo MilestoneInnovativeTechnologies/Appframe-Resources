@@ -1,6 +1,15 @@
 <template>
     <div class="bslist_loading">
         <div class="card">
+            <div class="card-header">
+                <div class="float-right w-75">
+                    <ul class="nav nav-pills float-right card-header-pills">
+                        <li class="nav-item" v-for="n in range(5)">
+                            <a class="nav-link btn btn-secondary text-light mx-1 btn-xs" href="#">{{ random_text() }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-sm mb-0 table-hover">

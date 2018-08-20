@@ -1,15 +1,9 @@
 <template>
     <div class="clearfix">
-        <div :class="{ 'float-right':(right === '') }">
-            <ul class="nav nav-pills card-header-pills">
-                <li class="nav-item">
-                    <a class="nav-link active btn btn-info mx-1" href="#">Active</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active btn btn-info mx-1" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled active btn btn-info mx-1" href="#">Disabled</a>
+        <div :class="{ 'float-right':(right === ''),'w-75':true }">
+            <ul class="nav nav-pills card-header-pills float-right">
+                <li class="nav-item" v-for="(action,id) in actions" :key="['L'+dataItem,'A'+id].join('-')">
+                    <BTN size="xs" :type="action.type" :icon="action.icon" class="ml-1">{{ action.title }}</BTN>
                 </li>
             </ul>
         </div>
@@ -18,12 +12,16 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapActions } = createNamespacedHelpers('ACTN');
+    const { mapActions,mapGetters } = createNamespacedHelpers('ACTN');
     export default {
         name: "AppActions",
         props: ['right','dataType','dataItem'],
         methods: {
             ...mapActions(['initAction'])
+        },
+        computed: {
+            ...mapGetters({ 'getActions':'actions' }),
+            actions(){ return this.getActions(this.dataType,this.dataItem) }
         },
         created(){
             this.initAction({ type:this.dataType, item:this.dataItem });
