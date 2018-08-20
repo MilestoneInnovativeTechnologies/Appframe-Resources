@@ -1,0 +1,11 @@
+<template>
+    <input :type="type" :name="name" v-model.lazy="value" class="form-control" />
+</template>
+
+<script>
+    export default {
+        name: "BSFormFieldText",
+        props: ['type','name','dataFormId'],
+        mixins: [require('./../../../js/common/BSFormFieldValueMixin').fieldValueMixin]
+    }
+</script>
