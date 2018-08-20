@@ -1,5 +1,5 @@
 <template>
-    <input type="radio" name="selectList" class="form-check-input ml-3" :value="id" :id="id" @change="change" />
+    <input type="radio" name="selectList" class="form-check-input ml-2" :value="id" :id="id" @change="change" />
 </template>
 
 <script>
