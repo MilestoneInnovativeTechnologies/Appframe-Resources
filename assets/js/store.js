@@ -9,9 +9,10 @@ import SPST from './vuex/modules/serverpost';
 import CONT from './vuex/modules/content';
 import FORM from './vuex/modules/form';
 import LIST from './vuex/modules/list';
+import ACTN from './vuex/modules/appaction';
 
 const modules = {
-    MACT, AUTH, SPST, CONT, FORM, LIST
+    MACT, AUTH, SPST, CONT, FORM, LIST, ACTN
 };
 
 global.AppVuexStore = new Vuex.Store({

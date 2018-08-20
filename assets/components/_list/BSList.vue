@@ -1,6 +1,7 @@
 <template>
     <div class="bslist_loading">
         <div class="card">
+            <div class="card-header"><AppActions right data-type="list" :data-item="dataListId"></AppActions></div>
             <div class="card-body">
                 <form>
                     <div class="table-responsive">
