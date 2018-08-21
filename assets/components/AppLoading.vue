@@ -8,8 +8,8 @@
     import { mapState } from 'vuex';
     export default {
         name: "AppLoading",
-        computed:mapState({
-            loading: state => state.page.loading,
+        computed:mapState('PAGE',{
+            loading: state => state.loading,
             backdrop: function(){ return App[(this.loading?'open':'close')+'Backdrop']().hasClass('show'); }
         })
     }

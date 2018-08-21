@@ -28,7 +28,30 @@ const mutations = {
     },
 };
 
+const actions = {
+    init({ commit }){
+        axios({
+            method: 'post',
+            url: 'token/fresh',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+            }
+        }).then(function({ headers }){
+            commit('setToken',headers['x-appframe-token'])
+        });
+    },
+    requestInterceptor({ commit },config){
+        config.headers['X-Appframe-Token'] = state.token;
+        commit('updateConfig',config,{ root:true });
+    },
+    responseInterceptor({ commit },response){
+        commit('respStatus',response.status);
+        commit('setToken',response.headers['x-appframe-token']);
+    },
+};
+
 export default {
     namespaced: true,
-    state, getters, mutations
+    state, getters, mutations, actions
 }

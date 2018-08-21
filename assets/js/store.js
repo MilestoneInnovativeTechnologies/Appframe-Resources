@@ -5,7 +5,7 @@ import actions from './vuex/actions'
 
 const vuexModules = {
     'AUTH': './vuex/modules/authentication',
-    'FRSH': './vuex/modules/fresh',
+    'PAGE': './vuex/modules/page',
     'MACT': './vuex/modules/menuaction',
     'SPST': './vuex/modules/serverpost',
     'CONT': './vuex/modules/content',

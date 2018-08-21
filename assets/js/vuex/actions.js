@@ -3,7 +3,7 @@ export default {
 
     routeChange({ commit,dispatch }, payload){
         let name = payload.from.name || payload.to.name;
-        commit('setPageTitle',null); commit('setRouteParams',payload.to.params);
+        commit('setRouteParams',payload.to.params);
         if(name && routeActionMap[name]){
             let routeActions = _.isArray(routeActionMap[name]) ? routeActionMap[name] : [routeActionMap[name]];
             _.forEach(routeActions,action => dispatch(action,payload) );
@@ -11,17 +11,19 @@ export default {
         payload.next();
     },
 
-    serverRequestInterceptor({ commit,dispatch,getters },config){
-        config.headers['X-Appframe-Token'] = getters.authToken;
-        commit('pageLoading',true);
-        return config;
+    serverRequestInterceptor({ state,dispatch,commit },config){
+        let { actions,mutations } = state.serverInterceptors.request;
+        _.forEach(actions,function(action){ dispatch(action,config) });
+        _.forEach(mutations,function(mutation){ commit(mutation,config) });
     },
 
-    serverResponseInterceptor({ dispatch,commit },response){
-        commit('AUTH/respStatus',response.status); commit('AUTH/setToken',response.headers['x-appframe-token']); commit('pageLoading',false);
-        dispatch(itemTypeActionMap[response.data.request.item.type],response);
-        dispatch('SPST/processServerPostQueue');
-        return response;
+    serverResponseInterceptor({ state,dispatch,commit },response){
+        let { actions,mutations } = state.serverInterceptors.response;
+        _.forEach(actions,function(action){ dispatch(action,response) });
+        _.forEach(mutations,function(mutation){ commit(mutation,response) });
+        //dispatch(itemTypeActionMap[response.data.request.item.type],response);
+        //dispatch('SPST/processServerPostQueue');
+        //return response;
     },
 
 

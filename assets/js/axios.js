@@ -18,6 +18,17 @@ const axiosInstance = axios.create({
     },
     validateStatus: function(status){ return status < 500; }
 });
-axiosInstance.interceptors.request.use(function (config) {window.VueApp.$store.dispatch('serverRequestInterceptor', config).then((modifiedConfig)=>{ config = modifiedConfig; });return config;}, function (error) {window.VueApp.$store.commit('pageLoading',false); return Promise.reject(error);});
-axiosInstance.interceptors.response.use(function (response) {window.VueApp.$store.dispatch('serverResponseInterceptor', response).then((modifiedResponse)=>{ response = modifiedResponse; });return response;}, function (error) {window.VueApp.$store.commit('pageLoading',false); return Promise.reject(error);});
+
+const interceptorErrorFunction = function (error) { window.VueApp.$store.commit('PAGE/loading',false); return Promise.reject(error); };
+axiosInstance.interceptors.request.use(function (config) {
+    window.VueApp.$store.commit('updateConfig',config);
+    window.VueApp.$store.dispatch('serverRequestInterceptor', config).then(null);
+    return window.VueApp.$store.getters.config;
+    } ,interceptorErrorFunction);
+axiosInstance.interceptors.response.use(function (response) {
+    window.VueApp.$store.commit('updateResponse',response);
+    window.VueApp.$store.dispatch('serverResponseInterceptor', response).then(null);
+    return window.VueApp.$store.getters.response;
+    }, interceptorErrorFunction);
+
 global.server = (params = null) => axiosInstance.post('',params);

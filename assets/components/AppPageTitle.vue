@@ -7,8 +7,8 @@
     export default {
         name: "AppPageTitle",
         props: ['Action'],
-        computed: mapState({
-            title: state => state.page.title
+        computed: mapState('PAGE',{
+            title: state => state.title
         }),
     }
 </script>

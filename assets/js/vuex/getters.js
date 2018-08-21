@@ -1,7 +1,8 @@
-
 import * as VX from '../common/Vuex';
 
 export default {
+    config(state){ return state.serverConfig; },
+    response(state){ return state.serverResponse; },
     logout(state){ return state.logout_url },
     user(state){ return getUser(state.data); },
     groups(state){ return VX.getKeyedObject(state.data.groups,'id',['name','title']) },

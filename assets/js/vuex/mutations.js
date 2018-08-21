@@ -1,7 +1,12 @@
 export default {
 
-    setPageTitle(state,payload){ state.page.title = _.isObject(payload) ? payload.title : payload; },
-    pageLoading(state,payload){ state.page.loading = _.isObject(payload) ? (payload.loading || payload.status || payload.load) : payload; },
+    updateConfig(state,config){ state.serverConfig = Object.assign({},config); },
+    updateResponse(state,response){ state.serverResponse = Object.assign({},response); },
+    addRequestInterceptor(state,payload){ state.serverInterceptors.request[payload.type].push(payload.item); },
+    addResponseInterceptor(state,payload){ state.serverInterceptors.response[payload.type].push(payload.item); },
+
+    //setPageTitle(state,payload){ state.PAGE.title = _.isObject(payload) ? payload.title : payload; },
+    //pageLoading(state,payload){ state.PAGE.loading = _.isObject(payload) ? (payload.loading || payload.status || payload.load) : payload; },
 
     setRouteParams(state, payload) { _.merge(state.request.head.route_params, payload); },
     setRequestData(state,data){ _.merge(state.request.data, data); },

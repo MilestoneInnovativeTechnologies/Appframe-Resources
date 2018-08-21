@@ -9,7 +9,6 @@ const state = {
 };
 
 const actions = {
-    init(){ console.log('CONT action init') },
     setContentDetails({ rootGetters,commit },payload){
         let action = payload.to.params.Action,
             methodObj = rootGetters.actions[action].method,
@@ -24,7 +23,6 @@ const actions = {
 };
 
 const mutations = {
-    init(){ console.log('CONT mutate init') },
     updateActive(state,type){ state.type = type },
     setItem(state,item){ state.item = item },
 };

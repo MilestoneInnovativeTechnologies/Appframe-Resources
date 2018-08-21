@@ -15,11 +15,11 @@ global.AppVueRouter = new VueRouter({
     mode: 'history',
     linkActiveClass: 'has-active'
 });
-AppVueRouter.beforeEach((to, from, next)=>{
-    let type = 'routeChange', payload = { to, from, next, type },
-        CallVueAppStoreAction = function(payload){
-            if(window.VueApp && window.VueApp.$store.getters.authToken) return window.VueApp.$store.dispatch(payload);
-            setTimeout(CallVueAppStoreAction,400,payload);
-        };
-    CallVueAppStoreAction(payload);
-});
+// AppVueRouter.beforeEach((to, from, next)=>{
+//     let type = 'routeChange', payload = { to, from, next, type },
+//         CallVueAppStoreAction = function(payload){
+//             if(window.VueApp && window.VueApp.$store.getters.authToken) return window.VueApp.$store.dispatch(payload);
+//             setTimeout(CallVueAppStoreAction,400,payload);
+//         };
+//     CallVueAppStoreAction(payload);
+// });

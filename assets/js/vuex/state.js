@@ -1,8 +1,3 @@
-const page = {
-    title: null,
-    loading: false,
-};
-
 const request_items = [
     'action', //Requesting Action
     'type', //Requesting Content type ex: Form, List, Data
@@ -36,7 +31,13 @@ const request = {
 };
 
 export default {
-    page, request_items, request
+    request_items, request,
+    serverConfig: {},
+    serverResponse: {},
+    serverInterceptors: {
+        request: { mutations: [], actions: [] },
+        response: { mutations: [], actions: [] }
+    },
 }
 
 function requestItemObject(){

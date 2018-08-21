@@ -21,9 +21,13 @@ global.VueApp = new Vue({
     created(){
         let vuex = this.$store;
         _.forEach(this.$store._modulesNamespaceMap,function(Obj,Module){
-            let init = Module + 'init';
-            if(vuex._actions[init]) vuex.dispatch(init).then(null);
-            if(vuex._mutations[init]) vuex.commit(init);
+            let init = Module + 'init'; if(vuex._actions[init]) vuex.dispatch(init).then(null); if(vuex._mutations[init]) vuex.commit(init);
+            let reqIntr = Module + 'requestInterceptor';
+            if(vuex._actions[reqIntr]) vuex.commit('addRequestInterceptor',{ type:'actions',item:reqIntr });
+            if(vuex._mutations[reqIntr]) vuex.commit('addRequestInterceptor',{ type:'mutations',item:reqIntr });
+            let resIntr = Module + 'responseInterceptor';
+            if(vuex._actions[resIntr]) vuex.commit('addResponseInterceptor',{ type:'actions',item:resIntr });
+            if(vuex._mutations[resIntr]) vuex.commit('addResponseInterceptor',{ type:'mutations',item:resIntr });
         });
     },
 });
