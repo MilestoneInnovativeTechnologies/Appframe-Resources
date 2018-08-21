@@ -12,7 +12,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" @click="cancelAuthWarning(200)">Cancel</button>
-                    <a :href="logout" class="btn btn-info">Proceed to Login</a>
+                    <a v-if="extra && extra === 'login'" :href="logout" class="btn btn-info">Proceed to Login</a>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
     export default {
         name: "AuthWarning",
         computed:{
-            ...mapGetters('AUTH',['status','title','description']),
+            ...mapGetters('AUTH',['status','title','description','extra']),
             ...mapState({
                 login:'login_url', logout:'logout_url'
             })

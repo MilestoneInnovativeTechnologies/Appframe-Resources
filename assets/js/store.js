@@ -3,16 +3,19 @@ import getters from './vuex/getters'
 import mutations from './vuex/mutations'
 import actions from './vuex/actions'
 
-import MACT from './vuex/modules/menuaction';
-import AUTH from './vuex/modules/authentication';
-import SPST from './vuex/modules/serverpost';
-import CONT from './vuex/modules/content';
-import FORM from './vuex/modules/form';
-import LIST from './vuex/modules/list';
-import ACTN from './vuex/modules/appaction';
+const vuexModules = {
+    'AUTH': './vuex/modules/authentication',
+    'FRSH': './vuex/modules/fresh',
+    'MACT': './vuex/modules/menuaction',
+    'SPST': './vuex/modules/serverpost',
+    'CONT': './vuex/modules/content',
+    'FORM': './vuex/modules/form',
+    'LIST': './vuex/modules/list',
+    'ACTN': './vuex/modules/appaction',
+};
 
 const modules = {
-    MACT, AUTH, SPST, CONT, FORM, LIST, ACTN
+    ..._.mapValues(vuexModules,(Path) => require(Path + '.js').default)
 };
 
 global.AppVuexStore = new Vuex.Store({

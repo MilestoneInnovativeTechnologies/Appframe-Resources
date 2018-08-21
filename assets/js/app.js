@@ -17,6 +17,13 @@ global.VueApp = new Vue({
     el: '#app',
     store: AppVuexStore,
     router: AppVueRouter,
-    created(){ token.post('fresh'); },
-    beforeCreate(){ $("#slow_connection_page_loading").remove(); }
+    beforeCreate(){ $("#slow_connection_page_loading").remove(); },
+    created(){
+        let vuex = this.$store;
+        _.forEach(this.$store._modulesNamespaceMap,function(Obj,Module){
+            let init = Module + 'init';
+            if(vuex._actions[init]) vuex.dispatch(init).then(null);
+            if(vuex._mutations[init]) vuex.commit(init);
+        });
+    },
 });

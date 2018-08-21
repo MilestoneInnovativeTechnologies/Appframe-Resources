@@ -6,12 +6,6 @@ const components = {
 
 const props = new Object({ ..._.mapValues(components,()=>true) });
 
-const menuActionBeforeEnter = function(to, from, next){
-    console.log('menuActionBeforeEnter => Called');
-    let type = 'menuActionTriggered', payload = { to, from, next, type };
-    window.AppVuexStore.dispatch(payload);
-};
-
 const routes = [
     { path: '/action/:Action', name: 'menu-action', props, components }
 ];

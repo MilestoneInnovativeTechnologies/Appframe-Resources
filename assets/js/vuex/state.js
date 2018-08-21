@@ -32,6 +32,7 @@ const request = {
     },
     item: requestItemObject(),//_(request_items).mapKeys(v => v).mapValues(() => null).value(),
     data: {}, //User submitted data, name:value pair.
+    action: null, //All server communications entry point, action must be set.
 };
 
 export default {
