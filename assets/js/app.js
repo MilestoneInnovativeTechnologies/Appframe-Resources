@@ -19,15 +19,23 @@ global.VueApp = new Vue({
     router: AppVueRouter,
     beforeCreate(){ $("#slow_connection_page_loading").remove(); },
     created(){
-        let vuex = this.$store;
-        _.forEach(this.$store._modulesNamespaceMap,function(Obj,Module){
+        let vuex = this.$store, checks = ['_actions','_mutations'], items = {
+            'requestInterceptor': { action:'addInterceptor',type:'request' },
+            'responseInterceptor': { action:'addInterceptor',type:'response' },
+            'beforeEachRoute': { action:'addRouteHook',type:'beforeEach' },
+        };
+        _.forEach(this.$store._modulesNamespaceMap,function(Obj,Module) {
             let init = Module + 'init'; if(vuex._actions[init]) vuex.dispatch(init).then(null); if(vuex._mutations[init]) vuex.commit(init);
-            let reqIntr = Module + 'requestInterceptor';
-            if(vuex._actions[reqIntr]) vuex.commit('addRequestInterceptor',{ type:'actions',item:reqIntr });
-            if(vuex._mutations[reqIntr]) vuex.commit('addRequestInterceptor',{ type:'mutations',item:reqIntr });
-            let resIntr = Module + 'responseInterceptor';
-            if(vuex._actions[resIntr]) vuex.commit('addResponseInterceptor',{ type:'actions',item:resIntr });
-            if(vuex._mutations[resIntr]) vuex.commit('addResponseInterceptor',{ type:'mutations',item:resIntr });
+            if(vuex.state[_.replace(Module,"/",'')] && vuex.state[_.replace(Module,"/",'')].handler) _.forEach(vuex.state[_.replace(Module,"/",'')].handler,function(item,type){ vuex.commit('addHandler',{ type,item,module:Module }) });
+            _.forEach(items, function ({action, type}, mItem) {
+                let item = Module + mItem;
+                _.forEach(checks, function (check) {
+                    if (vuex[check][item]){
+                        vuex.commit(action, {type, item});
+                        return false;
+                    }
+                })
+            });
         });
     },
 });

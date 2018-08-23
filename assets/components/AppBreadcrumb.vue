@@ -14,11 +14,11 @@
 <script>
     export default {
         name: "AppBreadcrumb",
-        props: ['Action'],
+        props: ['action'],
         computed:{
-            action(){ return this.$store.getters.actions[this.Action] },
-            resource(){ return this.$store.getters.resources[this.action.resource] },
-            actionTitle(){ return this.action.title },
+            Action(){ return this.$store.getters.actions[this.action] },
+            resource(){ return this.$store.getters.resources[this.Action.resource] },
+            actionTitle(){ return this.Action.title },
             list(){ return [this.resource,this.actionTitle] }
         }
     }

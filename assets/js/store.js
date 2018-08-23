@@ -4,18 +4,20 @@ import mutations from './vuex/mutations'
 import actions from './vuex/actions'
 
 const vuexModules = {
-    'AUTH': './vuex/modules/authentication',
-    'PAGE': './vuex/modules/page',
-    'MACT': './vuex/modules/menuaction',
-    'SPST': './vuex/modules/serverpost',
-    'CONT': './vuex/modules/content',
-    'FORM': './vuex/modules/form',
-    'LIST': './vuex/modules/list',
-    'ACTN': './vuex/modules/appaction',
+    'AUTH': 'authentication',
+    'PAGE': 'page',
+    'RSLV': 'resolve',
+    'SRVR': 'server',
+
+    'MACT': 'menuaction',
+    'CONT': 'content',
+    'FORM': 'form',
+    'LIST': 'list',
+    'ACTN': 'appaction',
 };
 
 const modules = {
-    ..._.mapValues(vuexModules,(Path) => require(Path + '.js').default)
+    ..._.mapValues(vuexModules,(Path) => require('./vuex/modules/' + Path + '.js').default)
 };
 
 global.AppVuexStore = new Vuex.Store({

@@ -1,41 +1,38 @@
-
 export default {
 
-    routeChange({ commit,dispatch }, payload){
-        let name = payload.from.name || payload.to.name;
-        commit('setRouteParams',payload.to.params);
-        if(name && routeActionMap[name]){
-            let routeActions = _.isArray(routeActionMap[name]) ? routeActionMap[name] : [routeActionMap[name]];
-            _.forEach(routeActions,action => dispatch(action,payload) );
-        }
-        payload.next();
+    serverRequestInterceptor({ state,dispatch },config){
+        let methods = state.serverInterceptors.request;
+        _.forEach(methods,function(method){ dispatch('runModuleMethod',{ method,payload:config }) });
     },
 
-    serverRequestInterceptor({ state,dispatch,commit },config){
-        let { actions,mutations } = state.serverInterceptors.request;
-        _.forEach(actions,function(action){ dispatch(action,config) });
-        _.forEach(mutations,function(mutation){ commit(mutation,config) });
+    serverResponseInterceptor({ state,dispatch },response){
+        let methods = state.serverInterceptors.response;
+        _.forEach(methods,function(method){ dispatch('runModuleMethod',{ method,payload:response }) });
     },
 
-    serverResponseInterceptor({ state,dispatch,commit },response){
-        let { actions,mutations } = state.serverInterceptors.response;
-        _.forEach(actions,function(action){ dispatch(action,response) });
-        _.forEach(mutations,function(mutation){ commit(mutation,response) });
-        //dispatch(itemTypeActionMap[response.data.request.item.type],response);
-        //dispatch('SPST/processServerPostQueue');
-        //return response;
+    routeHook({ state,dispatch,commit },payload){
+        commit('updateRoute',payload);
+        let methods = state.routeHooks[payload.type];
+        _.forEach(methods,function(method){ dispatch('runModuleMethod',{ method,payload }) });
+        if(_.isEmpty(methods)) payload.next();
     },
 
+    handleResponseData({ state,dispatch },data){
+        _.forEach(_.keys(data),function(prop){
+            if(state.handler[prop] && !_.isEmpty(state.handler[prop])) {
+                let payload = { data }; payload[prop] = data[prop];
+                _.forEach(state.handler[prop], (method) => dispatch('runModuleMethod', { method, payload }))
+            }
+        })
+    },
 
+    runModuleMethod({ dispatch,commit },{ method,payload }){
+        if(this._actions[method]) dispatch(method,payload);
+        else if(this._mutations[method]) commit(method,payload)
+    },
+
+    post({ dispatch },request){
+        dispatch('SRVR/post',request);
+    },
 
 };
-
-let routeActionMap = {
-    'menu-action': ['MACT/prepareAndSetRequest','CONT/setContentDetails']
-};
-
-let itemTypeActionMap = {
-    'Form': 'FORM/newItem',
-    'List': 'LIST/mergeList',
-};
-

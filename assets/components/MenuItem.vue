@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{ name:'menu-action',params:{ Action:action } }" tag="li" class="menu-item">
+    <router-link :to="{ name:'menu-action',params:{ action:action } }" tag="li" class="menu-item">
         <a class="menu-link"><slot></slot></a>
     </router-link>
 </template>

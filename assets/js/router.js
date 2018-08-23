@@ -7,7 +7,7 @@ const components = {
 const props = new Object({ ..._.mapValues(components,()=>true) });
 
 const routes = [
-    { path: '/action/:Action', name: 'menu-action', props, components }
+    { path: '/action/:action', name: 'menu-action', props, components }
 ];
 
 global.AppVueRouter = new VueRouter({
@@ -15,11 +15,11 @@ global.AppVueRouter = new VueRouter({
     mode: 'history',
     linkActiveClass: 'has-active'
 });
-// AppVueRouter.beforeEach((to, from, next)=>{
-//     let type = 'routeChange', payload = { to, from, next, type },
-//         CallVueAppStoreAction = function(payload){
-//             if(window.VueApp && window.VueApp.$store.getters.authToken) return window.VueApp.$store.dispatch(payload);
-//             setTimeout(CallVueAppStoreAction,400,payload);
-//         };
-//     CallVueAppStoreAction(payload);
-// });
+AppVueRouter.beforeEach(function(to, from, next){
+    let payload = { type:'beforeEach', to, from, next };
+    CallVueAppStoreAction = function(payload){
+        if(window.VueApp && window.VueApp.$store) return window.VueApp.$store.dispatch('routeHook',payload);
+        setTimeout(CallVueAppStoreAction,400,payload);
+    };
+    CallVueAppStoreAction(payload);
+});
