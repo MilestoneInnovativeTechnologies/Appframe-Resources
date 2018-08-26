@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="btn" :class="cls" v-on="listeners" :disabled="disabled"><icon class="mr-1" v-if="ipp">{{ icon }}</icon><slot></slot><icon class="ml-1" v-if="iap">{{ icon }}</icon></button>
+    <button role="button" class="btn" :class="cls" v-on="listeners" :disabled="disabled"><icon class="mr-1" v-if="ipp">{{ icon }}</icon><slot></slot><icon class="ml-1" v-if="iap">{{ icon }}</icon></button>
 </template>
 
 <script>

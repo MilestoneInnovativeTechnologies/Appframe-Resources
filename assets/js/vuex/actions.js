@@ -35,4 +35,8 @@ export default {
         dispatch('SRVR/post',request);
     },
 
+    navigate(ctx,{ name,params }){
+        VueApp.$router.push({ name,params })
+    }
+
 };

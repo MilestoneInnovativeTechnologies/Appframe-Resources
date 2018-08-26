@@ -3,7 +3,7 @@
         <div class="float-right w-75">
             <ul class="nav nav-pills card-header-pills float-right">
                 <li class="nav-item" v-for="(action,id) in actions" :key="['L'+dataItemId,'A'+id].join('-')">
-                    <ListAction :data-list-id="dataItemId" v-bind="action"></ListAction>
+                    <ListAction :data-list-id="dataItemId" :data-action="id" v-bind="action"></ListAction>
                 </li>
             </ul>
         </div>

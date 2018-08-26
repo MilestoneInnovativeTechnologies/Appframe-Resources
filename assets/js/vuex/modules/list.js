@@ -22,12 +22,16 @@ const actions = {
             if(action.lists && !_.isEmpty(action.lists)){
                 _.forEach(action.lists,function(list){
                     if(list.resource_list == id){
-                        actions.push(list.resource_action)
+                        actions.push(list.resource_action);
                     }
                 })
             }
         });
         commit('setActions',{ list:id,actions })
+    },
+    action({ dispatch },params){
+        let payload = { name:'list-action',params };
+        dispatch('navigate',payload,{ root:true });
     },
 };
 

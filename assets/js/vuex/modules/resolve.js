@@ -8,14 +8,14 @@ const state = {
 const actions = {
     beforeEachRoute({ commit,dispatch },{ to }){
         if(!to.params.action) return;
-        dispatch('resolveAction',to.params.action);
+        dispatch(_.camelCase('resolve-' + to.name),to.params);
         commit('proceedRoute',null,{ root:true })
     },
-    resolveAction({ state,dispatch },action){
-        if(!state.actions[action]) return dispatch('fetchAction',action);
+    resolveMenuAction({ state,dispatch },{ action }){
+        if(!state.actions[action]) dispatch('post',{ action },{ root:true })
     },
-    fetchAction({ dispatch },action){
-        dispatch('post',{ action },{ root:true })
+    resolveListAction({ state,dispatch },{ action,id }){
+        if(!state.actions[action]) dispatch('post',{ action,id },{ root:true })
     },
 };
 
