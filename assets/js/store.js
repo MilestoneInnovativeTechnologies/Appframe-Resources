@@ -8,12 +8,12 @@ const vuexModules = {
     'PAGE': 'page',
     'RSLV': 'resolve',
     'SRVR': 'server',
-
-    'MACT': 'menuaction',
     'CONT': 'content',
     'FORM': 'form',
     'LIST': 'list',
-    'ACTN': 'appaction',
+
+    // 'MACT': 'menuaction',
+    // 'ACTN': 'appaction',
 };
 
 const modules = {

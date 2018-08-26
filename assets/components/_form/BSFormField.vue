@@ -12,12 +12,12 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     export default {
         name: "BSFormField",
         inheritAttrs: false,
         props: {
             inline: { default: false },
-            //invalid: null,
             prepend: { default: false }, append: { default: false },
             prependIcon: { default: false }, appendIcon: { default: false },
         },
@@ -27,7 +27,8 @@
             inputGroup(){ return this.prepend || this.append || this.prependIcon || this.appendIcon },
             cntComponent(){ return (this.inputGroup) ? 'BSFormFieldInputGroup' : 'BSFormFieldControl' },
             props(){ return _.merge({},this.$attrs,this.$props); },
-            invalid(){ return this.$store.getters['FORM/invalid'](this.props['data-form-id'],this.props.name) }
+            ...mapGetters('FORM',{ getInvalid:'invalid' }),
+            invalid(){ return this.getInvalid(this.props['data-form-id'],this.props.name) }
         }
     }
 </script>

@@ -7,7 +7,7 @@ const components = {
 const props = new Object({ ..._.mapValues(components,()=>true) });
 
 const routes = [
-    { path: '/action/:action', name: 'menu-action', props, components }
+    { path: '/action/:action', meta:{ target:'AppContent' }, name: 'menu-action', props, components },
 ];
 
 global.AppVueRouter = new VueRouter({

@@ -1,4 +1,4 @@
-<b>The following methods should be either in mutations to commit or in actions to dispatch</b>
+<h1>The following methods should be either in mutations to commit or in actions to dispatch</h1>
 
 **init**
 
@@ -24,3 +24,15 @@ Once modified, it should commit by calling updateResponse mutation in root</p>
 <p>This method received payload with properties to,from,next.</p>
 <p>Once done, must commit proceedRoute in root</p>
 <p>Ex: commit('proceedRoute',null,{ root:true });</p>
+
+<h1>The following methods should be in state</h1>
+
+**handler**
+
+<p>Response handler.</p>
+<p>This could be defined as object with key as response key and value as method.</p>
+<p>Ex: handler: { 'Resolve':'storeResolve' }</p>
+<p>From the above example, where ever a response have a key 'Resolve', then 'storeResolve' action or mutation get triggered.</p>
+<p>The method can be array also if have multiple handler.</p>
+<p>Method invoked with payload containts data as complete data, and triggered key in same name</p>
+

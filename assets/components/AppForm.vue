@@ -1,27 +1,20 @@
 <template>
     <transition name="fade">
         <FormLoading v-if="!form"></FormLoading>
-        <BSForm v-else :name="form.name" :fields="form.fields" :data-form-id="formId"></BSForm>
+        <BSForm v-else :name="form.name" :fields="form.fields" :data-form-id="id" :data-action-text="form.action_text"></BSForm>
     </transition>
 </template>
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters,mapActions } = createNamespacedHelpers('FORM');
+    const { mapGetters } = createNamespacedHelpers('FORM');
     export default {
         name: "AppForm",
-        computed: mapGetters(['form','formId']),
-        methods: {
-            ...mapActions(['setComponent','getForm']),
-            initForm(){ this.$store.commit('setPageTitle',this.form.title) }
-        },
-        created(){
-            this.setComponent();
-            if(!this.form) this.getForm();
-            else this.initForm();
-        },
-        updated(){
-            if(this.form) this.initForm();
+        props: ['dataIds'],
+        computed: {
+            id(){ return this.dataIds['idn1'] },
+            ...mapGetters({ getForm:'form' }),
+            form(){ return this.getForm(this.id) },
         }
     }
 </script>

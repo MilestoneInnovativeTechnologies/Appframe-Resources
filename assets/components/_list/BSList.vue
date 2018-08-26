@@ -1,13 +1,13 @@
 <template>
     <div class="bslist_loading">
         <div class="card">
-            <div class="card-header"><AppActions right data-type="list" :data-item="dataListId"></AppActions></div>
+            <div class="card-header"><AppActions data-type="list" :data-item="dataListId"></AppActions></div>
             <div class="card-body">
                 <form>
                     <div class="table-responsive">
                         <table class="table table-sm mb-0 table-hover">
-                            <BSListTHead :layout="Object.keys(layout)" :data-list-id="dataListId"></BSListTHead>
-                            <BSListTBody :columns="Object.values(layout)" :list="list" :data-list-id="dataListId"></BSListTBody>
+                            <BSListTHead :columns="Object.keys(layout)" :data-list-id="dataListId"></BSListTHead>
+                            <BSListTBody :columns="Object.values(layout)" :data="data" :data-list-id="dataListId"></BSListTBody>
                         </table>
                     </div>
                 </form>
@@ -19,6 +19,6 @@
 <script>
     export default {
         name: "BSList",
-        props: ['layout','list','dataListId']
+        props: ['layout','data','dataListId']
     }
 </script>

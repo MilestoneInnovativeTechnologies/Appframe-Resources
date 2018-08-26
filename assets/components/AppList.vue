@@ -1,31 +1,28 @@
 <template>
     <transition name="fade">
-        <ListLoading v-if="!list"></ListLoading>
-        <BSList v-else :data-list-id="listId" :layout="layout" :list="list"></BSList>
+        <ListLoading v-if="!data"></ListLoading>
+        <BSList v-else :data-list-id="id" :layout="layout" :data="data"></BSList>
     </transition>
 </template>
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters,mapActions } = createNamespacedHelpers('LIST');
+    const { mapActions,mapGetters } = createNamespacedHelpers('LIST');
     export default {
         name: "AppList",
+        props: ['dataIds'],
         computed: {
-            ...mapGetters(['listId','list','layout','details']),
+            id(){ return this.dataIds['idn1'] },
+            ...mapGetters({ getList:'list',getLayout:'layout' }),
+            data(){ return this.getList(this.id) },
+            layout(){ return this.getLayout(this.id) },
         },
         methods: {
-            ...mapActions(['setComponent','getList']),
-            initList(){ if(this.details && this.details.title) this.$store.commit('setPageTitle',this.details.title) }
+            ...mapActions({ updateList: 'update' }),
         },
         created(){
-            this.setComponent();
-            this.getList();
-            this.initList();
+            this.updateList(this.id);
         },
-        updated(){
-            this.initList();
-        }
-
     }
 </script>
 

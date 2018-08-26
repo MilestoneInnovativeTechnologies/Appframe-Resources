@@ -1,36 +1,21 @@
-const contentTypeComponentMap = {
-    'Form':'AppForm',
-    'List':'AppList'
-};
-
 const state = {
-    type: null,
-    item: null,
+    AppContent: null,
 };
 
 const actions = {
-    setContentDetails({ rootGetters,commit },payload){
-        let action = payload.to.params.Action,
-            methodObj = rootGetters.actions[action].method,
-            type = methodObj.method || methodObj.type,
-            item = methodObj.idn1;
-        commit('updateActive', type); commit('setItem', item);
-        commit('setRequestItems',{ type, item },{ root:true });
-    },
-    setRequests({ commit }){
-        commit({ type:'setRequest', request:{ head:{ source:{ component:'AppContent' } } } }, { root:true });
+    beforeEachRoute({ state,commit },{ to }){
+        if(to && to.meta && to.meta.target) commit('setContentAction',{ content:to.meta.target,action:to.params.action });
+        commit('proceedRoute',null,{ root:true });
     }
 };
 
 const mutations = {
-    updateActive(state,type){ state.type = type },
-    setItem(state,item){ state.item = item },
+    setContentAction(state,{ content,action }){ state[content] = action; }
 };
 
 const getters = {
-    type(state){ return state.type; },
-    item(state){ return state.item; },
-    component(state){ return contentTypeComponentMap[state.type]; }
+    resolution(state,getters,rootState,rootGetters){ return (action) => rootGetters.resolution(action); },
+    action(state){ return (target) => state[target]; }
 };
 
 export default {

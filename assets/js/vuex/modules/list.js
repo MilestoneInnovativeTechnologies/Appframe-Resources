@@ -1,50 +1,54 @@
 const state = {
-    store: {},
+    lists: {},
     detail: {},
     layout: {},
+    selected: {},
+    actions: {},
+    handler: {
+        'ListData': ['setDetail','setActions'],
+        'ListLayout': 'setLayout',
+        'List': 'mergeList'
+    }
 };
 
 const actions = {
-    setComponent({ commit }){
-        let type = 'setRequest',
-            request = { head: {source: { component: 'AppList'} } };
-        commit({ type, request }, { root:true });
+    update({ rootGetters,dispatch },id){
+        let action = rootGetters.criteriaAction({ type:'List',idn1:id });
+        dispatch('post',{ action,update:true },{ root:true });
     },
-    setRequestItems({ getters,commit }){
-        let item = getters.listId, type = 'List',force = (!getters.details || !getters.layout);
-        commit('setRequestItems', { item,type,force }, { root:true });
+    setActions({ rootGetters,commit },{ data }){
+        let id = _.keys(data.List)[0], actions = [];
+        _.forEach(rootGetters._actions,function(action){
+            if(action.lists && !_.isEmpty(action.lists)){
+                _.forEach(action.lists,function(list){
+                    if(list.resource_list == id){
+                        actions.push(list.resource_action)
+                    }
+                })
+            }
+        });
+        commit('setActions',{ list:id,actions })
     },
-    setRequestRelations({ commit },payload){
-        commit('setRequestRelations', payload, { root:true });
-    },
-    getList({ dispatch }){
-        dispatch('setRequestItems');
-        dispatch('SPST/postRequestServer', null, { root:true })
-    },
-
-    mergeList({ commit },{ data }){
-        if(data.ListData) commit('setDetail',data.ListData);
-        if(data.ListLayout) commit('setLayout',data.ListLayout);
-        let id = data.request.item.item, list = data.List[id];
-        commit('mergeList',{ id,list });
-    },
-
 };
 
 const mutations = {
-    mergeList(state,{ id,list }){
-        let Obj = {}; Obj[id] = []; if(!state.store[id]) state.store = Object.assign({},state.store,Obj);
-        if(_.isEmpty(list)) return; state.store[id] = Object.assign({},state.store[id],_.keyBy(list,'id'));
+    mergeList(state,{ List }){
+        let id = _.keys(List)[0], Obj = {}; Obj[id] = [];
+        if(!state.lists[id]) { state.lists = Object.assign({},state.lists,Obj); let selected = {}; selected[id] = null; state.selected = Object.assign({},state.selected,selected) }
+        if(_.isEmpty(List[id])) return; state.lists[id] = Object.assign({},state.lists[id],_.keyBy(List[id],'id'));
     },
-    setDetail(state,payload){ state.detail = Object.assign({},state.detail,payload); },
-    setLayout(state,payload){ state.layout = Object.assign({},state.layout,payload); },
+    setDetail(state,{ ListData }){ state.detail = Object.assign({},state.detail,ListData); },
+    setLayout(state,{ ListLayout }){ state.layout = Object.assign({},state.layout,ListLayout); },
+    setSelected(state,{ list,record }){ state.selected[list] = record; },
+    setActions(state,{ list,actions }){ let action = {}; action[list] = actions; state.actions = Object.assign({},state.actions,action) },
 };
 
 const getters = {
-    listId(state,getters,rootState,rootGetters){ return rootGetters['CONT/item'] },
-    list(state,getters){ return state.store[getters.listId] },
-    layout(state,getters){ return state.layout[getters.listId] },
-    details(state,getters){ return state.detail[getters.listId] },
+    list(state){ return (id) => state.lists[id] },
+    layout(state){ return (id) => state.layout[id] },
+    details(state){ return (id) => state.details[id] },
+    selected(state){ return (id) => state.selected[id] },
+    actions(state){ return (id) => state.actions[id] },
 };
 
 export default {

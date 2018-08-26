@@ -1,18 +1,18 @@
 <template>
-    <div class="appcontent"><component :is="component"></component></div>
+    <div class="appcontent"><component v-if="component" :is="component" :data-ids="idns"></component></div>
 </template>
 
 <script>
     import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('CONT');
+    const { mapState,mapGetters } = createNamespacedHelpers('CONT');
     export default {
         name: "AppContent",
-        beforeRouteUpdate(to,from,next){ this.setRequests({ to,from }); next(); },
-        beforeRouteEnter(to,from,next){ next(vm => vm.setRequests({ to,from })); },
         computed: {
-            ...mapGetters(['type','component']),
-        },
-        methods: mapActions(['setRequests']),
+            ...mapState({ action:'AppContent' }),
+            ...mapGetters(['resolution']),
+            component(){ return (this.resolution(this.action)) ? 'App' + this.resolution(this.action)['type'] : null },
+            idns(){ return (this.resolution(this.action)) ? _.omit(this.resolution(this.action),['type','method']): null },
+        }
     }
 </script>
 
