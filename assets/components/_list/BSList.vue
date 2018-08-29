@@ -1,5 +1,5 @@
 <template>
-    <div class="bslist_loading">
+    <div>
         <div class="card">
             <div class="card-header"><AppActions data-type="list" :data-item="dataListId"></AppActions></div>
             <div class="card-body">

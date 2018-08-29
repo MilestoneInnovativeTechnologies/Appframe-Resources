@@ -11,6 +11,7 @@ const vuexModules = {
     'CONT': 'content',
     'FORM': 'form',
     'LIST': 'list',
+    'DATA': 'data',
 
     // 'MACT': 'menuaction',
     // 'ACTN': 'appaction',
