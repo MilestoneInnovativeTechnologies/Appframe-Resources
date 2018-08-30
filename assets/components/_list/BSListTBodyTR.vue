@@ -1,7 +1,7 @@
 <template>
     <tr @click="clicked">
         <td><BSListSelectRadio :data-list-id="dataListId" :data-record-id="dataRecordId"></BSListSelectRadio></td>
-        <td v-for="(path,key) in columns" :key="['L'+dataListId,'R'+dataRecordId,key].join('-')">{{ data(path) }}</td>
+        <td v-for="(pathProps,key) in columns" :key="['L'+dataListId,'R'+dataRecordId,key].join('-')">{{ data(pathProps) }}</td>
     </tr>
 </template>
 
@@ -11,7 +11,8 @@
         name: "BSListTBodyTR",
         props: ['columns','record','dataListId','dataRecordId'],
         methods: {
-            data(path){ return _.get(this.record,path) },
+            data(pathProps){ return (pathProps.path) ? this.dataFromPath(pathProps.path,pathProps.field): _.get(this.record,pathProps.field); },
+            dataFromPath(path,field){ let initData = _.get(this.record,path); return (_.isArray(initData)) ? _.map(initData,field).join(', ') : _.get(initData,field); },
             ...mapMutations('LIST',['setSelected']),
             clicked(){ this.setSelected({ list:this.dataListId, record:this.dataRecordId }); this.$el.getElementsByTagName('input')[0].checked = true; }
         }

@@ -1,5 +1,5 @@
 <template>
-    <DataTemp></DataTemp>
+    <DataLoading></DataLoading>
 </template>
 
 <script>
