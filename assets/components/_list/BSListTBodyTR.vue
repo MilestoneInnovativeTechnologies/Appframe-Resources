@@ -1,5 +1,5 @@
 <template>
-    <tr @click="clicked">
+    <tr @click="clicked" style="cursor: pointer">
         <td><BSListSelectRadio :data-list-id="dataListId" :data-record-id="dataRecordId"></BSListSelectRadio></td>
         <td v-for="(pathProps,key) in columns" :key="['L'+dataListId,'R'+dataRecordId,key].join('-')">{{ data(pathProps) }}</td>
     </tr>

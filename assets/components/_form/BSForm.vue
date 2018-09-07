@@ -5,7 +5,7 @@
             <form :name="name">
                 <template v-if="formLayout">
                     <div class="form-row" v-for="rows in formLayout">
-                        <div v-for="(span,fName) in rows" :class="'col-md-'+span">
+                        <div v-for="(span,fName) in rows" :class="spanClass(span)">
                             <BSFormField :key="[name,fName].join('-')" v-bind="fields[fName]" :data-form-name="name" :data-form-id="dataFormId"></BSFormField>
                         </div>
                     </div>
@@ -46,6 +46,7 @@
                 if(!_.isEmpty(cols)) rows.push(cols);
                 return rows;
             },
+            spanClass(span){ let cls = 'col'; return (span && _.toSafeInteger(span) > 0) ? [cls,'md',span].join('-') : cls; }
         },
     }
 </script>
