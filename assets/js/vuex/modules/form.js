@@ -4,6 +4,7 @@ const state = {
         Validation: 'newValidation',
     },
     forms: {},
+    layout:{},
     data: {},
     invalids: {},
     submitting:{},
@@ -14,8 +15,8 @@ const actions = {
     newForm({ commit },{ Form }){
         let id = _.keys(Form)[0], form = _.pick(Form[id],['name','title','action_text']);
         form['fields'] = getFieldExtract(Form[id].fields);
-        let data = getValueExtract(form['fields']), invalids = getInvalidExtract(form['fields']),
-            type = 'storeForm', payload = { type,id,form,data,invalids };
+        let data = getValueExtract(form['fields']), invalids = getInvalidExtract(form['fields']), layout = getLayoutExtract(Form[id]['layout'],Form[id]['fields']),
+            type = 'storeForm', payload = { type,id,form,data,invalids,layout };
         commit(payload);
     },
 
@@ -46,9 +47,10 @@ const actions = {
 
 const mutations = {
     storeForm(state,payload){
-        let form = {}, data = {}, invalids = {}, submitting = {};
-        form[payload.id] = payload.form; data[payload.id] = payload.data; invalids[payload.id] = payload.invalids; submitting[payload.id] = false;
+        let form = {}, layout = {}, data = {}, invalids = {}, submitting = {};
+        form[payload.id] = payload.form; layout[payload.id] = payload.layout; data[payload.id] = payload.data; invalids[payload.id] = payload.invalids; submitting[payload.id] = false;
         state.forms = Object.assign({},state.forms,form);
+        state.layout = Object.assign({},state.layout,layout);
         state.data = Object.assign({},state.data,data);
         state.invalids = Object.assign({},state.invalids,invalids);
         state.submitting = Object.assign({},state.submitting,submitting);
@@ -67,6 +69,7 @@ const mutations = {
 
 const getters = {
     form(state){ return (id) => state.forms[id] },
+    layout(state){ return (id) => state.layout[id] },
     value(state){ return (formId,fieldName) => state.data[formId][fieldName] },
     invalid(state,getters){
         return function(formId,fieldName){
@@ -116,6 +119,8 @@ function getInvalidExtract(fields){
     });
 }
 
-function getSubmittingExtract(id){
-    let submitting = {}; submitting[id] = false; return submitting;
+function getLayoutExtract(layout,fields){
+    if(_.isEmpty(layout)) return [];
+    let Fields = _(fields).keyBy('id').mapValues('name').value();
+    return _(layout).keyBy(function(l){ return Fields[l.form_field] }).mapValues('colspan').value();
 }

@@ -3,7 +3,14 @@
         <div v-show="submitting" :style="{ opacity:0.5 }" style="position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; background-color: #F5F5F5; opacity: 0; z-index: 100; transition: opacity 0.2s linear"></div>
         <div class="card-body">
             <form :name="name">
-                <BSFormField v-for="(props,fieldName) in fields" :key="[name,fieldName].join('-')" v-bind="props" :data-form-name="name" :data-form-id="dataFormId"></BSFormField>
+                <template v-if="formLayout">
+                    <div class="form-row" v-for="rows in formLayout">
+                        <div v-for="(span,fName) in rows" :class="'col-md-'+span">
+                            <BSFormField :key="[name,fName].join('-')" v-bind="fields[fName]" :data-form-name="name" :data-form-id="dataFormId"></BSFormField>
+                        </div>
+                    </div>
+                </template>
+                <BSFormField v-else v-for="(props,fieldName) in fields" :key="[name,fieldName].join('-')" v-bind="props" :data-form-name="name" :data-form-id="dataFormId"></BSFormField>
             </form>
             <div class="card-title clearfix">
                 <div class="float-right">
@@ -19,8 +26,9 @@
     const { mapActions } = createNamespacedHelpers('FORM');
     export default {
         name: "BSForm",
-        props: ['name','fields','dataFormId','dataActionText'],
+        props: ['name','fields','dataFormId','dataActionText','layout'],
         computed: {
+            formLayout(){ let layout = this.getLayout(); return _.isEmpty(layout) ? false : layout },
             submitting(){ return this.$store.state.FORM.submitting[this.dataFormId] },
         },
         methods: {
@@ -28,7 +36,16 @@
             submit(){
                 let vm = this, payload = { form:vm.dataFormId };
                 vm.formSubmit(payload);
-            }
-        }
+            },
+            getLayout(){
+                let rows = [], cols = new Object({}), count = 0;
+                _.each(this.layout,function(span,name){
+                    if(count + parseInt(span) > 12) { rows.push(cols); cols = new Object({}); count = 0; }
+                    cols = Object.assign({},cols,_.fromPairs([[name,span]])); count += parseInt(span);
+                });
+                if(!_.isEmpty(cols)) rows.push(cols);
+                return rows;
+            },
+        },
     }
 </script>
