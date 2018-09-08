@@ -21,11 +21,10 @@ const actions = {
 const mutations = {
     addData(state,{ Data }){
         let id = _.keys(Data)[0], Obj = {}; Obj[id] = {};
-        if(!state.store[id]) { state.store = Object.assign({},state.store,Obj); }
-        if(!state.updated[id]) { state.updated = Object.assign({},state.updated,Obj); }
-        if(_.isEmpty(Data[id])) return;
-        state.store[id] = _.fromPairs([[Data[id].id,Data[id]]]);
-        state.updated[id] = _.fromPairs([[Data[id].id,Data[id].updated_at]]);
+        if(!state.store[id]) { state.store = Object.assign({},state.store,Obj); state.updated = Object.assign({},state.updated,Obj); }
+        if(_.isEmpty(Data[id])) return; let recId = Data[id].id;
+        state.store[id] = Object.assign({},state.store[id],_.fromPairs([[recId,Data[id]]]));
+        state.updated[id] = Object.assign({},state.updated[id],_.fromPairs([[recId,Data[id].updated_at]]));
     },
     addView(state,{ DataViewSection }){
         let id = _.keys(DataViewSection)[0], sections = getExtractSectionAndItems(DataViewSection[id]);
