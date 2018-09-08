@@ -1,26 +1,59 @@
 const state = {
     store: {},
+    updated: {},
+    sections: {},
     handler: {
-        'Data': 'addData'
+        'Data': 'addData',
+        'DataViewSection' : 'addView'
     }
 };
 
 const actions = {
-
+    fetch({ dispatch },request){
+        dispatch('post',request,{ root:true })
+    },
+    update({ getters,dispatch },request){
+        request['last_updated'] = getters.updated(request.data,request.id);
+        dispatch('post',request,{ root:true });
+    }
 };
 
 const mutations = {
     addData(state,{ Data }){
         let id = _.keys(Data)[0], Obj = {}; Obj[id] = {};
         if(!state.store[id]) { state.store = Object.assign({},state.store,Obj); }
-        if(_.isEmpty(Data[id])) return; let data = {}; data[Data[id].id] = Data[id]; state.store[id] = Object.assign({},state.store[id],data);
+        if(!state.updated[id]) { state.updated = Object.assign({},state.updated,Obj); }
+        if(_.isEmpty(Data[id])) return;
+        state.store[id] = _.fromPairs([[Data[id].id,Data[id]]]);
+        state.updated[id] = _.fromPairs([[Data[id].id,Data[id].updated_at]]);
+    },
+    addView(state,{ DataViewSection }){
+        let id = _.keys(DataViewSection)[0], sections = getExtractSectionAndItems(DataViewSection[id]);
+        if(!state.sections[id]) { state.sections = Object.assign({},state.sections,_.fromPairs([[id,{}]])); }
+        state.sections[id] = sections;
     },
 };
 
 const getters = {
+    record(state){ return (data,id) => state.store[data][id] },
+    updated(state){ return (data,id) => state.updated[data][id] },
+    section(state){ return (data) => state.sections[data] },
 };
 
 export default {
     namespaced: true,
     state, getters, actions, mutations
+}
+
+function getExtractSectionAndItems(data) {
+    return _.map(data,function(obj){
+        let secObj = _.pick(obj,['title','title_field','colspan']);
+        secObj['relation'] = getRelationMethod(obj.relation);
+        let items = _(obj.items).keyBy('label').mapValues(function(itemObj){ obj = _.pick(itemObj,['attribute']);
+        obj.relation = getRelationMethod(itemObj.relation); return obj; }).value() ;
+        return Object.assign(secObj,{ items });
+    })
+}
+function getRelationMethod(relation){
+    return (relation) ? _.snakeCase(relation.method) : null;
 }
