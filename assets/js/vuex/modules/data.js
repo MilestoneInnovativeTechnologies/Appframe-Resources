@@ -28,8 +28,7 @@ const mutations = {
     },
     addView(state,{ DataViewSection }){
         let id = _.keys(DataViewSection)[0], sections = getExtractSectionAndItems(DataViewSection[id]);
-        if(!state.sections[id]) { state.sections = Object.assign({},state.sections,_.fromPairs([[id,{}]])); }
-        state.sections[id] = sections;
+        state.sections = Object.assign({},state.sections,_.fromPairs([[id,sections]]));
     },
 };
 

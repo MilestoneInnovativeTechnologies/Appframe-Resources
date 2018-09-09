@@ -1,6 +1,6 @@
 <template>
     <div v-if="sections" class="data-sections">
-        <BSDataSection v-for="(sec,index) in sections" v-bind="sec" :data-record="dataRecord" :key="['ds',index].join('-')"></BSDataSection>
+        <BSDataDeck v-for="(columns,index) in sections" :columns="columns" :data-record="dataRecord" :section="index" :key="['ds',index].join('-')"></BSDataDeck>
     </div>
     <div v-else class="display-4">No section defined</div>
 </template>
@@ -18,10 +18,10 @@
         },
         methods: {
             getSections(){
-                let rows = [], cols = new Object({}), count = 0;
+                let rows = [], cols = [], count = 0;
                 _.each(this.section,function(secObj){
-                    if(count + _.toSafeInteger(secObj.colspan) > 12) { rows.push(cols); cols = new Object({}); count = 0; }
-                    cols = Object.assign({},cols,secObj); count += _.toSafeInteger(secObj.colspan);
+                    if(count + _.toSafeInteger(secObj.colspan) > 12) { rows.push(cols); cols = []; count = 0; }
+                    cols.push(secObj); count += _.toSafeInteger(secObj.colspan);
                 });
                 if(!_.isEmpty(cols)) rows.push(cols);
                 return rows;
