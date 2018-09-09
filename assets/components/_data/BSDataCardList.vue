@@ -2,7 +2,7 @@
     <div class="table-responsive">
         <table class="table table-sm mb-0 table-bordered">
             <thead class="thead-light"><tr>
-                <th>#</th><th v-for="(hd,idx) in rows">{{ hd }}</th>
+                <th>#</th><th v-for="hd in rows">{{ hd }}</th>
             </tr></thead>
             <BSDataCardListItems :cols="cols" :record="record"></BSDataCardListItems>
         </table>

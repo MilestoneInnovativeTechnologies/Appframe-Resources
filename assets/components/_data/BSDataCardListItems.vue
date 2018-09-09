@@ -1,6 +1,6 @@
 <template>
     <tbody><tr v-for="(item,idx) in record">
-        <th>{{ idx+1 }}</th><td v-for="(colObj,idx2) in cols">{{ text(item,colObj) }}</td>
+        <th>{{ idx+1 }}</th><td v-for="colObj in cols">{{ text(item,colObj) }}</td>
     </tr></tbody>
 </template>
 
