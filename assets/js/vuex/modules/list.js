@@ -12,12 +12,11 @@ const state = {
 };
 
 const actions = {
-    update({ rootGetters,dispatch },id){
-        let action = rootGetters.criteriaAction({ type:'List',idn1:id });
+    update({ rootGetters,dispatch },action){
         dispatch('post',{ action,update:true },{ root:true });
     },
-    setActions({ rootGetters,commit },{ data }){
-        let id = _.keys(data.List)[0], actions = [];
+    setActions({ rootGetters,commit },{ _response_data }){
+        let id = _.keys(_response_data.List)[0], actions = [];
         _.forEach(rootGetters._actions,function(action){
             if(action.lists && !_.isEmpty(action.lists)){
                 _.forEach(action.lists,function(list){

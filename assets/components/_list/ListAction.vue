@@ -15,7 +15,7 @@
         },
         methods: {
             ...mapActions(['action']),
-            clicked(){ this.action({ action:this.dataAction,id:this.record.id }) }
+            clicked(){ this.action({ action:this.dataAction,id:this.record.id,list:this.dataListId }) }
         }
     }
 </script>

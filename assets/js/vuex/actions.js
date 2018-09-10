@@ -20,7 +20,7 @@ export default {
     handleResponseData({ state,dispatch },data){
         _.forEach(_.keys(data),function(prop){
             if(state.handler[prop] && !_.isEmpty(state.handler[prop])) {
-                let payload = { data }; payload[prop] = data[prop];
+                let payload = { _response_data:data }; payload[prop] = data[prop];
                 _.forEach(state.handler[prop], (method) => dispatch('runModuleMethod', { method, payload }))
             }
         })

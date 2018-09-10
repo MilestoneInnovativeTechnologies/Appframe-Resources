@@ -1,5 +1,5 @@
 <template>
-    <div class="appcontent"><component v-if="component" :is="component" :data-ids="idns"></component></div>
+    <div class="appcontent"><component v-if="component" :is="component" :data-ids="idns" :key="$route.fullPath"></component></div>
 </template>
 
 <script>

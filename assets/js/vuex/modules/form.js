@@ -2,12 +2,14 @@ const state = {
     handler: {
         Form: 'newForm',
         Validation: 'newValidation',
+        FormData: 'newFormData'
     },
     forms: {},
     layout:{},
     data: {},
     invalids: {},
-    submitting:{},
+    submitting: {},
+    formrecord: {},
 };
 
 const actions = {
@@ -20,10 +22,10 @@ const actions = {
         commit(payload);
     },
 
-    submit({ state,rootGetters,commit,dispatch },{ form }){
-        let data = state.data[form], action = rootGetters.criteriaAction({ type:'Form',idn1:form });
+    submit({ state,commit,dispatch },{ form,action }){
+        let data = state.data[form], record = state.formrecord[form];
         commit('submitting',{ form,status:true });
-        dispatch('post', { data,action,form }, { root:true });
+        dispatch('post', { data,action,form,record }, { root:true });
     },
 
     newValidation({ getters,commit },{ Validation }){
@@ -42,6 +44,13 @@ const actions = {
         commit('setRequestItems', item, { root:true });
         dispatch('SPST/postRequestServer', null, { root:true });
     },
+
+    newFormData({ getters,commit },{ FormData,_response_data }){
+        let form = _.keys(FormData)[0], fields = _.keys(getters.form(form).fields),
+            dataId = _.keys(FormData[form])[0], record = FormData[form][dataId], data = _response_data.Data[dataId];
+        commit('setFormRecord',{ form,record }); if(!data) return;
+        _.forEach(fields,function(field){ let value = _.get(data,field); commit('updateValue',{ form,field,value }); })
+    }
 
 };
 
@@ -64,7 +73,8 @@ const mutations = {
         if(!state.invalids[form][field][value]) state.invalids[form][field][value] = '';
         state.invalids[form][field][value] = text;
     },
-    submitting(state,{ form,status }){ state.submitting[form] = status }
+    submitting(state,{ form,status }){ state.submitting[form] = status },
+    setFormRecord(state,{ form,record }){ state.formrecord = Object.assign({},state.formrecord,_.fromPairs([[form,record]])) },
 };
 
 const getters = {

@@ -16,12 +16,13 @@
             ...mapGetters({ getList:'list',getLayout:'layout' }),
             data(){ return this.getList(this.id) },
             layout(){ return this.getLayout(this.id) },
+            action(){ return this.$route.params.action },
         },
         methods: {
             ...mapActions({ updateList: 'update' }),
         },
         created(){
-            this.updateList(this.id);
+            this.updateList(this.action);
         },
     }
 </script>
