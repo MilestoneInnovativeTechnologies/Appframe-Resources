@@ -24,7 +24,7 @@ global.VueApp = new Vue({
             'responseInterceptor': { action:'addInterceptor',type:'response' },
             'beforeEachRoute': { action:'addRouteHook',type:'beforeEach' },
         };
-        _.forEach(this.$store._modulesNamespaceMap,function(Obj,Module) {
+        _.forEach(vuex._modulesNamespaceMap,function(Obj,Module) {
             let init = Module + 'init'; if(vuex._actions[init]) vuex.dispatch(init).then(null); if(vuex._mutations[init]) vuex.commit(init);
             if(vuex.state[_.replace(Module,"/",'')] && vuex.state[_.replace(Module,"/",'')].handler) _.forEach(vuex.state[_.replace(Module,"/",'')].handler,function(item,type){ vuex.commit('addHandler',{ type,item,module:Module }) });
             _.forEach(items, function ({action, type}, mItem) {
