@@ -12,7 +12,11 @@ const actions = {
         _.forEach(rootGetters._actions,function(action){
             _.forEach(actionRunCommits,(mutation) => commit(mutation,action))
         })
-    }
+    },
+    action({ dispatch },payload){
+        console.log(payload);
+        dispatch('navigate',payload,{ root:true });
+    },
 };
 
 const mutations = {

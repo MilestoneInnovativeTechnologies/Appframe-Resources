@@ -27,11 +27,7 @@ const actions = {
             }
         });
         commit('setActions',{ list:id,actions })
-    },
-    action({ dispatch },params){
-        let payload = { name:'list-action',params };
-        dispatch('navigate',payload,{ root:true });
-    },
+    }
 };
 
 const mutations = {
