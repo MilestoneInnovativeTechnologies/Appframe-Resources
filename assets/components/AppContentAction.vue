@@ -1,18 +1,17 @@
 <template>
-    <div class="btn-toolbar"></div>
+    <component v-if="resolution && types.indexOf(contentType) > -1" :is="component" :idns="contentIdns"></component>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
     export default {
         name: "AppContentAction",
+        data(){ return { types:['List','Data'] }},
         computed: {
             action(){ return this.$store.getters.contentAction('AppContent'); },
             resolution(){ return this.$store.getters.resolution(this.action) },
-            contentType(){ return this.resolution['type'] },
+            contentType(){ return this.resolution.type },
             contentIdns(){ return _(this.resolution).omit('type').values().value() },
-            ...mapGetters('ACTN',{ getActions:'actions' }),
-            contentActions(){ return this.getActions(this.contentType,this.contentIdns[0]) },
+            component(){ return ['App','Content',this.contentType,'Action'].join(''); },
         }
     }
 </script>

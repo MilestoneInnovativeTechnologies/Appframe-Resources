@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-header"><AppActions data-type="list" :data-item="dataListId"></AppActions></div>
+            <!--<div class="card-header"><AppActions data-type="list" :data-item="dataListId"></AppActions></div>-->
             <div class="card-body">
                 <form>
                     <div class="table-responsive">
