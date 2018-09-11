@@ -4,11 +4,9 @@
 // If array is passing as 2nd argument, extractions goes to the deep
 //
 export function extractPropertyFromAll(Obj, Key){
-    if(Array.isArray(Key)){
-        $.each(Key,function(i,key){ Obj = extractPropertyFromAll(Obj,key); });
-        return Obj;
-    }
-    return $.map(Obj,function(ObjProp){ return ObjProp[Key]; });
+    if(_.isArray(Key))
+        return _.reduce(Key,function(obj,key){ return extractPropertyFromAll(obj,key) },Obj);
+    return _.flatMap(Obj,Key)
 }
 
 //
@@ -17,7 +15,6 @@ export function extractPropertyFromAll(Obj, Key){
 // or else, All properties get returned
 //
 export function getKeyedObject(Obj,Key,Values){
-    let KeyedObject = {}; Values = Values || Object.keys(Obj[Object.keys(Obj)[0]]);
-    $.each(Obj,function(i,objProp){ KeyedObject[objProp[Key]] = _.pick(objProp,Values); });
-    return KeyedObject;
+    Values = Values || _.keys(_.head(Obj));
+    return _(Obj).keyBy(Key).mapValues(obj => _.pick(obj,Values)).value();
 }
