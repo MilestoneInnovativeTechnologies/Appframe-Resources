@@ -17,6 +17,9 @@ const actions = {
     resolveListAction({ state,dispatch },{ action,id }){
         if(!state.actions[action]) dispatch('post',{ action,id },{ root:true })
     },
+    resolveDataAction({ state,dispatch },{ action,id }){
+        if(!state.actions[action]) dispatch('post',{ action,id },{ root:true })
+    },
 };
 
 const mutations = {
