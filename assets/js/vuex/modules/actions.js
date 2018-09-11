@@ -29,7 +29,8 @@ const mutations = {
 };
 
 const getters = {
-    actions(state){ return (content,id) => _.mapValues(state[_.lowerCase(content)][id],(action) => state.display[action]); }
+    actions(state){ return (content,id) => _.mapValues(state[_.lowerCase(content)][id],(action) => state.display[action]); },
+    confirm(state){ return (id) => state.confirm[id] },
 };
 
 export default {

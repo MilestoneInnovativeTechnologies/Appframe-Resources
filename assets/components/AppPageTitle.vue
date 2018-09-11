@@ -1,12 +1,11 @@
 <template>
-    <h1 class="page-title mr-sm-auto font-weight-bold"> {{ title }} </h1>
+    <h1 class="page-title mr-sm-auto"> {{ title }} </h1>
 </template>
 
 <script>
     import { mapState } from 'vuex';
     export default {
         name: "AppPageTitle",
-        props: ['Action'],
         computed: mapState('PAGE',{
             title: state => state.title
         }),
