@@ -4,6 +4,7 @@ const state = {
     menu: {},
     list: {},
     data: {},
+    confirm: {},
 };
 
 const actions = {
@@ -24,6 +25,7 @@ const mutations = {
     setDataActions(state,{ id,data }){ if(_.isEmpty(data)) return;
         _.forEach(data,function({ resource_data }){ if(!state.data[resource_data]) state.data = Object.assign({},state.data,_.fromPairs([[resource_data,[]]])); state.data[resource_data].push(id); })
     },
+    setConfirm(state,{ id,confirm }){ if(!confirm) return; state.confirm = Object.assign({},state.confirm,_.fromPairs([[id,confirm]])) },
 };
 
 const getters = {
@@ -36,5 +38,5 @@ export default {
 }
 
 const actionRunCommits = [
-    'storeAction','setDisplay','setMenu','setListActions','setDataActions'
+    'storeAction','setDisplay','setMenu','setListActions','setDataActions','setConfirm'
 ];
