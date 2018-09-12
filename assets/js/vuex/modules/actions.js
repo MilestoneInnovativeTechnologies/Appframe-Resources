@@ -14,7 +14,6 @@ const actions = {
         })
     },
     action({ dispatch },payload){
-        console.log(payload);
         dispatch('navigate',payload,{ root:true });
     },
 };
