@@ -1,6 +1,7 @@
 <template>
     <transition name="fade">
-        <AppForm v-if="record" :data-ids="dataIds"></AppForm>
+        <FormSubmitData v-if="submitData" :data="submitData" :notify="true" :form="formId"></FormSubmitData>
+        <AppForm v-else-if="record" :data-ids="dataIds"></AppForm>
         <FormLoading v-else></FormLoading>
     </transition>
 </template>
@@ -15,11 +16,13 @@
             dataId(){ return this.dataIds['idn2'] },
             recordId(){ return this.$route.params.id },
             action(){ return this.$route.params.action },
-            ...mapGetters('FORM',{ getForm: 'form' }),
+            ...mapGetters('FORM',{ getForm: 'form',getSubmit:'getSubmit' }),
             fields(){ return _.keys(this.getForm(this.formId).fields) },
+            submitData(){ return this.getSubmit(this.formId) },
             ...mapGetters('DATA',{ getRecord: 'record', getUpdated: 'updated' }),
             record(){ return this.getRecord(this.dataId,this.recordId) },
             updated(){ return this.getUpdated(this.dataId,this.recordId) },
+
         },
         methods: {
             ...mapMutations('FORM',{ setValue: 'updateValue' }),
