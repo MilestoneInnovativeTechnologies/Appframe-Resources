@@ -1,4 +1,5 @@
 <script>
+    import { mapState,mapGetters } from 'vuex';
     export default {
         render:function(h){
             let vm = this;
@@ -20,9 +21,13 @@
             return {
                 comp: 'Resources',
                 navs: ['Resources'/*,'User','Theme'*/],
-                menu: this.$store.getters.menu,
-                resources: this.$store.getters.resources,
+                //menu: mapState('ACTN',['menu']),
+                //resources: this.$store.getters.resources,
             }
+        },
+        computed: {
+            ...mapState('ACTN',['menu']),
+            ...mapGetters(['resources']),
         }
     }
 </script>

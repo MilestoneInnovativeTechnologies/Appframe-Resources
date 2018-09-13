@@ -1,10 +1,7 @@
 <template>
     <ul class="menu">
-        <menu-item
-                v-for="(item,index) in items"
-                :key="['mg',name,index].join('-')"
-                :action="actionId(item)">
-            {{ menuName(item) }}
+        <menu-item v-for="(item,index) in items" :key="['mg',name,index].join('-')" :action="item.id">
+            {{ item.menu }}
         </menu-item>
     </ul>
 </template>
@@ -13,9 +10,5 @@
     export default {
         name: "MenuGroup",
         props:['items','name'],
-        methods:{
-            menuName(item){ return _.isObject(item) ? item.menu : item },
-            actionId(item){ return _.isObject(item) ? item.id : item },
-        }
     }
 </script>
