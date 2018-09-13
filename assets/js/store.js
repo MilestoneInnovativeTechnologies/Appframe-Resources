@@ -12,7 +12,8 @@ const vuexModules = {
     'FORM': 'form',
     'LIST': 'list',
     'DATA': 'data',
-    'ACTN': 'actions'
+    'ACTN': 'actions',
+    'PTTL': 'pagetitle',
 
     // 'MACT': 'menuaction',
     // 'ACTN': 'appaction',
