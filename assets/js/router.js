@@ -10,6 +10,8 @@ const routes = [
     { path: '/action/:action', meta:{ target:'AppContent' }, name: 'menu-action', props, components },
     { path: '/action/:action/record/:id', meta:{ target:'AppContent' }, name: 'list-action', props, components },
     { path: '/action/:action/record/:id', meta:{ target:'AppContent' }, name: 'data-action', props, components },
+    { path: '/action/:action/form/:form/submit/new', meta:{ target:'AppContent' }, name: 'form-submit-new', props, components },
+    { path: '/action/:action/form/:form/submit/update/:record', meta:{ target:'AppContent' }, name: 'form-submit-update', props, components },
 ];
 
 global.AppVueRouter = new VueRouter({
