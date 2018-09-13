@@ -20,6 +20,8 @@ const actions = {
     resolveDataAction({ state,dispatch },{ action,id }){
         if(!state.actions[action]) dispatch('post',{ action,id },{ root:true })
     },
+    resolveFormSubmitNew({ state,dispatch },{ action,form }){ },
+    resolveFormSubmitUpdate({ state,dispatch },{ action,form,record }){ },
 };
 
 const mutations = {
