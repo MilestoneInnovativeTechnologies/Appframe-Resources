@@ -22,7 +22,7 @@
             ClearFormSubmitAndNavigate(){
                 this.delFormSubmitData(this.form); this.reset(this.form);
                 if(this.route.record) this.$router.go(-2);
-                else this.navigate({ name: 'menu-action',params: { action: this.route.action } });
+                else this.navigate({ name: 'menu-action', params: { action: this.route.action } });
             }
         }
     }
