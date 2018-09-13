@@ -3,6 +3,7 @@ const state = {
         Form: 'newForm',
         Validation: 'newValidation',
         FormData: 'newFormData',
+        FormSubmitData: ['addFormSubmitData','showResponsePage'],
     },
     forms: {},
     layout:{},
@@ -10,6 +11,7 @@ const state = {
     invalids: {},
     submitting: {},
     formrecord: {},
+    submit: {},
 };
 
 const actions = {
@@ -50,7 +52,13 @@ const actions = {
             dataId = _.keys(FormData[form])[0], record = FormData[form][dataId], data = _response_data.Data[dataId];
         commit('setFormRecord',{ form,record }); if(!data) return;
         _.forEach(fields,function(field){ let value = _.get(data,field); commit('updateValue',{ form,field,value }); })
-    }
+    },
+
+    showResponsePage({ dispatch },{ _response_data }){
+        let request = _response_data.request, name = 'form-submit-' + (request.record ? 'update' : 'new'),
+            params = { action:request.action,form:request.form,record:request.record,id:request.record };
+        dispatch('navigate', { name,params }, { root:true });
+    },
 
 };
 
@@ -75,6 +83,9 @@ const mutations = {
     },
     submitting(state,{ form,status }){ state.submitting[form] = status },
     setFormRecord(state,{ form,record }){ state.formrecord = Object.assign({},state.formrecord,_.fromPairs([[form,record]])) },
+    addFormSubmitData(state,{ FormSubmitData }){ let id = _.keys(FormSubmitData)[0]; if(!state.submit[id]) state.submit = Object.assign({},state.submit,_.fromPairs([[id,null]])); state.submit[id] = FormSubmitData[id]; },
+    delFormSubmitData(state,id){ state.submit[id] = null; },
+    reset(state,id){ _.each(state.data[id],(value,field) => state.data[id][field] = (_.isArray(value)) ? [] : '') },
 };
 
 const getters = {
