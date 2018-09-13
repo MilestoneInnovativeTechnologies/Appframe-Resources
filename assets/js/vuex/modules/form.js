@@ -3,7 +3,6 @@ const state = {
         Form: 'newForm',
         Validation: 'newValidation',
         FormData: 'newFormData',
-
     },
     forms: {},
     layout:{},
