@@ -3,12 +3,14 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapGetters } from 'vuex';
     export default {
         name: "AppPageTitle",
-        computed: mapState('PAGE',{
-            title: state => state.title
-        }),
+        computed: {
+            action(){ return this.$route.params.action },
+            ...mapGetters('PTTL',{ getTitle:'title' }),
+            title(){ return this.getTitle(this.action) },
+        },
     }
 </script>
 

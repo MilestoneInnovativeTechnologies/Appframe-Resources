@@ -1,5 +1,4 @@
 const state = {
-    title: null,
     loading: false,
 };
 
