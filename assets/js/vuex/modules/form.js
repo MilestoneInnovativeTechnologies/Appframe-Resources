@@ -2,7 +2,8 @@ const state = {
     handler: {
         Form: 'newForm',
         Validation: 'newValidation',
-        FormData: 'newFormData'
+        FormData: 'newFormData',
+
     },
     forms: {},
     layout:{},
