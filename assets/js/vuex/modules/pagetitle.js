@@ -8,9 +8,8 @@ const state = {
 
 const actions = {
     addResolveTitle({ commit },{ _response_data,Resolve }){
-        let action = _response_data.request.action, type = Resolve[action].type, mutate = 'set'+type+'Title',
-            data = _.get(_response_data,titleFetchProperty[type]), data2 = _.get(_response_data,titleFetchProperty2[type]),
-            payload = Object.assign({},_response_data.request,{ data,data2 });
+        let action = _response_data.request.action, type = Resolve[action].type, mutate = 'set'+type+'Title', payload = _response_data.request, fetchProps = titleFetchProperty[type];
+        fetchProps = (!_.isArray(fetchProps)) ? [fetchProps] : fetchProps; _.forEach(fetchProps,(prop,index) => payload['data'+index] = _.get(_response_data,prop));
         commit(mutate,payload)
     }
 };
@@ -22,23 +21,27 @@ const mutations = {
             return State[Prop];
         },state)
     },
-    setFormTitle(state,{ action,data }){
+    setFormTitle(state,{ action,data0 }){
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
-        let title = _.values(data)[0].title; state.title[action]['*'] = title;
+        let title = _.values(data0)[0].title; state.title[action]['*'] = title;
     },
-    setListTitle(state,{ action,data }){
+    setListTitle(state,{ action,data0 }){
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
-        let title = _.values(data)[0].title; state.title[action]['*'] = title;
+        let title = _.values(data0)[0].title; state.title[action]['*'] = title;
     },
-    setDataTitle(state,{ action,data,data2,id }){
-        if(!state.title[action]) state.title = Object.assign({},state.title,getDataActionObj(action,data,id));
-        state.title[action][id] = _.get(_.values(data2)[0],state.title[action].path);
+    setDataTitle(state,{ action,data0,data1,id }){
+        if(!state.title[action]) state.title = Object.assign({},state.title,getDataActionObj(action,data0,id));
+        state.title[action][id] = _.get(_.values(data1)[0],state.title[action].path);
     },
     changeDataTitle(state,{ Data,_response_data }){
         let action = _response_data.request.action, record = _response_data.request.id, data = _.keys(Data)[0];
         if(!Data || !Data[data]) return; if(!state.title[action][record]) state.title[action] = Object.assign({},state.title[action],_.fromPairs([[record,null]]));
         state.title[action][record] = _.get(Data[data],state.title[action].path);
-    }
+    },
+    setFormWithDataTitle(state,{ action,data,data2,id }){
+        if(!state.title[action]) state.title = Object.assign({},state.title,_.zipObject([action],[]));
+        state.title[action][id] = _.get(_.values(data2)[0],state.title[action].path);
+    },
 };
 
 const getters = {
@@ -58,11 +61,8 @@ export default {
 const titleFetchProperty = {
     Form: 'Form',
     List: 'ListData',
-    Data: 'DataDetails',
-};
-
-const titleFetchProperty2 = {
-    Data: 'Data'
+    Data: ['DataDetails','Data'],
+    FormWithData: 'DataDetails',
 };
 
 function getDataActionObj(action,data,id){
