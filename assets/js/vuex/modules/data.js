@@ -19,7 +19,8 @@ const actions = {
 };
 
 const mutations = {
-    addData(state,{ Data }){
+    addData(state,{ Data,_response_data }){
+        if(_response_data.FormData) return;
         let id = _.keys(Data)[0], Obj = {}; Obj[id] = {};
         if(!state.store[id]) { state.store = Object.assign({},state.store,Obj); state.updated = Object.assign({},state.updated,Obj); }
         if(_.isEmpty(Data[id])) return; let recId = Data[id].id;
