@@ -8,7 +8,7 @@ const state = {
 
 const actions = {
     addResolveTitle({ commit },{ _response_data,Resolve }){
-        let action = _response_data.request.action, type = Resolve[action].type, mutate = 'set'+type+'Title', payload = _response_data.request, fetchProps = titleFetchProperty[type];
+        let action = _response_data.request.action, type = Resolve[action].type, mutate = 'set'+type+'Title', payload = Object.assign({},_response_data.request,Resolve[action]), fetchProps = titleFetchProperty[type];
         fetchProps = (!_.isArray(fetchProps)) ? [fetchProps] : fetchProps; _.forEach(fetchProps,(prop,index) => payload['data'+index] = _.get(_response_data,prop));
         commit(mutate,payload)
     }
@@ -38,7 +38,7 @@ const mutations = {
         if(!Data || !Data[data]) return; if(!state.title[action][record]) state.title[action] = Object.assign({},state.title[action],_.fromPairs([[record,null]]));
         state.title[action][record] = _.get(Data[data],state.title[action].path);
     },
-    setFormWithDataTitle(state,{ action,data,data2,id }){
+    setFormWithDataTitle(state,{ action }){
         if(!state.title[action]) state.title = Object.assign({},state.title,_.zipObject([action],[]));
         state.title[action][id] = _.get(_.values(data2)[0],state.title[action].path);
     },
@@ -62,7 +62,7 @@ const titleFetchProperty = {
     Form: 'Form',
     List: 'ListData',
     Data: ['DataDetails','Data'],
-    FormWithData: 'DataDetails',
+    FormWithData: 'Form',
 };
 
 function getDataActionObj(action,data,id){
