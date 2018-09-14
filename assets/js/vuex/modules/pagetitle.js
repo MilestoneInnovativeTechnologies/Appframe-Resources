@@ -36,11 +36,13 @@ const mutations = {
     changeDataTitle(state,{ Data,_response_data }){
         let action = _response_data.request.action, record = _response_data.request.id, data = _.keys(Data)[0];
         if(!Data || !Data[data]) return; if(!state.title[action][record]) state.title[action] = Object.assign({},state.title[action],_.fromPairs([[record,null]]));
-        state.title[action][record] = _.get(Data[data],state.title[action].path);
+        let titleAction = state.title[action];
+        titleAction[record] = (titleAction.path) ? _.get(Data[data],titleAction.path) : [titleAction.form,_.get(Data[data],titleAction.data)].join(', ');
     },
-    setFormWithDataTitle(state,{ action }){
-        if(!state.title[action]) state.title = Object.assign({},state.title,_.zipObject([action],[]));
-        state.title[action][id] = _.get(_.values(data2)[0],state.title[action].path);
+    setFormWithDataTitle(state,{ action,data0,idn1,data1,idn2,id,data2 }){
+        if(!state.title[action]) state.title = Object.assign({},state.title,
+            _.zipObject([action],[_.zipObject(['form','data',id],[data0[idn1].title,data1[idn2].title_field,null])]));
+        state.title[action][id] = [state.title[action].form,_.get(data2[idn2],state.title[action].data)].join(', ');
     },
 };
 
@@ -62,7 +64,7 @@ const titleFetchProperty = {
     Form: 'Form',
     List: 'ListData',
     Data: ['DataDetails','Data'],
-    FormWithData: 'Form',
+    FormWithData: ['Form','DataDetails','Data'],
 };
 
 function getDataActionObj(action,data,id){
