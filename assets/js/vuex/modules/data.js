@@ -4,7 +4,7 @@ const state = {
     sections: {},
     handler: {
         'Data': 'addData',
-        'DataViewSection' : 'addView'
+        'DataDetails' : 'addView'
     }
 };
 
@@ -26,8 +26,8 @@ const mutations = {
         state.store[id] = Object.assign({},state.store[id],_.fromPairs([[recId,Data[id]]]));
         state.updated[id] = Object.assign({},state.updated[id],_.fromPairs([[recId,Data[id].updated_at]]));
     },
-    addView(state,{ DataViewSection }){
-        let id = _.keys(DataViewSection)[0], sections = getExtractSectionAndItems(DataViewSection[id]);
+    addView(state,{ DataDetails }){
+        let id = _.keys(DataDetails)[0], sections = getExtractSectionAndItems(DataDetails[id].sections);
         state.sections = Object.assign({},state.sections,_.fromPairs([[id,sections]]));
     },
 };
