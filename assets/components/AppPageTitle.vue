@@ -8,8 +8,9 @@
         name: "AppPageTitle",
         computed: {
             action(){ return this.$route.params.action },
+            id(){ return this.$route.params.id },
             ...mapGetters('PTTL',{ getTitle:'title' }),
-            title(){ return this.getTitle(this.action) },
+            title(){ return this.getTitle(this.action,this.id) },
         },
     }
 </script>
