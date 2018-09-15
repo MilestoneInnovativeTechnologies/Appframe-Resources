@@ -1,6 +1,5 @@
 
 const components = {
-    breadcrumb: require('../components/AppBreadcrumb'),
     appcontent: require('../components/AppContent'),
 };
 
