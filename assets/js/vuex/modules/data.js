@@ -20,12 +20,12 @@ const actions = {
 
 const mutations = {
     addData(state,{ Data,_response_data }){
-        if(_response_data.FormData) return;
         let id = _.keys(Data)[0], Obj = {}; Obj[id] = {};
         if(!state.store[id]) { state.store = Object.assign({},state.store,Obj); state.updated = Object.assign({},state.updated,Obj); }
         if(_.isEmpty(Data[id])) return; let recId = Data[id].id;
         state.store[id] = Object.assign({},state.store[id],_.fromPairs([[recId,Data[id]]]));
-        state.updated[id] = Object.assign({},state.updated[id],_.fromPairs([[recId,Data[id].updated_at]]));
+        if(!_response_data.FormData)
+            state.updated[id] = Object.assign({},state.updated[id],_.fromPairs([[recId,Data[id].updated_at]]));
     },
     addView(state,{ DataDetails }){
         let id = _.keys(DataDetails)[0], sections = getExtractSectionAndItems(DataDetails[id].sections);
@@ -34,8 +34,8 @@ const mutations = {
 };
 
 const getters = {
-    record(state){ return (data,id) => state.store[data][id] },
-    updated(state){ return (data,id) => state.updated[data][id] },
+    record(state){ return (data,id) => (state.store[data]) ? state.store[data][id] : null },
+    updated(state){ return (data,id) => (state.updated[data]) ? state.updated[data][id] : null },
     section(state){ return (data) => state.sections[data] },
 };
 
