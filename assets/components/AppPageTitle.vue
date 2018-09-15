@@ -3,15 +3,18 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters,mapMutations } from 'vuex';
     export default {
         name: "AppPageTitle",
         computed: {
             action(){ return this.$route.params.action },
             id(){ return this.$route.params.id },
             ...mapGetters('PTTL',{ getTitle:'title' }),
-            title(){ return this.getTitle(this.action,this.id) },
+            title(){ let title = this.getTitle(this.action,this.id); this.setTitle(title); return title; },
         },
+        methods: {
+            ...mapMutations('PTTL',['setTitle']),
+        }
     }
 </script>
 
