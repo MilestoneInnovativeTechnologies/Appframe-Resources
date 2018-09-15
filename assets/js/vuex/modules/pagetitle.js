@@ -3,7 +3,8 @@ const state = {
     handler: {
         Resolve: 'addResolveTitle',
         Data: 'changeDataTitle',
-    }
+    },
+    current: null,
 };
 
 const actions = {
@@ -48,6 +49,7 @@ const getters = {
             id = (actObj['*']) ? '*' : id; return state.title[action][id];
         };
     },
+    current(state){ return state.current },
 };
 
 export default {
