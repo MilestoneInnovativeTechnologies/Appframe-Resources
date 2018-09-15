@@ -15,12 +15,7 @@ const actions = {
 };
 
 const mutations = {
-    setStateProp(state,ary){
-        _.reduce(ary,function(State,Prop){
-            if(!State[Prop]) State = Object.assign(State,_.fromPairs([[Prop,null]]));
-            return State[Prop];
-        },state)
-    },
+    setTitle(state,title){ state.current = title },
     setFormTitle(state,{ action,data0 }){
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
         let title = _.values(data0)[0].title; state.title[action]['*'] = title;
