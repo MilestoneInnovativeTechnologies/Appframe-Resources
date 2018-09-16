@@ -5,6 +5,7 @@ const state = {
     list: {},
     data: {},
     confirm: {},
+    resource: {},
 };
 
 const actions = {
@@ -22,6 +23,10 @@ const mutations = {
     storeAction(state,{ id,name,description,title }){ state.store = Object.assign({},state.store,_.fromPairs([[id,{ id,name,description,title }]])); },
     setDisplay(state,{ id,type,icon,set,title }){ state.display = Object.assign({},state.display,_.fromPairs([[id,{ id,type,icon,set,title }]])); },
     setMenu(state,{ id,resource,menu }){ if(!menu) return; if(!state.menu[resource]) state.menu = Object.assign({},state.menu,_.fromPairs([[resource,[]]])); state.menu[resource].push({ id,resource,menu }) },
+    setResourceActions(state,{ id,resource }){
+        if(!state.resource[resource]) state.resource = Object.assign({},state.resource,_.zipObject([resource],[[]]));
+        state.resource[resource].push(id);
+    },
     setListActions(state,{ id,lists }){ if(_.isEmpty(lists)) return;
         _.forEach(lists,function({ resource_list }){ if(!state.list[resource_list]) state.list = Object.assign({},state.list,_.fromPairs([[resource_list,[]]])); state.list[resource_list].push(id); })
     },
@@ -34,6 +39,7 @@ const mutations = {
 const getters = {
     actions(state){ return (content,id) => _.mapValues(state[_.lowerCase(content)][id],(action) => state.display[action]); },
     confirm(state){ return (id) => state.confirm[id] },
+    resource(state){ return (action) => _.findKey(state.resource,(actions) => _.includes(actions,action)); },
 };
 
 export default {
@@ -42,5 +48,5 @@ export default {
 }
 
 const actionRunCommits = [
-    'storeAction','setDisplay','setMenu','setListActions','setDataActions','setConfirm'
+    'storeAction','setDisplay','setMenu','setResourceActions','setListActions','setDataActions','setConfirm'
 ];
