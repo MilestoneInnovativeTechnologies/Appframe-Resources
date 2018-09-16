@@ -5,7 +5,7 @@ export default {
         request: [],
         response: []
     },
-    routes: { from:{}, to:{}, next:null },
+    route: { from:{}, to:{}, next:null },
     routeHooks: {
         beforeEach: [],
     },
