@@ -18,11 +18,10 @@ global.AppVueRouter = new VueRouter({
     mode: 'history',
     linkActiveClass: 'has-active'
 });
-AppVueRouter.beforeEach(function(to, from, next){
-    let payload = { type:'beforeEach', to, from, next };
-    CallVueAppStoreAction = function(payload){
-        if(window.VueApp && window.VueApp.$store) return window.VueApp.$store.dispatch('routeHook',payload);
-        setTimeout(CallVueAppStoreAction,400,payload);
-    };
-    CallVueAppStoreAction(payload);
-});
+AppVueRouter.beforeEach(function(to, from, next){ CallVueAppStoreAction({ type:'beforeEach', to, from, next }); });
+AppVueRouter.afterEach((to,from) => CallVueAppStoreAction({ type:'afterEach', to, from }));
+
+const CallVueAppStoreAction = function(payload){
+    if(window.VueApp && window.VueApp.$store) return window.VueApp.$store.dispatch('routeHook',payload);
+    setTimeout(CallVueAppStoreAction,400,payload);
+};
