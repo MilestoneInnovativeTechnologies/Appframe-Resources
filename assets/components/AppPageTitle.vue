@@ -10,10 +10,12 @@
             action(){ return this.$route.params.action },
             id(){ return this.$route.params.id },
             ...mapGetters('PTTL',{ getTitle:'title' }),
-            title(){ let title = this.getTitle(this.action,this.id); this.setTitle(title); return title; },
+            title(){ let title = this.getTitle(this.action,this.id); this.setTitles(title); return title; },
         },
         methods: {
-            ...mapMutations('PTTL',['setTitle']),
+            ...mapMutations('PTTL',{ setPageTitle:'setTitle' }),
+            ...mapMutations('HSTR',{ setHistoryTitle:'setTitle' }),
+            setTitles(title){ this.setPageTitle(title); if(title) this.setHistoryTitle(title) }
         }
     }
 </script>
