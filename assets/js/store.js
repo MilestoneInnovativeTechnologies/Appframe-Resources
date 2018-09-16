@@ -14,6 +14,7 @@ const vuexModules = {
     'DATA': 'data',
     'ACTN': 'actions',
     'PTTL': 'pagetitle',
+    'HSTR': 'history',
 
     // 'MACT': 'menuaction',
     // 'ACTN': 'appaction',
