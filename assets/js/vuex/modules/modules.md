@@ -25,7 +25,12 @@ Once modified, it should commit by calling updateResponse mutation in root</p>
 <p>Once done, must commit proceedRoute in root</p>
 <p>Ex: commit('proceedRoute',null,{ root:true });</p>
 
-<h1>The following methods should be in state</h1>
+**afterEachRoute**
+
+<p>This method is invoked after the route get confirmed.</p>
+<p>This method received payload with properties to,from.</p>
+
+<h1>The following property should be in state</h1>
 
 **handler**
 
