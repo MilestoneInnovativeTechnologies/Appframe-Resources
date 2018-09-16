@@ -23,6 +23,8 @@ export default {
 
     pageTitle(state,getters){ return getters['PTTL/current'] },
 
-    actionResource(state,getters){ return (action) => getters['ACTN/resource'](action) }
+    actionResource(state,getters){ return (action) => getters['ACTN/resource'](action) },
+
+    data(state,getters){ return (dataId,recordId) => getters['DATA/record'](dataId,recordId) },
 
 }
