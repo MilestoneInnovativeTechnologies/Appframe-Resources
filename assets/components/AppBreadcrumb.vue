@@ -1,25 +1,30 @@
 <template>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item active" v-for="(name,index) in list">
-                <a href="#">
-                    <icon v-if="!index" class="breadcrumb-icon mr-2">angle-left</icon>
-                    {{ name }}
-                </a>
+            <li class="breadcrumb-item active" v-for="(route,index) in list">
+                <a v-if="!index" href="#"><icon class="breadcrumb-icon mr-2">angle-left</icon>{{ route }}</a>
+                <a v-else @click.prevent="navigate(route)" href="#">{{ compress(route.title) }}</a>
             </li>
         </ol>
     </nav>
 </template>
 
 <script>
+    import { mapGetters } from'vuex';
     export default {
         name: "AppBreadcrumb",
-        props: ['action'],
-        computed:{
-            Action(){ return this.$store.getters.actions[this.action] },
-            resource(){ return this.$store.getters.resources[this.Action.resource] },
-            actionTitle(){ return this.Action.title },
-            list(){ return [this.resource,this.actionTitle] }
+        data(){ return { max:20,threshold:20 } },
+        computed: {
+            ...mapGetters('HSTR',['set']),
+            list(){ return this.set() }
+        },
+        methods: {
+            navigate(route){ console.log('Navigate to: ',route) },
+            compress(text){ if(!text) return ''; console.log(this.max/2-3,this.max/2+3);
+                return (text.length > this.max * (1+this.threshold/100))
+                    ? [ text.substr(0,this.max/2-3),text.substr(text.length-this.max/2+3) ].join('.....')
+                    : text;
+            }
         }
     }
 </script>
