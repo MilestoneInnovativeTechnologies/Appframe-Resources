@@ -15,7 +15,7 @@ export default {
         state.routeHooks[payload.type].push(payload.item);
     },
     updateRoute(state, {to, from, next}) {
-        state.route = Object.assign({}, {to, from, next})
+        if(next) state.route = Object.assign({}, {to, from, next})
     },
     proceedRoute(state) {
         state.route.next()
