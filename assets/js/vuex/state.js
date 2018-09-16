@@ -8,6 +8,7 @@ export default {
     route: { from:{}, to:{}, next:null },
     routeHooks: {
         beforeEach: [],
+        afterEach: [],
     },
     handler: {
 

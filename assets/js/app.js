@@ -23,6 +23,7 @@ global.VueApp = new Vue({
             'requestInterceptor': { action:'addInterceptor',type:'request' },
             'responseInterceptor': { action:'addInterceptor',type:'response' },
             'beforeEachRoute': { action:'addRouteHook',type:'beforeEach' },
+            'afterEachRoute': { action:'addRouteHook',type:'afterEach' },
         };
         _.forEach(vuex._modulesNamespaceMap,function(Obj,Module) {
             let init = Module + 'init'; if(vuex._actions[init]) vuex.dispatch(init).then(null); if(vuex._mutations[init]) vuex.commit(init);
