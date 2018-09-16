@@ -5,9 +5,15 @@ const state = {
 };
 
 const actions = {
-    afterEachRoute({ state,rootGetters,commit },{ to }){
+    afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
         commit('increment'); commit('addRoute',to); if(!state.count) return;
         if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
+        dispatch('addToSet',to);
+    },
+    addToSet({ state,getters,commit },{ name,params }){
+        let set = getters.set(), route = null; if(_.isEmpty(set)) commit('addNewSet','-');
+        _.forEachRight(set,function(setItem,index){ if(!index) return; if(isRouteObjectsEqual({ name,params },_.pick(setItem,['name','params']))) { route = index; return false; } })
+        if(route) commit('setNewSet',state.set[state.set.length-1].slice(0,route));
         commit('addToSet')
     }
 };
@@ -16,8 +22,9 @@ const mutations = {
     increment(state){ state.count++ },
     addRoute(state,to){ state.routes = Object.assign({},state.routes,_.zipObject([state.count],[{ name:to.name,params:to.params,title:null }])) },
     addNewSet(state,resource){ state.set.push([resource]) },
-    addToSet(state){ state.set[state.set.length-1].push(state.count) },
-    setTitle(state,title){ state.routes[state.count].title = title }
+    addToSet(state){ let setInd = (state.set.length || 1)-1; state.set[setInd].push(state.count) },
+    setTitle(state,title){ state.routes[state.count].title = title },
+    setNewSet(state,set){ state.set.push(set) },
 };
 
 const getters = {
@@ -27,4 +34,16 @@ const getters = {
 export default {
     namespaced: true,
     state, getters, actions, mutations
+}
+
+function isRouteObjectsEqual(Obj1,Obj2){
+    let equal = true;
+    _.forEach(Obj1,function(Val,Key){
+        if(_.has(Obj2,Key) && typeof Val === typeof Obj2[Key]){
+            if(_.isObject(Val)) equal = isRouteObjectsEqual(Val,Obj2[Key]);
+            else equal = (Obj2[Key] == Val)
+        } else equal = false;
+        return equal;
+    });
+    return equal;
 }
