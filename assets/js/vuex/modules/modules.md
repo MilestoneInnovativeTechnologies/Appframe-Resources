@@ -20,7 +20,7 @@ Once modified, it should commit by calling updateResponse mutation in root</p>
 
 **beforeEachRoute**
 
-<p>This method is invoked just after the response received, before it get handled.</p>
+<p>This method is invoked before the route get changed.</p>
 <p>This method received payload with properties to,from,next.</p>
 <p>Once done, must commit proceedRoute in root</p>
 <p>Ex: commit('proceedRoute',null,{ root:true });</p>
