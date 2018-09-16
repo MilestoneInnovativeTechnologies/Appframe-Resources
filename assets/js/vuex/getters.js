@@ -21,6 +21,8 @@ export default {
     contentAction(state,getters){ return (content) => getters['CONT/action'](content) },
     criteriaAction(state,getters){ return (criteria) => getters['RSLV/action'](criteria) },
 
-    pageTitle(state,getters){ return getters['PTTL/current'] }
+    pageTitle(state,getters){ return getters['PTTL/current'] },
+
+    actionResource(state,getters){ return (action) => getters['ACTN/resource'](action) }
 
 }
