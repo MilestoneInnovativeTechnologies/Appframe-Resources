@@ -21,7 +21,7 @@ const mutations = {
 };
 
 const getters = {
-    set(state){ return (n = null) => state.set[n === null ? state.set.length-1 : n].map(function(route,index){ return (index) ? state.routes[route] : route}) },
+    set(state){ return (n = null) => _.map(state.set[n === null ? state.set.length-1 : n],function(route,index){ return (index) ? state.routes[route] : route}) },
 };
 
 export default {
