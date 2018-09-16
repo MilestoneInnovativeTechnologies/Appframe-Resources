@@ -14,7 +14,7 @@ export default {
         commit('updateRoute',payload);
         let methods = state.routeHooks[payload.type];
         _.forEach(methods,function(method){ dispatch('runModuleMethod',{ method,payload }) });
-        if(_.isEmpty(methods)) payload.next();
+        if(_.isEmpty(methods) && payload.next) payload.next();
     },
 
     handleResponseData({ state,dispatch },data){
