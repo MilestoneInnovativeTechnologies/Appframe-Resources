@@ -3,6 +3,7 @@ const state = {
     handler: {
         Resolve: 'addResolveTitle',
         Data: 'changeDataTitle',
+        FormData: 'updateFormDataTitle'
     },
     current: null,
 };
@@ -12,11 +13,20 @@ const actions = {
         let action = _response_data.request.action, type = Resolve[action].type, mutate = 'set'+type+'Title', payload = Object.assign({},_response_data.request,Resolve[action]), fetchProps = titleFetchProperty[type];
         fetchProps = (!_.isArray(fetchProps)) ? [fetchProps] : fetchProps; _.forEach(fetchProps,(prop,index) => payload['data'+index] = _.get(_response_data,prop));
         commit(mutate,payload)
+    },
+    updateFormDataTitle({ state,rootGetters,commit },{ FormData,_response_data }){
+        if(_.values(_response_data.Data)[0] !== null) return; let { data,id,action } = _response_data.request, record = rootGetters.data(data,id);
+        commit('forceSetTitle',{ action,id,title:getJoinedFormDataTitle(state.title[action].form,_.get(record,state.title[action].data)) });
     }
 };
 
 const mutations = {
     setTitle(state,title){ state.current = title },
+    forceSetTitle(state,{ action,id,title }){
+        if(!state.title[action]) state.title = Object.assign({},state.title,_.zipObject(action,[{  }]));
+        if(!state.title[action][id]) state.title[action] = Object.assign({},state.title[action],_.zipObject(id));
+        state.title[action][id] = title;
+    },
     setFormTitle(state,{ action,data0 }){
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
         let title = _.values(data0)[0].title; state.title[action]['*'] = title;
@@ -38,7 +48,7 @@ const mutations = {
     setFormWithDataTitle(state,{ action,data0,idn1,data1,idn2,id,data2 }){
         if(!state.title[action]) state.title = Object.assign({},state.title,
             _.zipObject([action],[_.zipObject(['form','data',id],[data0[idn1].title,data1[idn2].title_field,null])]));
-        state.title[action][id] = [state.title[action].form,_.get(data2[idn2],state.title[action].data)].join(', ');
+        state.title[action][id] = getJoinedFormDataTitle(state.title[action].form,_.get(data2[idn2],state.title[action].data));
     },
 };
 
@@ -68,4 +78,8 @@ function getDataActionObj(action,data,id){
     let path = _.values(data)[0].title_field;
     let Obj = {}; Obj[action] = { path };
     Obj[action][id] = null; return Obj;
+}
+
+function getJoinedFormDataTitle(form,data){
+    return [form,data].join(', ');
 }
