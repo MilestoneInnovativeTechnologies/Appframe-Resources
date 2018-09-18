@@ -15,9 +15,6 @@ const vuexModules = {
     'ACTN': 'actions',
     'PTTL': 'pagetitle',
     'HSTR': 'history',
-
-    // 'MACT': 'menuaction',
-    // 'ACTN': 'appaction',
 };
 
 const modules = {
