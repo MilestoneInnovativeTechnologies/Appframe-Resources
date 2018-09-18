@@ -6,7 +6,7 @@ const state = {
 
 const actions = {
     afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
-        commit('increment'); commit('addRoute',to); if(!state.count) return;
+        commit('increment'); commit('addRoute',to); if(!state.count || _.includes(discardRoutes,to.name)) return;
         if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
         dispatch('addToSet',to);
     },
@@ -47,3 +47,5 @@ function isRouteObjectsEqual(Obj1,Obj2){
     });
     return equal;
 }
+
+const discardRoutes = ['form-submit-new','form-submit-update'];
