@@ -23,8 +23,8 @@ const actions = {
 const mutations = {
     setTitle(state,title){ state.current = title },
     forceSetTitle(state,{ action,id,title }){
-        if(!state.title[action]) state.title = Object.assign({},state.title,_.zipObject(action,[{  }]));
-        if(!state.title[action][id]) state.title[action] = Object.assign({},state.title[action],_.zipObject(id));
+        if(!state.title[action]) state.title = Object.assign({},state.title,_.zipObject([action],[{  }]));
+        if(!state.title[action][id]) state.title[action] = Object.assign({},state.title[action],_.zipObject([id]));
         state.title[action][id] = title;
     },
     setFormTitle(state,{ action,data0 }){
@@ -50,6 +50,10 @@ const mutations = {
             _.zipObject([action],[_.zipObject(['form','data',id],[data0[idn1].title,data1[idn2].title_field,null])]));
         state.title[action][id] = getJoinedFormDataTitle(state.title[action].form,_.get(data2[idn2],state.title[action].data));
     },
+    setListRelationTitle(state,{ action,data0 }){
+        if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
+        let title = _.values(data0)[0].title; state.title[action]['*'] = title;
+    }
 };
 
 const getters = {
@@ -72,6 +76,7 @@ const titleFetchProperty = {
     List: 'ListData',
     Data: ['DataDetails','Data'],
     FormWithData: ['Form','DataDetails','Data'],
+    ListRelation: 'ListData',
 };
 
 function getDataActionObj(action,data,id){
