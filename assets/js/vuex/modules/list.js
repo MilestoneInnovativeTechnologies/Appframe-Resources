@@ -3,9 +3,8 @@ const state = {
     detail: {},
     layout: {},
     selected: {},
-    actions: {},
     handler: {
-        'ListData': ['setDetail','setActions'],
+        'ListData': 'setDetail',
         'ListLayout': 'setLayout',
         'List': 'mergeList'
     }
@@ -15,19 +14,6 @@ const actions = {
     update({ rootGetters,dispatch },action){
         dispatch('post',{ action,update:true },{ root:true });
     },
-    setActions({ rootGetters,commit },{ _response_data }){
-        let id = _.keys(_response_data.List)[0], actions = [];
-        _.forEach(rootGetters._actions,function(action){
-            if(action.lists && !_.isEmpty(action.lists)){
-                _.forEach(action.lists,function(list){
-                    if(list.resource_list == id){
-                        actions.push(list.resource_action);
-                    }
-                })
-            }
-        });
-        commit('setActions',{ list:id,actions })
-    }
 };
 
 const mutations = {
@@ -39,7 +25,6 @@ const mutations = {
     setDetail(state,{ ListData }){ state.detail = Object.assign({},state.detail,ListData); },
     setLayout(state,{ ListLayout }){ state.layout = Object.assign({},state.layout,ListLayout); },
     setSelected(state,{ list,record }){ state.selected[list] = record; },
-    setActions(state,{ list,actions }){ let action = {}; action[list] = actions; state.actions = Object.assign({},state.actions,action) },
 };
 
 const getters = {
@@ -47,7 +32,6 @@ const getters = {
     layout(state){ return (id) => state.layout[id] },
     details(state){ return (id) => state.details[id] },
     selected(state){ return (id) => state.selected[id] },
-    actions(state){ return (id) => state.actions[id] },
 };
 
 export default {
