@@ -19,8 +19,8 @@ const actions = {
     updateRelation({ dispatch },request){
         dispatch('post',request,{ root:true });
     },
-    addListRelation({ state,commit },{ ListRelation,_response_data }) {
-        let { action,id } = _response_data.request, list = _response_data.Resolve[action]['idn2'], data = ListRelation[list][id];
+    addListRelation({ state,rootGetters,commit },{ ListRelation,_response_data }) {
+        let { action,id } = _response_data.request, list = rootGetters.resolution(action)['idn2'], data = ListRelation[list][id];
         if (!state.relation[list] || !state.relation[list][id]) commit('createRelation', { list,id });
         if(!_.isEmpty(data)) commit('addRelation',{ list,id,data })
     }
