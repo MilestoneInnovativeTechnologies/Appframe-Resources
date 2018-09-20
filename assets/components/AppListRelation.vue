@@ -17,7 +17,7 @@
             ...mapGetters({ getList:'list',getLayout:'layout',getRelation:'relation' }),
             relation(){ return this.getRelation(this.list,this.record) },
             data(){ return _.pick(this.getList(this.list),this.relation) },
-            updated(){ return _.max(_.map(this.data,'updated_at')) },
+            updated(){ return _.isEmpty(this.data) ? 0 : _.max(_.map(this.data,'updated_at')) },
             layout(){ return this.getLayout(this.list) },
             action(){ return this.$route.params.action },
         },
