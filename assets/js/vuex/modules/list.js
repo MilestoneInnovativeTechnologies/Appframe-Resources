@@ -20,9 +20,9 @@ const actions = {
         dispatch('post',request,{ root:true });
     },
     addListRelation({ state,rootGetters,commit },{ ListRelation,_response_data }) {
-        let { action,id } = _response_data.request, list = rootGetters.resolution(action)['idn2'], data = ListRelation[list][id];
-        if (!state.relation[list] || !state.relation[list][id]) commit('createRelation', { list,id });
-        if(!_.isEmpty(data)) commit('addRelation',{ list,id,data })
+        let { action,id } = _response_data.request, rslv = rootGetters.resolution(action), relation = rslv['idn1'], list = rslv['idn2'], data = ListRelation[list][relation][id];
+        if (!state.relation[list] || !state.relation[list][relation]|| !state.relation[list][relation][id]) commit('createRelation', { list,relation,id });
+        if(!_.isEmpty(data)) commit('addRelation',{ list,relation,id,data })
     }
 };
 
@@ -35,13 +35,15 @@ const mutations = {
     setDetail(state,{ ListData }){ state.detail = Object.assign({},state.detail,ListData); },
     setLayout(state,{ ListLayout }){ state.layout = Object.assign({},state.layout,ListLayout); },
     setSelected(state,{ list,record }){ state.selected[list] = record; },
-    createRelation(state,{ list,id }){
-        if(!state.relation[list])
-            state.relation = Object.assign({},state.relation,_.zipObject([list],[{}]));
-        if(!state.relation[list][id])
-            state.relation[list] = Object.assign({},state.relation[list],_.zipObject([id],[[]]))
+    createRelation(state,{ list,relation,id }){
+        if(!state.relation[list]) state.relation = Object.assign({},state.relation,_.zipObject([list],[{}]));
+        if(!state.relation[list][relation]) state.relation[list] = Object.assign({},state.relation[list],_.zipObject([relation],[{}]))
+        if(!state.relation[list][relation][id]) state.relation[list][relation] = Object.assign({},state.relation[list][relation],_.zipObject([id],[[]]))
     },
-    addRelation(state,{ list,id,data }){ data = _.uniq(_.concat(state.relation[list][id],data)); state.relation[list] = Object.assign({},state.relation[list],_.zipObject([id],[data])); },
+    addRelation(state,{ list,relation,id,data }){
+        Array.prototype.push.apply(state.relation[list][relation][id],data);
+        state.relation[list][relation][id] = _.uniq(state.relation[list][relation][id]);
+    },
 };
 
 const getters = {
@@ -49,7 +51,7 @@ const getters = {
     layout(state){ return (id) => state.layout[id] },
     details(state){ return (id) => state.details[id] },
     selected(state){ return (id) => state.selected[id] },
-    relation(state){ return (list,id) => state.relation[list][id] },
+    relation(state){ return (list,relation,id) => state.relation[list][relation][id] },
 };
 
 export default {
