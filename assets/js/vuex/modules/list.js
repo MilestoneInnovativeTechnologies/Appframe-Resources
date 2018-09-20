@@ -41,7 +41,7 @@ const mutations = {
         if(!state.relation[list][id])
             state.relation[list] = Object.assign({},state.relation[list],_.zipObject([id],[[]]))
     },
-    addRelation(state,{ list,id,data }){ data = _.concat(state.relation[list][id],data); state.relation[list] = Object.assign({},state.relation[list],_.zipObject([id],[data])); },
+    addRelation(state,{ list,id,data }){ data = _.uniq(_.concat(state.relation[list][id],data)); state.relation[list] = Object.assign({},state.relation[list],_.zipObject([id],[data])); },
 };
 
 const getters = {
