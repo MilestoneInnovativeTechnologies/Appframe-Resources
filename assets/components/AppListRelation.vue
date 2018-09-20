@@ -22,7 +22,7 @@
             action(){ return this.$route.params.action },
         },
         methods: {
-            ...mapActions({ updateList: 'updateRelation' }),
+            ...mapActions({ updateList: 'post' }),
         },
         created(){
             this.updateList({ action:this.action,id:this.record,updated:this.updated });
