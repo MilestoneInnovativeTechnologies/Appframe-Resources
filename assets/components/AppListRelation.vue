@@ -17,14 +17,15 @@
             ...mapGetters({ getList:'list',getLayout:'layout',getRelation:'relation' }),
             relation(){ return this.getRelation(this.list,this.record) },
             data(){ return _.pick(this.getList(this.list),this.relation) },
+            updated(){ return _.max(_.map(this.data,'updated_at')) },
             layout(){ return this.getLayout(this.list) },
             action(){ return this.$route.params.action },
         },
         methods: {
-            ...mapActions({ updateList: 'update' }),
+            ...mapActions({ updateList: 'updateRelation' }),
         },
         created(){
-            //this.updateList(this.action);
+            this.updateList({ action:this.action,id:this.record,updated:this.updated });
         },
     }
 </script>

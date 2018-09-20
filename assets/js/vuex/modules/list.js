@@ -13,8 +13,11 @@ const state = {
 };
 
 const actions = {
-    update({ rootGetters,dispatch },action){
+    update({ dispatch },action){
         dispatch('post',{ action,update:true },{ root:true });
+    },
+    updateRelation({ dispatch },request){
+        dispatch('post',request,{ root:true });
     },
     addListRelation({ state,commit },{ ListRelation,_response_data }) {
         let { action,id } = _response_data.request, list = _response_data.Resolve[action]['idn2'], data = ListRelation[list][id];
