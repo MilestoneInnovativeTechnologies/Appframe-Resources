@@ -58,7 +58,7 @@ const mutations = {
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
         let title = _.values(data0)[0].title; state.title[action]['*'] = title;
     },
-    setManageRelationsTitle(state,{ action,data0 }){
+    setManageRelationTitle(state,{ action,data0 }){
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
         let title = _.values(data0)[0].title; state.title[action]['*'] = title;
     },
@@ -86,7 +86,7 @@ const titleFetchProperty = {
     FormWithData: ['Form','DataDetails','Data'],
     ListRelation: 'ListData',
     AddRelation: 'Form',
-    ManageRelations: 'ListData',
+    ManageRelation: 'ListData',
 };
 
 function getDataActionObj(action,data,id){
