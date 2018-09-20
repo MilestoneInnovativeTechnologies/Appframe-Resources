@@ -10,6 +10,7 @@ const state = {
         'ListLayout': 'setLayout',
         'List': 'mergeList',
         'ListRelation': 'addListRelation',
+        'ListRelationUpdated': 'setListRelationUpdate',
     },
 };
 
