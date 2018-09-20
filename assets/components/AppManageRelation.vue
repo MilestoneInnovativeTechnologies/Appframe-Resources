@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
         <ListLoading v-if="!data"></ListLoading>
-        <BSList v-else :data-list-id="id" :layout="layout" :data="data"></BSList>
+        <MRList v-else :data-list-id="list" :layout="layout" :data="data" :check="property"></MRList>
     </transition>
 </template>
 
@@ -12,17 +12,16 @@
         name: "AppManageRelation",
         props: ['dataIds'],
         computed: {
-            id(){ return this.dataIds['idn2'] },
-            ...mapGetters({ getList:'list',getLayout:'layout' }),
-            data(){ return this.getList(this.id) },
-            layout(){ return this.getLayout(this.id) },
-            action(){ return this.$route.params.action },
+            list(){ return this.dataIds['idn2'] }, relation(){ return this.dataIds['idn1'] },
+            ...mapGetters({ getList:'list',getLayout:'layout',getRelation:'relation' }),
+            data(){ return this.getList(this.list) }, layout(){ return this.getLayout(this.list) },
+            action(){ return this.$route.params.action }, record(){ return this.$route.params.id },
+            current(){ return this.getRelation(this.list,this.relation,this.record) },
+            property(){ return { list:this.list,relation:this.relation,record:this.record,current:this.current } }
         },
-        methods: {
-            ...mapActions({ updateList: 'update' }),
-        },
+        methods: mapActions(['post']),
         created(){
-            //this.updateList(this.action);
+            this.post({ action:this.action,id:this.record,update:true  });
         },
     }
 </script>
