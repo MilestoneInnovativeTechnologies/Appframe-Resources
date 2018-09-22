@@ -13,7 +13,7 @@
         name: "AppAddRelation",
         props: ['dataIds'],
         computed: {
-            id(){ return this.dataIds['idn2'] },
+            id(){ return this.dataIds['idn1'] },
             ...mapGetters({ getForm:'form',getLayout:'layout',getSubmit:'getSubmit' }),
             form(){ return this.getForm(this.id) },
             layout(){ return this.getLayout(this.id) },
