@@ -30,12 +30,12 @@
         computed: {
             formLayout(){ let layout = this.getLayout(); return _.isEmpty(layout) ? false : layout },
             submitting(){ return this.$store.state.FORM.submitting[this.dataFormId] },
-            action(){ return this.$route.params.action },
+            action(){ return this.$route.params.action }, record(){ return this.$route.params.id },
         },
         methods: {
             ...mapActions({ formSubmit:'submit' }),
             submit(){
-                let vm = this, payload = { form:vm.dataFormId,action:vm.action };
+                let vm = this, payload = { form:vm.dataFormId,action:vm.action,record:vm.record };
                 vm.formSubmit(payload);
             },
             getLayout(){

@@ -24,8 +24,8 @@ const actions = {
         commit(payload);
     },
 
-    submit({ state,commit,dispatch },{ form,action }){
-        let data = state.data[form], record = state.formrecord[form];
+    submit({ state,commit,dispatch },{ form,action,record }){
+        let data = state.data[form];
         commit('submitting',{ form,status:true });
         dispatch('post', { data,action,form,record }, { root:true });
     },
@@ -103,13 +103,13 @@ const getters = {
         }
     },
     submitting(state){ return (formId) => state.submitting[formId] },
-    //
-    // list(state,getters,rootState){ return function(field){
-    //     let listId = getters.form.fields[field].options.resource_list;
-    //     return (rootState.LIST.store && rootState.LIST.store[listId])
-    //         ? rootState.LIST.store[listId].data
-    //         : null;
-    // } }
+
+    list(state,getters,rootState){ return function(field){
+        let listId = getters.form.fields[field].options.resource_list;
+        return (rootState.LIST.store && rootState.LIST.store[listId])
+            ? rootState.LIST.store[listId].data
+            : null;
+    } },
     getSubmit(state){ return (id) => state.submit[id] }
 };
 
