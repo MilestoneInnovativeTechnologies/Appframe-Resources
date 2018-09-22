@@ -1,6 +1,6 @@
 <template>
     <select :name="name" v-model="value" class="custom-select">
-        <option v-for="opt in options" :value="getOptionValue(opt)" :key="[dataFormId,name,opt.id].join('-')">{{ getOptionLabel(opt) }}</option>
+        <option v-for="opt in options" :value="getOptionValue(opt)" v-bind="getOptionAttrs(opt)" :key="[dataFormId,name,opt.id].join('-')">{{ getOptionLabel(opt) }}</option>
     </select>
 </template>
 
@@ -20,6 +20,7 @@
         methods: {
             ...mapActions(['loadOptions']),
             getOptionValue(option){ return _.get(option,this.option.value_attr); },
+            getOptionAttrs(option){ return {}; },
             getOptionLabel(option){ return _.get(option,this.option.label_attr); },
         },
         created(){
