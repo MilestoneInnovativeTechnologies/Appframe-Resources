@@ -11,17 +11,19 @@ const state = {
     invalids: {},
     submitting: {},
     formrecord: {},
+    collection: {},
     submit: {},
 };
 
 const actions = {
 
-    newForm({ commit },{ Form }){
+    newForm({ commit,dispatch },{ Form }){
         let id = _.keys(Form)[0], form = _.pick(Form[id],['name','title','action_text']);
         form['fields'] = getFieldExtract(Form[id].fields);
         let data = getValueExtract(form['fields']), invalids = getInvalidExtract(form['fields']), layout = getLayoutExtract(Form[id]['layout'],Form[id]['fields']),
             type = 'storeForm', payload = { type,id,form,data,invalids,layout };
         commit(payload);
+        if(Form[id].collections && !_.isEmpty(Form[id].collections)) dispatch('addCollection',{ form:id,Collection:Form[id].collections })
     },
 
     submit({ state,commit,dispatch },{ form,action,record }){
@@ -60,6 +62,10 @@ const actions = {
         dispatch('navigate', { name,params }, { root:true });
     },
 
+    addCollection({ dispatch,commit },{ form,Collection }){
+        _.each(Collection,(collection) => { dispatch('newForm',_.zipObject(['Form'],[_.zipObject([collection.form.id],[collection.form])])); commit('addCollection',{ form,collection }) })
+    }
+
 };
 
 const mutations = {
@@ -86,6 +92,12 @@ const mutations = {
     addFormSubmitData(state,{ FormSubmitData }){ let id = _.keys(FormSubmitData)[0]; if(!state.submit[id]) state.submit = Object.assign({},state.submit,_.fromPairs([[id,null]])); state.submit[id] = FormSubmitData[id]; },
     delFormSubmitData(state,id){ state.submit[id] = null; },
     reset(state,id){ _.each(state.data[id],(value,field) => state.data[id][field] = (_.isArray(value)) ? [] : '') },
+    addCollection(state,{ form,collection }){
+        if(!state.collection[form]) state.collection = Object.assign({},state.collection,_.zipObject([form],[{}]));
+        let cForm = collection.form.id, cRel = collection.relation ? _.snakeCase(collection.relation.method) : null;
+        if(!state.collection[form][cRel]) state.collection[form] = Object.assign({},state.collection[form],_.zipObject([cRel],[cForm]));
+        else state.collection[form][cRel] = cForm;
+    }
 };
 
 const getters = {
