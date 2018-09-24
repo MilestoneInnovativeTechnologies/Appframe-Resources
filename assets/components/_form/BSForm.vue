@@ -11,6 +11,7 @@
                     </div>
                 </template>
                 <BSFormField v-else v-for="(props,fieldName) in fields" :key="[name,fieldName].join('-')" v-bind="props" :data-form-name="name" :data-form-id="dataFormId"></BSFormField>
+                <BSFormCollection v-if="collection" v-for="(cFormId,cName) in collection" :form="cFormId" :name="cName" :key="['F',dataFormId,'C',cName].join('-')"></BSFormCollection>
             </form>
             <div class="card-title clearfix">
                 <div class="float-right">
@@ -23,7 +24,7 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapActions } = createNamespacedHelpers('FORM');
+    const { mapActions,mapGetters } = createNamespacedHelpers('FORM');
     export default {
         name: "BSForm",
         props: ['name','fields','dataFormId','dataActionText','layout'],
@@ -31,6 +32,8 @@
             formLayout(){ let layout = this.getLayout(); return _.isEmpty(layout) ? false : layout },
             submitting(){ return this.$store.state.FORM.submitting[this.dataFormId] },
             action(){ return this.$route.params.action }, record(){ return this.$route.params.id },
+            ...mapGetters({ getCollection:'collection' }),
+            collection(){ return this.getCollection(this.dataFormId) }
         },
         methods: {
             ...mapActions({ formSubmit:'submit' }),
