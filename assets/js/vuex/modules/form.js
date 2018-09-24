@@ -12,6 +12,7 @@ const state = {
     submitting: {},
     formrecord: {},
     collection: {},
+    collectiondata: {},
     submit: {},
 };
 
@@ -28,6 +29,7 @@ const actions = {
 
     submit({ state,commit,dispatch },{ form,action,record }){
         let data = state.data[form];
+        if(!_.isEmpty(state.collection[form])) _.each(state.collection[form],(cForm,collection) => _.set(data,collection,state.collectiondata[cForm][collection]) );
         commit('submitting',{ form,status:true });
         dispatch('post', { data,action,form,record }, { root:true });
     },
@@ -63,40 +65,39 @@ const actions = {
     },
 
     addCollection({ dispatch,commit },{ form,Collection }){
-        _.each(Collection,(collection) => { dispatch('newForm',_.zipObject(['Form'],[_.zipObject([collection.form.id],[collection.form])])); commit('addCollection',{ form,collection }) })
+        _.each(Collection,(collection) => { let Form = {}; Vue.set(Form,collection.form.id,collection.form); dispatch('newForm',{ Form }); commit('addCollection',{ form,collection }); })
     }
 
 };
 
 const mutations = {
     storeForm(state,payload){
-        let form = {}, layout = {}, data = {}, invalids = {}, submitting = {};
-        form[payload.id] = payload.form; layout[payload.id] = payload.layout; data[payload.id] = payload.data; invalids[payload.id] = payload.invalids; submitting[payload.id] = false;
-        state.forms = Object.assign({},state.forms,form);
-        state.layout = Object.assign({},state.layout,layout);
-        state.data = Object.assign({},state.data,data);
-        state.invalids = Object.assign({},state.invalids,invalids);
+        let id = payload.id, submitting = {};
+        submitting[id] = false;
+        Vue.set(state.forms,id,payload.form);
+        _.each(['layout','data','invalids'],(itm) => Vue.set(state[itm],id,payload[itm]));
         state.submitting = Object.assign({},state.submitting,submitting);
     },
-    updateValue(state,payload){
-        state.data[payload.form][payload.field] = payload.value;
-    },
-    addInvalid(state,{ form,field,value,text }){
-        if(!state.invalids[form]) state.invalids[form] = {};
-        if(!state.invalids[form][field]) state.invalids[form][field] = {};
-        if(!state.invalids[form][field][value]) state.invalids[form][field][value] = '';
-        state.invalids[form][field][value] = text;
-    },
+    updateValue(state,{ form,field,value }){ state.data[form][field] = value },
+    addInvalid(state,{ form,field,value,text }){ Vue.set(state.invalids[form][field],value,text); },
     submitting(state,{ form,status }){ state.submitting[form] = status },
     setFormRecord(state,{ form,record }){ state.formrecord = Object.assign({},state.formrecord,_.fromPairs([[form,record]])) },
     addFormSubmitData(state,{ FormSubmitData }){ let id = _.keys(FormSubmitData)[0]; if(!state.submit[id]) state.submit = Object.assign({},state.submit,_.fromPairs([[id,null]])); state.submit[id] = FormSubmitData[id]; },
     delFormSubmitData(state,id){ state.submit[id] = null; },
     reset(state,id){ _.each(state.data[id],(value,field) => state.data[id][field] = (_.isArray(value)) ? [] : '') },
     addCollection(state,{ form,collection }){
-        if(!state.collection[form]) state.collection = Object.assign({},state.collection,_.zipObject([form],[{}]));
+        if(!state.collection[form]) Vue.set(state.collection,form,{});
         let cForm = collection.form.id, cRel = collection.relation ? _.snakeCase(collection.relation.method) : null;
-        if(!state.collection[form][cRel]) state.collection[form] = Object.assign({},state.collection[form],_.zipObject([cRel],[cForm]));
-        else state.collection[form][cRel] = cForm;
+        if(!state.collectiondata[cForm]) Vue.set(state.collectiondata,cForm,{});
+        Vue.set(state.collection[form],cRel,cForm); Vue.set(state.collectiondata[cForm],cRel,{});
+    },
+    addCollectionValue(state,{ form,collection,id }){
+        let data = _.clone(state.data[form]);
+        _.each(state.data[form],(val,name) => Vue.set(state.data[form],name,_.isArray(val) ? [] : ''));
+        Vue.set(state.collectiondata[form][collection],id,data)
+    },
+    delCollectionValue(state,{ form,collection,id }){
+        Vue.delete(state.collectiondata[form][collection],id);
     }
 };
 
@@ -122,7 +123,9 @@ const getters = {
             ? rootState.LIST.store[listId].data
             : null;
     } },
-    getSubmit(state){ return (id) => state.submit[id] }
+    getSubmit(state){ return (id) => state.submit[id] },
+    collection(state){ return (id) => state.collection[id] },
+    collectiondata(state){ return (form,collection) => (collection) ? state.collectiondata[form][collection] : state.collectiondata[form] },
 };
 
 export default {
