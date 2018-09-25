@@ -15,6 +15,7 @@ const vuexModules = {
     'ACTN': 'actions',
     'PTTL': 'pagetitle',
     'HSTR': 'history',
+    'FOPT': 'fieldoption',
 };
 
 const modules = {
