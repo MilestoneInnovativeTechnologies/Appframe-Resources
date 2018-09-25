@@ -1,14 +1,23 @@
 const state = {
+    store: { },
     handler: {
-        //Option: 'newForm',
+        FieldOption: 'newOption',
     },
 };
 
-const actions = {};
+const actions = {
+    fetch({ dispatch },id){ dispatch('post',{ action:'option',id },{ root:true }) },
+};
 
-const mutations = {};
+const mutations = {
+    newOption(state,{ FieldOption }){
+        _.each(FieldOption,(Option,Id) => Vue.set(state.store,Id,Option) )
+    }
+};
 
-const getters = {};
+const getters = {
+    get(state){ return (id) => state.store[id] }
+};
 
 export default {
     namespaced: true,
