@@ -1,5 +1,4 @@
-import { createNamespacedHelpers } from'vuex'
-const { mapMutations } = createNamespacedHelpers('FORM');
+import { mapMutations } from'vuex'
 
 export const fieldValueMixin = {
 
@@ -13,7 +12,7 @@ export const fieldValueMixin = {
     },
 
     methods: {
-        ...mapMutations(['updateValue']),
+        ...mapMutations('FORM',['updateValue']),
         input(e){ this.updateValue({ form: this.dataFormId, field: this.name, value: e.target.value }) }
     }
 
