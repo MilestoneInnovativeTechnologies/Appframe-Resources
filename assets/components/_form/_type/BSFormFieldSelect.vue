@@ -13,14 +13,20 @@
         computed: {
             ...mapGetters('FORM',{ getOption:'option' }),
             ...mapGetters('FOPT',{ getOptions:'get' }),
-             option(){ return _.get(this.getOption(this.dataFormId,this.name),'id') },
-             options(){ return this.getOptions(this.option) },
+            option(){ return _.get(this.getOption(this.dataFormId,this.name),'id') },
+            options(){ return this.getOptions(this.option) },
         },
         methods: {
             ...mapActions('FOPT',{ fetchOptions:'fetch' }),
         },
-        created(){
-            if(!this.options) this.fetchOptions(this.option)
+        created(){ if(!this.options) this.fetchOptions(this.option); },
+        mounted(){
+            let vm = this;
+            $(`select[name="${this.name}"]`)
+                .select2({ minimumResultsForSearch: 12 })
+                .on('select2:select',function(e){
+                    vm.value = e.params.data.id;
+                })
         },
     }
 </script>
