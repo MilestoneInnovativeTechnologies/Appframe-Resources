@@ -1,15 +1,14 @@
 <template>
     <div>
-        <div class="form-check" v-for="opt in options" :key="[dataFormId,name,opt.id].join('-')">
-            <input class="form-check-input" type="checkbox" :name="name" :value="getOptionValue(opt)" v-model="value" :id="['radio',dataFormId,name,opt.id].join('-')">
-            <label class="form-check-label" :for="['radio',dataFormId,name,opt.id].join('-')">{{ getOptionLabel(opt) }}</label>
+        <div class="form-check" v-for="(label,id) in options" :key="[dataFormId,name,id].join('-')">
+            <input class="form-check-input" type="checkbox" :name="name" :value="id" v-model="value" :id="['radio',dataFormId,name,id].join('-')">
+            <label class="form-check-label" :for="['radio',dataFormId,name,id].join('-')">{{ label }}</label>
         </div>
     </div>
 </template>
 
 <script>
-    import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters,mapActions } = createNamespacedHelpers('FORM');
+    import { mapGetters,mapActions } from 'vuex';
     import { fieldValueMixin } from './../../../js/common/BSFormFieldValueMixin';
     export default {
         name: "BSFormFieldCheckbox",
@@ -17,19 +16,16 @@
         props:['dataFormId','name'],
         inheritAttrs: false,
         computed: {
-            ...mapGetters(['form','list']),
-            option(){ return this.form.fields[this.name].options },
-            optionPreload(){ return this.option.preload === 'Yes'; },
-            options(){ return this.list(this.name) || null },
+            ...mapGetters('FORM',{ getOption:'option' }),
+            ...mapGetters('FOPT',{ getOptions:'get' }),
+            option(){ return _.get(this.getOption(this.dataFormId,this.name),'id') },
+            options(){ return this.getOptions(this.option) },
         },
         methods: {
-            ...mapActions(['loadOptions']),
-            getOptionValue(option){ return _.get(option,this.option.value_attr); },
-            getOptionLabel(option){ return _.get(option,this.option.label_attr); },
-            abc(e){ console.log(e.target.value) }
+            ...mapActions('FOPT',{ fetchOptions:'fetch' }),
         },
         created(){
-            if(!this.options && this.optionPreload) this.loadOptions({ field:this.name, form:this.dataFormId })
+            if(!this.options) this.fetchOptions(this.option)
         }
     }
 </script>
