@@ -17,7 +17,6 @@
                 componentPrefix: 'BSFormField',
                 textComponentTypes: ['text','number','email','password'],
                 allControlAttrs: ['disabled','readonly','required'],
-                value: 'Test Value'
             }
         },
         computed: {
