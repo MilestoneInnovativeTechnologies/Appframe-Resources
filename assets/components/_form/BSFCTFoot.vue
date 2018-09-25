@@ -1,7 +1,7 @@
 <template>
     <tfoot><tr><th>{{ count+1 }}</th><td v-for="(field,fName) in fields" :key="key(fName)">
         <BSFormFieldControl :dataFormId="form" v-bind="field" :name="fName"></BSFormFieldControl>
-    </td><th><BTN size="xs" type="outline-info" @click.prevent="add">Add</BTN></th></tr></tfoot>
+    </td><th><BTN type="outline-info" @click.prevent="add">Add</BTN></th></tr></tfoot>
 </template>
 
 <script>
