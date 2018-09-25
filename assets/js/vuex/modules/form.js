@@ -126,6 +126,7 @@ const getters = {
     getSubmit(state){ return (id) => state.submit[id] },
     collection(state){ return (id) => state.collection[id] },
     collectiondata(state){ return (form,collection) => (collection) ? state.collectiondata[form][collection] : state.collectiondata[form] },
+    option(state,getters){ return (form,field) => getters.form(form).fields[field].options },
 };
 
 export default {
@@ -138,7 +139,7 @@ function getFieldExtract(fieldsObj){
         return _.merge(
             _.pick(v,['name','value','type','label']),
             _(v.attributes).keyBy('name').mapValues(V => V.value).value(),
-            { options:_.pick(v.options,['preload','label_attr','value_attr','resource_list']) }
+            { options:_.omit(v.options,['created_at','updated_at']) }
         )
     },1).keyBy('name').value();
 }
