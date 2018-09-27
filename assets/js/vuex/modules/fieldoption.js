@@ -11,7 +11,7 @@ const actions = {
 
 const mutations = {
     newOption(state,{ FieldOption }){
-        _.each(FieldOption,(Option,Id) => Vue.set(state.store,Id,Option) )
+        _.each(FieldOption,(Option,Id) => _.isEmpty(Option) ? Option : Vue.set(state.store,Id,Option) )
     }
 };
 

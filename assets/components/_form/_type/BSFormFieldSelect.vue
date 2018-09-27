@@ -13,13 +13,16 @@
         computed: {
             ...mapGetters('FORM',{ getOption:'option' }),
             ...mapGetters('FOPT',{ getOptions:'get' }),
-            option(){ return _.get(this.getOption(this.dataFormId,this.name),'id') },
-            options(){ return this.getOptions(this.option) },
+            option(){ return this.getOption(this.dataFormId,this.name); },
+            option_id(){ return this.option ? this.option.id : null },
+            options(){ return this.getOptions(this.option_id); },
         },
         methods: {
             ...mapActions('FOPT',{ fetchOptions:'fetch' }),
         },
-        created(){ if(!this.options) this.fetchOptions(this.option); },
+        created(){
+            if(!this.options || this.option.type !== 'Enum') this.fetchOptions(this.option_id);
+        },
         mounted(){
             let vm = this;
             $(`select[name="${this.name}"]`)
