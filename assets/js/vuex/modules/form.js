@@ -98,6 +98,9 @@ const mutations = {
     },
     delCollectionValue(state,{ form,collection,id }){
         Vue.delete(state.collectiondata[form][collection],id);
+    },
+    delAllCollectionValue(state,{ form,collection }){
+        Vue.set(state.collectiondata[form],collection,{});
     }
 };
 
