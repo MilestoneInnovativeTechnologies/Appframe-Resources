@@ -18,8 +18,11 @@
             empty(){ return _.isEmpty(this.collectiondata) }
         },
         methods: {
-            ...mapMutations('FORM',['delCollectionValue']),
+            ...mapMutations('FORM',['delCollectionValue','delAllCollectionValue']),
             del(id){ this.delCollectionValue({ form:this.form,collection:this.name,id }) },
+        },
+        beforeDestroy(){
+            this.delAllCollectionValue({ form:this.form, collection:this.name })
         }
     }
 </script>
