@@ -12,7 +12,7 @@
         mixins: [require('./../../../js/common/BSFormFieldValueMixin').fieldValueMixin],
         computed: {
             ...mapGetters('FORM',{ getOption:'option' }),
-            ...mapGetters('FOPT',{ getOptions:'get' }),
+            ...mapGetters('FOPT',{ getOptions:'get',getLatest:'latest' }),
             option(){ return this.getOption(this.dataFormId,this.name); },
             option_id(){ return this.option ? this.option.id : null },
             options(){ return this.getOptions(this.option_id); },
@@ -21,12 +21,12 @@
             ...mapActions('FOPT',{ fetchOptions:'fetch' }),
         },
         created(){
-            if(!this.options || this.option.type !== 'Enum') this.fetchOptions(this.option_id);
+            if(!this.options || this.option.type !== 'Enum') this.fetchOptions({ id:this.option_id,latest:this.getLatest(this.option_id) });
         },
         mounted(){
             let vm = this;
             $(`select[name="${this.name}"]`)
-                .select2({ minimumResultsForSearch: 12 })
+                .select2({ minimumResultsForSearch: 12, allowClear: true, placeholder: '' })
                 .on('select2:select',function(e){
                     vm.value = e.params.data.id;
                 })
