@@ -29,7 +29,7 @@ const actions = {
 
     submit({ state,commit,dispatch },{ form,action,record }){
         let data = state.data[form];
-        if(!_.isEmpty(state.collection[form])) _.each(state.collection[form],(cForm,collection) => _.set(data,collection,state.collectiondata[cForm][collection]) );
+        if(!_.isEmpty(state.collection[form])) _.each(state.collection[form],(details,collection) => _.set(data,collection,state.collectiondata[details.form][collection]) );
         commit('submitting',{ form,status:true });
         dispatch('post', { data,action,form,record }, { root:true });
     },
@@ -87,12 +87,13 @@ const mutations = {
     reset(state,id){ _.each(state.data[id],(value,field) => state.data[id][field] = (_.isArray(value)) ? [] : '') },
     addCollection(state,{ form,collection }){
         if(!state.collection[form]) Vue.set(state.collection,form,{});
-        let cForm = collection.form.id, cRel = collection.relation ? _.snakeCase(collection.relation.method) : null;
+        let cForm = collection.form.id, cRel = collection.relation ? _.snakeCase(collection.relation.method) : null, skip = collection.foreign_field ? getFieldNameFromId(collection.foreign_field,collection.form.fields) : null;
+        let cObj = Object.assign({},{ form:cForm },{ skip });
         if(!state.collectiondata[cForm]) Vue.set(state.collectiondata,cForm,{});
-        Vue.set(state.collection[form],cRel,cForm); Vue.set(state.collectiondata[cForm],cRel,{});
+        Vue.set(state.collection[form],cRel,cObj); Vue.set(state.collectiondata[cForm],cRel,{});
     },
-    addCollectionValue(state,{ form,collection,id }){
-        let data = _.clone(state.data[form]);
+    addCollectionValue(state,{ parent,form,collection,id }){
+        let data = _.omit(_.clone(state.data[form]),state.collection[parent][collection].skip);
         _.each(state.data[form],(val,name) => Vue.set(state.data[form],name,_.isArray(val) ? [] : ''));
         Vue.set(state.collectiondata[form][collection],id,data)
     },
@@ -164,4 +165,8 @@ function getLayoutExtract(layout,fields){
     if(_.isEmpty(layout)) return [];
     let Fields = _(fields).keyBy('id').mapValues('name').value();
     return _(layout).keyBy(function(l){ return Fields[l.form_field] }).mapValues('colspan').value();
+}
+
+function getFieldNameFromId(id,fields) {
+    return _.chain(fields).find((field) => field.id == id).pick('name').value().name || null;
 }
