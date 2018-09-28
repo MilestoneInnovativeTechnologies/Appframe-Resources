@@ -8,11 +8,11 @@
     import { mapMutations } from 'vuex'
     export default {
         name: "BSFCTFoot",
-        props: ['form','name','fields','count'],
+        props: ['parent','form','name','fields','count','skip'],
         methods: {
             key(fName){ return ['FC',this.form,'TF',fName].join('-') },
             ...mapMutations('FORM',['addCollectionValue','delCollectionValue']),
-            add(){ this.addCollectionValue({ form:this.form,collection:this.name,id:this.id() }) },
+            add(){ this.addCollectionValue({ parent:this.parent,form:this.form,collection:this.name,id:this.id() }) },
             del(id){ this.delCollectionValue({ form:this.form,collection:this.name,id }) },
             id(){ return new Date().getTime()%(Math.pow(10,10)) }
         }

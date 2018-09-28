@@ -5,7 +5,7 @@
             <div class="table-responsive"><table class="table table-sm">
                 <thead><tr><th>#</th><th v-for="(label,idx) in Labels" :key="['FC',form,'THC',idx+1].join('-')">{{ label }}</th><th></th></tr></thead>
                 <BSFCTBody :form="form" :name="name" :names="Names" :collectiondata="collectiondata"></BSFCTBody>
-                <BSFCTFoot :form="form" :name="name" :fields="Fields" :count="Object.keys(collectiondata).length" :key="tfkey"></BSFCTFoot>
+                <BSFCTFoot :form="form" :name="name" :fields="Fields" :skip="skip" :count="Object.keys(collectiondata).length" :parent="parent" :key="tfkey"></BSFCTFoot>
             </table></div>
         </div>
     </div>
@@ -16,12 +16,12 @@
     const { mapGetters } = createNamespacedHelpers('FORM');
     export default {
         name: "BSFormCollection",
-        props: ['form','name'],
+        props: ['parent','form','name','skip'],
         computed: {
             ...mapGetters({ getForm:'form',getInvalid:'invalid' }),
             Form(){ return this.getForm(this.form) },
             title(){ return this.Form.title },
-            Fields(){ return this.Form.fields },
+            Fields(){ return _.omit(this.Form.fields,this.skip) },
             Labels(){ return _.map(this.Fields,'label') },
             Names(){ return _.map(this.Fields,'name') },
             ...mapGetters({ getData:'collectiondata' }),
