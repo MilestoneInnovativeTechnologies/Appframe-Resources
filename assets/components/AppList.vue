@@ -15,11 +15,14 @@
             id(){ return this.dataIds['idn1'] },
             ...mapGetters({ getList:'list',getLayout:'layout' }),
             data(){ return this.getList(this.id) },
-            layout(){ return this.getLayout(this.id) },
+            layout(){ return this.getLayout(this.id) || this.defaultLayout(this.data) },
             action(){ return this.$route.params.action },
         },
         methods: {
             ...mapActions({ updateList: 'update' }),
+            defaultLayout(lists){
+                return _(_.head(_.values(lists))).pickBy((val) => !(_.isArray(val) || _.isObject())).keys().mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['field','path'],[field,''])).value();
+            }
         },
         created(){
             this.updateList(this.action);
