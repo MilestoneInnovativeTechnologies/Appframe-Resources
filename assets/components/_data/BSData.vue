@@ -14,12 +14,14 @@
         computed: {
             ...mapGetters({ getSection:'section' }),
             section(){ return this.getSection(this.dataDataId) },
-            sections(){ return _.isEmpty(this.section) ? false : this.getSections() }
+            sections(){ return _.isEmpty(this.section) ? this.getDefaultSections() : this.getSections(this.section) }
         },
         methods: {
-            getSections(){
+            getDefaultSections(){ return this.getSections([ { colspan:12,relation:null,title:null,title_field:null,items:this.sectionItems(_.keys(this.dataRecord)) } ]) },
+            sectionItems(fields){ return _(fields).mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['attribute','relation'],[field,null])).value(); },
+            getSections(section){
                 let rows = [], cols = [], count = 0;
-                _.each(this.section,function(secObj){
+                _.each(section,function(secObj){
                     if(count + _.toSafeInteger(secObj.colspan) > 12) { rows.push(cols); cols = []; count = 0; }
                     cols.push(secObj); count += _.toSafeInteger(secObj.colspan);
                 });
