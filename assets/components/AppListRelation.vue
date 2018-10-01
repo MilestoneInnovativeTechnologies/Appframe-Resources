@@ -18,11 +18,14 @@
             keys(){ return this.getRelation(this.list,this.relation,this.record) },
             data(){ return _.pick(this.getList(this.list),this.keys) },
             updated(){ return _.isEmpty(this.data) ? 0 : _.max(_.map(this.data,'updated_at')) },
-            layout(){ return this.getLayout(this.list) },
+            layout(){ return this.getLayout(this.list) || this.defaultLayout(this.data) },
             action(){ return this.$route.params.action },
         },
         methods: {
             ...mapActions({ updateList: 'post' }),
+            defaultLayout(lists){
+                return _(_.head(_.values(lists))).pickBy((val) => !(_.isArray(val) || _.isObject())).keys().mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['field','path'],[field,''])).value();
+            },
         },
         created(){
             this.updateList({ action:this.action,id:this.record,updated:this.updated });
