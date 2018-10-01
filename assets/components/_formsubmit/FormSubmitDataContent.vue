@@ -1,5 +1,5 @@
 <template>
-    <dl class="row"><dt class="col-2 text-uppercase">{{ title }}</dt><dd class="col-10">{{ description }}</dd></dl>
+    <dl class="row"><dt class="col-3">{{ title }}</dt><dd class="col-9">{{ description }}</dd></dl>
 </template>
 
 <script>

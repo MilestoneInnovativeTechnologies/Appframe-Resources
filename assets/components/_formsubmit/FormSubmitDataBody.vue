@@ -11,7 +11,7 @@
             component(){ return 'FormSubmitData' + this.type; }
         },
         filters: {
-            read(text){ return text.replace(/\W|\_/g,' ').toUpperCase(); }
+            read(text){ return _.upperCase(text.replace(/\W|\_/g,' ')); }
         }
     }
 </script>
