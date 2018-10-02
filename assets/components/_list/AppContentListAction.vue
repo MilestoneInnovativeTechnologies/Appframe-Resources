@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-toolbar mt-3">
+    <div class="btn-toolbar mt-1 mt-md-0">
         <ListAction v-for="actn in contentActions" v-bind="actn" :list-id="id" :key="['list',id,'action',actn.id].join('-')" :confirm="getConfirm(actn.id)"></ListAction>
         <div class="modal modal-alert fade" id="ListWarningModal">
             <div class="modal-dialog">

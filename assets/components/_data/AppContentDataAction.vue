@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-toolbar mt-3">
+    <div class="btn-toolbar">
         <DataAction v-for="actn in contentActions" v-bind="actn" :data-id="id" :key="['data',id,'action',actn.id].join('-')" :confirm="getConfirm(actn.id)"></DataAction>
         <div class="modal modal-alert fade" id="DataWarningModal">
             <div class="modal-dialog">
