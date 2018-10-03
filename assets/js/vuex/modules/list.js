@@ -59,7 +59,7 @@ const mutations = {
 const getters = {
     list(state){ return (id) => state.lists[id] },
     layout(state){ return (id) => state.layout[id] },
-    details(state){ return (id) => state.details[id] },
+    details(state){ return (id) => state.detail[id] },
     selected(state){ return (id) => state.selected[id] },
     relation(state){ return (list,relation,id) => state.relation[list][relation][id] },
 };
