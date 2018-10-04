@@ -11,6 +11,7 @@
     export default {
         name: "AppList",
         props: ['dataIds'],
+        mixins: [require('./../js/common/ListDefaultLayoutMixin').listDefaultLayoutMixin],
         computed: {
             id(){ return this.dataIds['idn1'] },
             ...mapGetters({ getList:'list',getLayout:'layout' }),
@@ -20,9 +21,6 @@
         },
         methods: {
             ...mapActions({ updateList: 'update' }),
-            defaultLayout(lists){
-                return _(_.head(_.values(lists))).pickBy((val) => !(_.isArray(val) || _.isObject())).keys().mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['field','path'],[field,''])).value();
-            }
         },
         created(){
             this.updateList(this.action);

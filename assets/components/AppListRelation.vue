@@ -11,6 +11,7 @@
     export default {
         name: "AppListRelation",
         props: ['dataIds'],
+        mixins: [require('./../js/common/ListDefaultLayoutMixin').listDefaultLayoutMixin],
         computed: {
             list(){ return this.dataIds['idn2'] }, relation(){ return this.dataIds['idn1'] },
             record(){ return this.$route.params.id },
@@ -23,9 +24,6 @@
         },
         methods: {
             ...mapActions({ updateList: 'post' }),
-            defaultLayout(lists){
-                return _(_.head(_.values(lists))).pickBy((val) => !(_.isArray(val) || _.isObject())).keys().mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['field','path'],[field,''])).value();
-            },
         },
         created(){
             this.updateList({ action:this.action,id:this.record,updated:this.updated });
