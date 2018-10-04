@@ -1,5 +1,5 @@
 <template>
-    <component v-if="resolution && types.indexOf(contentType) > -1" :is="component" :idns="contentIdns" class="align-items-end my-0"></component>
+    <component v-if="resolution && types.indexOf(contentType) > -1" :is="component" :idns="contentIdns" class="my-0"></component>
 </template>
 
 <script>
