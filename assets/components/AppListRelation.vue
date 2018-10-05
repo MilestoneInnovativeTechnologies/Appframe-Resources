@@ -14,20 +14,28 @@
         mixins: [require('./../js/common/ListDefaultLayoutMixin').listDefaultLayoutMixin],
         computed: {
             list(){ return this.dataIds['idn2'] }, relation(){ return this.dataIds['idn1'] },
-            record(){ return this.$route.params.id },
+            record(){ return this.$route.params.id }, action(){ return this.$route.params.action },
             ...mapGetters({ getList:'list',getLayout:'layout',getRelation:'relation' }),
-            keys(){ return this.getRelation(this.list,this.relation,this.record) },
-            data(){ return _.pick(this.getList(this.list),this.keys) },
-            updated(){ return _.isEmpty(this.data) ? 0 : _.max(_.map(this.data,'updated_at')) },
+            lists(){ return this.getList(this.list) },
+            relations(){ return this.getRelation(this.list,this.relation,this.record) },
+            data(){ return _.pick(this.lists,this.relations); },
             layout(){ return this.getLayout(this.list) || this.defaultLayout(this.data) },
-            action(){ return this.$route.params.action },
+            request(){ return { action:this.action,id:this.record,data:true } }
         },
         methods: {
-            ...mapActions({ updateList: 'post' }),
+            ...mapActions({ post: 'post' }),
+            fetchRelation(){ this.post(this.request) },
+            fetchList(get){ this.post({ ...(this.request),get }) }
         },
         created(){
-            this.updateList({ action:this.action,id:this.record,updated:this.updated });
+            this.fetchRelation();
         },
+        watch: {
+            relations(relations){
+                let get = _.difference(_.map(relations,_.toString),_.keys(this.data));
+                if(this.relations && !_.isEmpty(get)) this.fetchList(get);
+            }
+        }
     }
 </script>
 
