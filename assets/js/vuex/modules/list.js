@@ -6,7 +6,6 @@ const state = {
     relation: {},
     relation_update: false,
     handler: {
-        'ListData': 'setDetail',
         'ListLayout': 'setLayout',
         'List': 'mergeList',
         'ListRelation': 'addListRelation',
@@ -36,7 +35,6 @@ const mutations = {
         if(!state.lists[id]) { state.lists = Object.assign({},state.lists,Obj); let selected = {}; selected[id] = null; state.selected = Object.assign({},state.selected,selected) }
         if(_.isEmpty(List[id])) return; state.lists[id] = Object.assign({},state.lists[id],_.keyBy(List[id],'id'));
     },
-    setDetail(state,{ ListData }){ state.detail = Object.assign({},state.detail,ListData); },
     setLayout(state,{ ListLayout }){ state.layout = Object.assign({},state.layout,ListLayout); },
     setSelected(state,{ list,record }){ state.selected[list] = record; },
     createRelation(state,{ list,relation,id }){
@@ -45,7 +43,6 @@ const mutations = {
         if(!state.relation[list][relation][id]) state.relation[list][relation] = Object.assign({},state.relation[list][relation],_.zipObject([id],[[]]))
     },
     setRelation(state,{ list,relation,id,data }){
-        //Array.prototype.push.apply(state.relation[list][relation][id],data);
         state.relation[list][relation][id] = data
     },
     updateRelation(state,{ list,relation,id,data,status }){
@@ -59,7 +56,6 @@ const mutations = {
 const getters = {
     list(state){ return (id) => state.lists[id] },
     layout(state){ return (id) => state.layout[id] },
-    details(state){ return (id) => state.detail[id] },
     selected(state){ return (id) => state.selected[id] },
     relation(state){ return (list,relation,id) => state.relation[list][relation][id] },
 };
