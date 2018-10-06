@@ -4,22 +4,37 @@ const state = {
     page: 1,
     cont: '...',
     list: {},
+    items: {},
     handler: {
-        'ListData': 'setList',
+        List: 'setListPageOneItems',
+        ListData: 'setList',
+        ListPageItems: 'setListPageItems'
     },
 };
 
 const actions = {
+    setListPageOneItems({ commit },{ List,_response_data }){
+        if(_response_data.Resolve) _.each(List,(Ary,list) => commit('setListPageItem',{ list,page:1,items:_.map(Ary,'id') }) )
+    },
+    setListPageItems({ commit },{ ListPageItems }){
+        _.each(ListPageItems,(pageItems,list) => _.each(pageItems,(items,page) => commit('setListPageItem',{ list,page,items })))
+    },
+    pageWiseArrange({ state,commit },{ list }){
+        let all = _.uniq(_.flatMap(state.items[list]));
+        _.each(_.chunk(all,state.list[list].items),(items,idx) => commit('setListPageItem',{ list,page:idx+1,items}) )
+    }
 };
 
 const mutations = {
     setPage(state,page){ state.page = page },
-    setList(state,{ ListData }){ state.list = Object.assign({},state.list,ListData); },
+    setList(state,{ ListData }){ state.list = Object.assign({},state.list,ListData); _.each(ListData,(data,list) => Vue.set(state.items,list,{})) },
+    setListPageItem(state,{ list,page,items }){ Vue.set(state.items[list],page,items) },
 };
 
 const getters = {
     list(state){ return (id) => state.list[id] },
     pages(state,getters){ return (id) => Math.ceil(parseInt(getters.list(id).count)/parseInt(getters.list(id).items)) },
+    items(state){ return (id) => state.items[id][state.page] },
     range_start(state,getters){ return (id) => {
         let pages = getters.pages(id);
         let start = (state.page + Math.ceil(state.first / 2)) - state.first; start = (pages <= (state.first + state.last) || start < 1) ? 1 : start;
