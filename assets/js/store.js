@@ -16,6 +16,7 @@ const vuexModules = {
     'PTTL': 'pagetitle',
     'HSTR': 'history',
     'FOPT': 'fieldoption',
+    'PGNT': 'pagination',
 };
 
 const modules = {
