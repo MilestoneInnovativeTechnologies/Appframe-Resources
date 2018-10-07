@@ -22,7 +22,8 @@ const actions = {
     pageWiseArrange({ state,commit },{ list }){
         let all = _.uniq(_.flatMap(state.items[list]));
         _.each(_.chunk(all,state.list[list].items),(items,idx) => commit('setListPageItem',{ list,page:idx+1,items}) )
-    }
+    },
+    post({ dispatch },request){ dispatch('post',request,{ root:true }); },
 };
 
 const mutations = {
