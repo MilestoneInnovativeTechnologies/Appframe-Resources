@@ -10,7 +10,6 @@
     export default {
         name: "AppList",
         props: ['dataIds'],
-        mixins: [require('./../js/common/ListDefaultLayoutMixin').listDefaultLayoutMixin],
         computed: {
             id(){ return this.dataIds['idn1'] },
             ...mapGetters('LIST',{ getList:'list',getLayout:'layout' }), ...mapGetters('PGNT',{ getDetails:'list',getItems:'items' }), ...mapState('PGNT',[ 'page' ]),

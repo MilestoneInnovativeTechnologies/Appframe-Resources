@@ -11,7 +11,6 @@
     export default {
         name: "AppListRelation",
         props: ['dataIds'],
-        mixins: [require('./../js/common/ListDefaultLayoutMixin').listDefaultLayoutMixin],
         computed: {
             list(){ return this.dataIds['idn2'] }, relation(){ return this.dataIds['idn1'] },
             record(){ return this.$route.params.id }, action(){ return this.$route.params.action },
