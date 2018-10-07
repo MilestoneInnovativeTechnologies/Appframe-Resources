@@ -8,7 +8,7 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex'
-    const { mapState,mapGetters,mapMutations } = createNamespacedHelpers('PGNT');
+    const { mapState,mapGetters,mapMutations,mapActions } = createNamespacedHelpers('PGNT');
     export default {
         name: "AppContentListPagination",
         props: ['idns'],
@@ -16,21 +16,22 @@
             ...mapState(['first','last','cont']),
             page: {
                 ...mapState({ get:state => state.page }),
-                set(page){ this.setPage(page) }
+                set(page){ this.setPage(page); this.loadPageItems(page) }
             },
             list_id(){ return this.idns[0] },
+            action(){ return this.$route.params.action },
             ...mapGetters({ getRange:'range' }),
             range(){ return this.getRange(this.list_id) },
             pages(){ return _.last(this.range) }
         },
         methods: {
-            ...mapMutations([ 'setPage' ]),
+            ...mapMutations([ 'setPage' ]), ...mapActions([ 'post' ]),
             goToPage(page){ this.page = page },
-            goToPreviousPage(){ this.page-- },
-            goToNextPage(){ this.page++ },
+            goToPreviousPage(){ this.page-- }, goToNextPage(){ this.page++ },
+            loadPageItems(page){ this.post({ action:this.action,page }) }
         },
         created(){
-            this.page = 1;
+            this.setPage(1)
         }
     }
 </script>
