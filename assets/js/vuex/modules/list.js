@@ -55,7 +55,7 @@ const mutations = {
 
 const getters = {
     list(state){ return (id) => state.lists[id] },
-    layout(state){ return (id) => state.layout[id] },
+    layout(state){ return (id) => state.layout[id] || _(_.head(_.values(state.lists[id]))).pickBy((val) => !(_.isArray(val) || _.isObject())).keys().mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['field','path'],[field,''])).value() },
     selected(state){ return (id) => state.selected[id] },
     relation(state){ return (list,relation,id) => state.relation[list][relation][id] },
 };
