@@ -27,7 +27,6 @@
             this.updateList(this.action);
         },
         watch: {
-            page(page){ this.post({ action:this.action,page }) },
             fetchable(get){ if(!_.isEmpty(get)) this.post({ action:this.action,get }) }
         }
     }
