@@ -16,10 +16,11 @@ const actions = {
     setListPageOneItems({ commit },{ List,_response_data }){
         if(_response_data.Resolve) _.each(List,(Ary,list) => commit('setListPageItem',{ list,page:1,items:_.map(Ary,'id') }) )
     },
-    setListPageItems({ commit },{ ListPageItems }){
+    setListPageItems({ commit,dispatch },{ ListPageItems }){
         _.each(ListPageItems,(pageItems,list) => _.each(pageItems,(items,page) => commit('setListPageItem',{ list,page,items })))
+        //dispatch('pageWiseArrange',_.head(_.keys(ListPageItems)))
     },
-    pageWiseArrange({ state,commit },{ list }){
+    pageWiseArrange({ state,commit },list){
         let all = _.uniq(_.flatMap(state.items[list]));
         _.each(_.chunk(all,state.list[list].items),(items,idx) => commit('setListPageItem',{ list,page:idx+1,items}) )
     },
