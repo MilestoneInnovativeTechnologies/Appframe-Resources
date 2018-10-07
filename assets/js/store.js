@@ -17,6 +17,7 @@ const vuexModules = {
     'HSTR': 'history',
     'FOPT': 'fieldoption',
     'PGNT': 'pagination',
+    'SRLS': 'searchlist',
 };
 
 const modules = {
