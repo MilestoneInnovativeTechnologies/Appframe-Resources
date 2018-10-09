@@ -5,7 +5,7 @@ const state = {
     list: {},
     items: {},
     handler: {
-        List: 'setListPageOneItems',
+        List: ['setListPageOneItems','addUpdateToPagination'],
         ListData: ['setList','setItem'],
         ListPageItems: 'setListPageItems'
     },
@@ -13,16 +13,23 @@ const state = {
 
 const actions = {
     setListPageOneItems({ commit },{ List,_response_data }){
-        if(_response_data.Resolve) _.each(List,(Ary,list) => commit('setListPageItem',{ list,page:1,items:_.map(Ary,'id') }) )
+        if(_response_data.Resolve) _.each(List,(lists,list) => commit('setListPageItem',{ list,page:1,items:_.map(lists,'id') }) )
     },
     setListPageItems({ commit,dispatch },{ ListPageItems }){
         _.each(ListPageItems,(pageItems,list) => _.each(pageItems,(items,page) => commit('setListPageItem',{ list,page,items })))
-        //dispatch('pageWiseArrange',_.head(_.keys(ListPageItems)))
     },
-    // pageWiseArrange({ state,commit },list){
-    //     let all = _.uniq(_.flatMap(state.items[list]));
-    //     _.each(_.chunk(all,state.list[list].items),(items,idx) => commit('setListPageItem',{ list,page:idx+1,items}) )
-    // },
+    addUpdateToPagination({ state,commit,dispatch },{ List,_response_data }){
+        if(_response_data.request.update && !_.isEmpty(_.values(List)))
+            _.each(List,(lists,list) => {
+                let items = _.concat(state.items[list][1],_.map(lists,'id'));
+                commit('setListPageItem',{ list,items,page:1 });
+                dispatch('pageWiseArrange',list);
+            })
+    },
+    pageWiseArrange({ state,commit },list){
+        let all = _.uniq(_.flatMap(state.items[list]));
+        _.each(_.chunk(all,state.list[list].items),(items,idx) => commit('setListPageItem',{ list,page:idx+1,items}) )
+    },
     post({ dispatch },request){ dispatch('post',request,{ root:true }); },
 };
 
