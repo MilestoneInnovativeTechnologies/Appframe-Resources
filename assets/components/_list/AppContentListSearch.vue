@@ -1,7 +1,7 @@
 <template>
     <div class="form-group">
         <div class="input-group input-group-sm input-group-alt">
-            <input type="text" class="form-control" placeholder="Search record" v-model="filter">
+            <input type="text" class="form-control" placeholder="Search record" v-model.lazy="term">
             <div class="input-group-append">
                 <span class="input-group-text">
                     <BTN icon="search" size="xs" type="btn-outline-info" class="bg-transparent py-0 border-0" @click="search">&nbsp;</BTN>
@@ -12,12 +12,21 @@
 </template>
 
 <script>
+    import { createNamespacedHelpers } from 'vuex'
+    const { mapState,mapMutations,mapActions } = createNamespacedHelpers('SRLS');
     export default {
         name: "AppContentListSearch",
-        props: ['idns'],
-        data(){ return { filter:'' } },
+        props: ['id'],
+        computed: {
+            action(){ return this.$route.params.action },
+            term: {
+                ...mapState({ get(state){ return state.list[this.id].term } }),
+                set(term){ this.setTerm({ id:this.id,term }); }
+            },
+        },
         methods: {
-            search(){ console.log('Filter'); }
+            ...mapActions([ 'post' ]), ...mapMutations([ 'setTerm','setPage' ]),
+            search(){ let term = _.trim(this.term); if(_.isEmpty(term)) return; this.post({ action:this.action,term }); this.setPage({ page:1,id:this.id }) }
         }
     }
 </script>

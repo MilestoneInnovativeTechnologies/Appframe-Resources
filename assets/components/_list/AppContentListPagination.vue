@@ -7,31 +7,40 @@
 </template>
 
 <script>
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapState,mapGetters,mapMutations,mapActions } = createNamespacedHelpers('PGNT');
+    import { mapState,mapMutations,mapActions } from 'vuex';
     export default {
         name: "AppContentListPagination",
-        props: ['idns'],
+        props: ['list','page','pages','search'],
         computed: {
-            ...mapState(['first','last','cont']),
-            page: {
-                ...mapState({ get:state => state.page }),
-                set(page){ this.setPage(page); this.loadPageItems(page) }
-            },
-            list_id(){ return this.idns[0] },
+            ...mapState('PGNT',['first','last','cont']),
             action(){ return this.$route.params.action },
-            ...mapGetters({ getRange:'range' }),
-            range(){ return this.getRange(this.list_id) },
-            pages(){ return _.last(this.range) }
+            range(){ return getRange(getStartRange(this.page,this.pages,this.first,this.last),getEndRange(this.pages,this.last),this.cont) },
         },
         methods: {
-            ...mapMutations([ 'setPage' ]), ...mapActions([ 'post' ]),
-            goToPage(page){ this.page = page },
-            goToPreviousPage(){ this.page-- }, goToNextPage(){ this.page++ },
+            ...mapMutations('PGNT',['setPage']), ...mapMutations('SRLS',{ setSearchPage:'setPage' }), ...mapActions('PGNT',['post']),
+            goToPage(page){ this.setPage({ list:this.list,page }); this.setPageAction(page); },
+            goToPreviousPage(){ this.goToPage(this.page-1) }, goToNextPage(){ this.goToPage(this.page+1) },
+            setPageAction(page){ return (this.search) ? this.setSearchPage({ id:this.list,page }) : this.loadPageItems(page) },
             loadPageItems(page){ this.post({ action:this.action,page }) }
-        },
-        created(){
-            this.setPage(1)
         }
+    }
+
+    function getStartRange(page,pages,first,last){
+        let start = (page + Math.ceil(first / 2)) - first; start = (pages <= (first + last) || start < 1) ? 1 : start;
+        let end = start + first; end = (end >= pages) ? pages + 1 : end;
+        return _.range(start,end);
+
+    }
+
+    function getEndRange(pages,last){
+        let start = (pages - last) < 1 ? 1 : (pages - last);
+        return _.range(start, pages)
+    }
+
+    function getRange(start,end,cont){
+        if(_.head(start) !== 1) start.unshift(cont);
+        if(_.head(end) - _.last(start) > 1) end.unshift(cont);
+        else if(_.head(end) - _.last(start) < 1) end = _.difference(end,start);
+        return _.concat(start,end);
     }
 </script>
