@@ -1,7 +1,7 @@
 <template>
     <div class="form-group">
         <div class="input-group input-group-sm input-group-alt">
-            <input type="text" class="form-control" placeholder="Search record" v-model.lazy="term">
+            <input type="text" class="form-control" placeholder="Search record" v-model.lazy="term" @keyup.enter="search">
             <div class="input-group-append">
                 <span class="input-group-text">
                     <BTN icon="search" size="xs" type="btn-outline-info" class="bg-transparent py-0 border-0" @click="search">&nbsp;</BTN>
