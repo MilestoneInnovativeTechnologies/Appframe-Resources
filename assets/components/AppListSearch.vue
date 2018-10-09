@@ -1,17 +1,14 @@
 <template>
-    <component v-if="resolution && types.indexOf(contentType) > -1" :is="component" :idns="contentIdns" class="mr-auto my-0"></component>
+    <AppContentListSearch v-if="active" :id="id" class="mr-auto my-0"></AppContentListSearch>
 </template>
 
 <script>
     export default {
         name: "AppListSearch",
-        data(){ return { types:['List'] }},
         computed: {
-            action(){ return this.$store.getters.contentAction('AppContent'); },
-            resolution(){ return this.$store.getters.resolution(this.action) },
-            contentType(){ return this.resolution.type },
-            contentIdns(){ return _(this.resolution).omit('type').values().value() },
-            component(){ return ['App','Content',this.contentType,'Search'].join(''); },
+            action(){ return this.$route.params.action }, resolution(){ return this.$store.getters.resolution(this.action) },
+            type(){ return this.resolution.type }, active(){ return this.resolution && this.type === 'List' },
+            id(){ return this.resolution.idn1 },
         }
     }
 </script>
