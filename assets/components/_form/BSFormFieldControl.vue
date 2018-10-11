@@ -17,6 +17,7 @@
                 componentPrefix: 'BSFormField',
                 textComponentTypes: ['text','number','email','password'],
                 allControlAttrs: ['disabled','readonly','required'],
+                forwardProps: ['parent','depends'],
             }
         },
         computed: {
@@ -31,8 +32,9 @@
             },
             props(){
                 let vm = this, props = { };
-                _.forEach(this.allControlAttrs,(v) => { if(vm.$attrs.hasOwnProperty(v)) props[v] = v; } );
-                if(_.indexOf(this.textComponentTypes,this.type) > -1) props['type'] = this.type;
+                _.forEach(vm.allControlAttrs,(v) => { if(vm.$attrs.hasOwnProperty(v)) props[v] = v; } );
+                _.forEach(vm.forwardProps,(v) => { if(vm.$attrs.hasOwnProperty(v)) props[v] = vm.$attrs[v]; } );
+                if(_.includes(vm.textComponentTypes,this.type)) props['type'] = this.type;
                 return props;
             }
         }
