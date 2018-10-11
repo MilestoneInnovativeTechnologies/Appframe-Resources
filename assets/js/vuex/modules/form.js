@@ -66,7 +66,9 @@ const actions = {
 
     addCollection({ dispatch,commit },{ form,Collection }){
         _.each(Collection,(collection) => { let Form = {}; Vue.set(Form,collection.form.id,collection.form); dispatch('newForm',{ Form }); commit('addCollection',{ form,collection }); })
-    }
+    },
+
+    post({ dispatch },request){ dispatch('post',request,{ root:true }); }
 
 };
 
