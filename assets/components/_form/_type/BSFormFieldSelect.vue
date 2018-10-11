@@ -9,7 +9,7 @@
     export default {
         name: "BSFormFieldSelect",
         props:['dataFormId','name'],
-        mixins: [require('./../../../js/common/BSFormFieldValueMixin').fieldValueMixin],
+        mixins: [require('./../../../js/common/BSFormFieldValueMixin').fieldValueMixin,require('./../../../js/common/BSFormFieldDependMixin').fieldDependMixin],
         computed: {
             ...mapGetters('FORM',{ getOption:'option' }),
             ...mapGetters('FOPT',{ getOptions:'get',getLatest:'latest' }),
