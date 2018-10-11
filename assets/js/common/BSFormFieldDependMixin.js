@@ -26,6 +26,7 @@ export const fieldDependMixin = {
             }
         }),
         ...mapActions(['post']),
+        doIgnoreFetchingDependValue(data){ return this.depends_ignore_null && _.some(_.map(_.toArray(data), v => _.toString(v)), v => _.isEmpty(v)) }
     },
     created(){
         if(this.depends_has){
@@ -35,8 +36,7 @@ export const fieldDependMixin = {
     },
     watch: {
         depend_field_values(data){
-            if(!this.depends_has) return; if(this.depends_ignore_null && _.some(_.map(_.toArray(data), v => _.toString(v)), v => _.isEmpty(v))) return;
-            this.post({ ...(this.depends_server_request),data })
+            if(this.depends_has && !this.doIgnoreFetchingDependValue(data)) this.post({ ...(this.depends_server_request),data })
         }
     }
 
