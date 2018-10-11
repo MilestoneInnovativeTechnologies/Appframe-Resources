@@ -141,7 +141,7 @@ export default {
 function getFieldExtract(fieldsObj){
     return _(fieldsObj).flatMapDepth(function(v){
         return _.merge(
-            _.pick(v,['name','value','type','label']),
+            _.pick(v,['name','value','type','label','id']),
             _(v.attributes).keyBy('name').mapValues(V => V.value).value(),
             { options:_.omit(v.options,['created_at','updated_at']) },
             { depends:_.map(v.depends,(depend) => _.pick(depend,['depend_field','ignore_null'])) },
