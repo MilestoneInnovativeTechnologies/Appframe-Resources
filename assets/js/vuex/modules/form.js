@@ -144,7 +144,7 @@ function getFieldExtract(fieldsObj){
             _.pick(v,['name','value','type','label']),
             _(v.attributes).keyBy('name').mapValues(V => V.value).value(),
             { options:_.omit(v.options,['created_at','updated_at']) },
-            { depends:_.map(v.depends,'depend_field') },
+            { depends:_.map(v.depends,(depend) => _.pick(depend,['depend_field','ignore_null'])) },
         )
     },1).keyBy('name').value();
 }
