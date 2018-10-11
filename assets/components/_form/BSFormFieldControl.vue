@@ -17,7 +17,7 @@
                 componentPrefix: 'BSFormField',
                 textComponentTypes: ['text','number','email','password'],
                 allControlAttrs: ['disabled','readonly','required'],
-                forwardProps: ['parent','depends'],
+                forwardProps: ['parent','depends','id'],
             }
         },
         computed: {
