@@ -4,6 +4,7 @@ const state = {
         Validation: 'newValidation',
         FormData: 'newFormData',
         FormSubmitData: ['addFormSubmitData','showResponsePage'],
+        DependValue: 'addFormFieldData',
     },
     forms: {},
     layout:{},
@@ -66,6 +67,10 @@ const actions = {
 
     addCollection({ dispatch,commit },{ form,Collection }){
         _.each(Collection,(collection) => { let Form = {}; Vue.set(Form,collection.form.id,collection.form); dispatch('newForm',{ Form }); commit('addCollection',{ form,collection }); })
+    },
+
+    addFormFieldData({ commit },{ DependValue }){
+        _.each(DependValue,(FieldValue,form) => _.each(FieldValue,(value,field) => commit('updateValue',{ form,field,value })))
     },
 
     post({ dispatch },request){ dispatch('post',request,{ root:true }); }
