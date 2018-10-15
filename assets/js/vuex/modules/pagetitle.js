@@ -62,6 +62,10 @@ const mutations = {
         if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
         let title = _.values(data0)[0].title; state.title[action]['*'] = title;
     },
+    setDashboardTitle(state,{ action,data0 }){
+        if(!state.title[action]) state.title = Object.assign({},state.title,_.fromPairs([[action,{'*':null}]]));
+        let title = _.values(data0)[0].title; state.title[action]['*'] = title;
+    },
 };
 
 const getters = {
@@ -83,6 +87,7 @@ const titleFetchProperty = {
     Form: 'Form',
     List: 'ListData',
     Data: ['DataDetails','Data'],
+    Dashboard: 'Dashboard',
     FormWithData: ['Form','DataDetails','Data'],
     ListRelation: 'ListData',
     AddRelation: 'Form',
