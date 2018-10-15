@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div class="float-right w-75">
                     <ul class="nav nav-pills float-right card-header-pills">
-                        <li class="nav-item" v-for="n in range(5)">
+                        <li class="nav-item" v-for="n in range(bts)">
                             <a class="nav-link btn btn-secondary text-light mx-1 btn-xs" href="#">{{ random_text() }}</a>
                         </li>
                     </ul>
@@ -13,8 +13,8 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-sm mb-0 table-hover">
-                        <thead class="thead-light"><tr><th></th><th v-for="n in range(5)"><span>{{ random_text() }}</span></th></tr></thead>
-                        <tbody><tr v-for="r in range()"><td><input class="mt-1" disabled type="checkbox"></td><td v-for="m in range(5)"><span>{{ random_text() }}</span></td></tr></tbody>
+                        <thead class="thead-light"><tr><th></th><th v-for="n in range(cls)"><span>{{ random_text() }}</span></th></tr></thead>
+                        <tbody><tr v-for="r in range()"><td><input class="mt-1" disabled type="checkbox"></td><td v-for="m in range(cls)"><span>{{ random_text() }}</span></td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -25,6 +25,10 @@
 <script>
     export default {
         name: "ListLoading",
+        props: {
+            bts: { default:5 },
+            cls: { default:5 },
+        },
         methods: {
             random_text(){ return _.range(parseInt(Math.random()*10)+6).join(''); },
             range(n){ return _.range(n || parseInt(Math.random()*10)+4) }
