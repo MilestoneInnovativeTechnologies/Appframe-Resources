@@ -18,6 +18,7 @@ const vuexModules = {
     'FOPT': 'fieldoption',
     'PGNT': 'pagination',
     'SRLS': 'searchlist',
+    'DBRD': 'dashboard',
 };
 
 const modules = {
