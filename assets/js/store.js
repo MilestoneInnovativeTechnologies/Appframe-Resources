@@ -19,6 +19,7 @@ const vuexModules = {
     'PGNT': 'pagination',
     'SRLS': 'searchlist',
     'DBRD': 'dashboard',
+    'MTRC': 'metrics',
 };
 
 const modules = {
