@@ -16,6 +16,7 @@
     export default {
         name: "BSFormField",
         inheritAttrs: false,
+        mixins: [require('./../../js/common/BSFormFieldDynamicMixin').fieldDynamicMixin],
         props: {
             inline: { default: false },
             prepend: { default: false }, append: { default: false },
