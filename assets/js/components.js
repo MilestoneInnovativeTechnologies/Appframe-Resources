@@ -12,7 +12,7 @@ vueGraphWidgets.forEach(Name => {
     Vue.component(Options.default.name,Options.default || Options);
 });
 
-const vueGraphs = ['line-dateblock'];
+const vueGraphs = ['line-dateblock','bar','line','area'];
 vueGraphs.forEach(Name => {
     let Options = require('vue-graph/src/components/' + Name + '.js');
     Vue.component(Options.default.name,Options.default || Options);
