@@ -3,6 +3,7 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex';
     export default {
         name: "BSFormFieldControl",
         inheritAttrs: false,
@@ -32,11 +33,15 @@
             },
             props(){
                 let vm = this, props = { };
-                _.forEach(vm.allControlAttrs,(v) => { if(vm.$attrs.hasOwnProperty(v)) props[v] = v; } );
+                _.forEach(vm.allControlAttrs,(v) => { if(vm.$attrs.hasOwnProperty(v) && vm.$attrs[v] !== false) props[v] = v; } );
                 _.forEach(vm.forwardProps,(v) => { if(vm.$attrs.hasOwnProperty(v)) props[v] = vm.$attrs[v]; } );
                 if(_.includes(vm.textComponentTypes,this.type)) props['type'] = this.type;
                 return props;
             }
+        },
+        methods: mapMutations('FORM',['updateValue']),
+        watch: {
+            props({ disabled }){ if(disabled) this.updateValue({ form:this.dataFormId,field:this.name,value:null }) }
         }
     }
 </script>
