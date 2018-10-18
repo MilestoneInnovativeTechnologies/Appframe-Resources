@@ -23,11 +23,11 @@
             prependIcon: { default: false }, appendIcon: { default: false },
         },
         computed: {
-            cls(){ return { 'form-group':true, row:this.inline }; },
+            cls(){ return { 'form-group':true, row:this.inline, ...(this.dynamic_field_class) }; },
             cntCls(){ return ['col-md-' + (12 - _.toSafeInteger(this.inline))] },
             inputGroup(){ return this.prepend || this.append || this.prependIcon || this.appendIcon },
             cntComponent(){ return (this.inputGroup) ? 'BSFormFieldInputGroup' : 'BSFormFieldControl' },
-            props(){ return _.merge({},this.$attrs,this.$props); },
+            props(){ return _.merge({},this.$attrs,this.$props,this.dynamic_field_attrs); },
             ...mapGetters('FORM',{ getInvalid:'invalid' }),
             invalid(){ return this.getInvalid(this.props['data-form-id'],this.props.name) }
         }
