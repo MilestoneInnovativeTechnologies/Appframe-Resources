@@ -29,10 +29,10 @@ const mutations = {
 };
 
 const actions = {
-    init({ commit }){
+    init({ commit,rootState }){
         axios({
             method: 'post',
-            url: '/token/fresh',
+            url: _.trim(rootState.root_path,'/') + '/token/fresh',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
