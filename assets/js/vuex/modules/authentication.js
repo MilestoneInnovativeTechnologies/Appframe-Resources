@@ -32,7 +32,7 @@ const actions = {
     init({ commit }){
         axios({
             method: 'post',
-            url: '/token/fresh',
+            url: [location.origin,_.trim(window.VuexStoreState.root_path,'/'),'token/fresh'].join('/'),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
