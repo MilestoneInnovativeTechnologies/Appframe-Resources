@@ -29,7 +29,7 @@ const mutations = {
 };
 
 const actions = {
-    init({ commit,rootState }){
+    init({ commit }){
         axios({
             method: 'post',
             url: '/token/fresh',
