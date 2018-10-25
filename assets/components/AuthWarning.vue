@@ -8,7 +8,7 @@
                     </h5>
                 </div>
                 <div class="modal-body">
-                    <p> {{ description }} </p>
+                    <p v-html="description"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" @click="cancelAuthWarning(200)">Cancel</button>

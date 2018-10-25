@@ -19,7 +19,11 @@ const axiosInstance = axios.create({
     validateStatus: function(status){ return status < 500; }
 });
 
-const interceptorErrorFunction = function (error) { window.VueApp.$store.commit('PAGE/loading',false); return Promise.reject(error); };
+const interceptorErrorFunction = function (error) {
+    window.VueApp.$store.commit('PAGE/loading',false);
+    window.VueApp.$store.dispatch('serverResponseError', error).then(null);
+    return Promise.reject(error);
+};
 axiosInstance.interceptors.request.use(function (config) {
     window.VueApp.$store.commit('updateConfig',config);
     window.VueApp.$store.dispatch('serverRequestInterceptor', config).then(null);

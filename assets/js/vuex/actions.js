@@ -10,6 +10,10 @@ export default {
         _.forEach(methods,function(method){ dispatch('runModuleMethod',{ method,payload:response }) });
     },
 
+    serverResponseError({ dispatch },error){
+        dispatch('AUTH/responseError',error.response.data)
+    },
+
     routeHook({ state,dispatch,commit },payload){
         commit('updateRoute',payload);
         let methods = state.routeHooks[payload.type];

@@ -7,6 +7,7 @@ const state = {
         401: [false,'Authentication Failed!','The authentication session seems to be invalid or expired. Please login to continue','login'],
         406: [false,'Not Acceptable','The requested action is not available for you.'],
         419: [false,'Authentication Failed!','The authentication session seems to be invalid or expired. Please login to continue','login'],
+        500: [false,'Server Error',''],
     }
 };
 
@@ -25,6 +26,10 @@ const mutations = {
 
     setToken(state,token) {
         state.token = token;
+    },
+
+    set500Desc({ details },desc) {
+        details[500][2] = desc;
     },
 };
 
@@ -48,6 +53,11 @@ const actions = {
     responseInterceptor({ commit },response){
         commit('respStatus',response.status);
         commit('setToken',response.headers['x-appframe-token']);
+    },
+    responseError({ commit },data){
+        let dls = ['<dl>'], dl = _.wrap(_.escape, function(func, dt, dd) { return '<dt>' + func(dt) + '</dt>' + '<dd>' + func(dd) + '</dd>'; });
+        _.each(data,(msg,key) => (_.isObject(msg)) ? '' : dls.push(dl(key,msg)) ); dls.push('</dl>');
+        commit('set500Desc',_.join(dls,'')); commit('respStatus',500);
     },
 };
 
