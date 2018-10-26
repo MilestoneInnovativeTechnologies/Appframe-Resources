@@ -18,7 +18,7 @@
         inheritAttrs: false,
         mixins: [require('./../../js/common/BSFormFieldDynamicMixin').fieldDynamicMixin],
         props: {
-            inline: { default: false },
+            inline: { default: false }, dataFormId: null, name:null,
             prepend: { default: false }, append: { default: false },
             prependIcon: { default: false }, appendIcon: { default: false },
         },
@@ -27,9 +27,9 @@
             cntCls(){ return ['col-md-' + (12 - _.toSafeInteger(this.inline))] },
             inputGroup(){ return this.prepend || this.append || this.prependIcon || this.appendIcon },
             cntComponent(){ return (this.inputGroup) ? 'BSFormFieldInputGroup' : 'BSFormFieldControl' },
-            props(){ return _.merge({},this.$attrs,this.$props,this.dynamic_field_attrs); },
+            props(){ return _.merge({},{ dataFormId:this.dataFormId,name:this.name },this.$attrs,this.$props,this.dynamic_field_attrs); },
             ...mapGetters('FORM',{ getInvalid:'invalid' }),
-            invalid(){ return this.getInvalid(this.props['data-form-id'],this.props.name) }
+            invalid(){ return this.getInvalid(this.dataFormId,this.name) }
         }
     }
 </script>
