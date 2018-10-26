@@ -14,7 +14,7 @@ const actions = {
 
 const mutations = {
     newOption({ store },{ Id,Options }){ Vue.set(store,Id,Options) },
-    addOption({ store },{ Id,Options }){ Object.assign({},store[Id],Options) },
+    addOption({ store },{ Id,Options }){ store[Id] = Object.assign({},store[Id],Options) },
     updateFieldOptionLatest(state,{ FieldOptionLatest }){
         _.each(FieldOptionLatest,(latest,id) => latest ? Vue.set(state.latest,id,latest) : null)
     }
