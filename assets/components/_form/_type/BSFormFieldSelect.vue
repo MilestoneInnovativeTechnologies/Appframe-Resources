@@ -24,12 +24,17 @@
             if(!this.options || this.option.type !== 'Enum') this.fetchOptions({ id:this.option_id,latest:this.getLatest(this.option_id) });
         },
         mounted(){
-            let vm = this;
+            let vm = this, options = { minimumResultsForSearch: 12, allowClear: true, placeholder: '' },
+                value = vm.value || ((this.option.type === 'Enum' && this.options) ? _.head(_.keys(this.options)) : null);
+            options.value = value;
             $(`select[name="${this.name}"]`)
-                .select2({ minimumResultsForSearch: 12, allowClear: true, placeholder: '' })
+                .select2(options)
                 .on('select2:select',function(e){
                     vm.value = e.params.data.id;
                 })
         },
+        watch: {
+            options(options){ if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options)) }
+        }
     }
 </script>
