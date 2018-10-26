@@ -36,14 +36,15 @@ const actions = {
     },
 
     newValidation({ getters,commit },{ Validation }){
-        let form = _.keys(Validation)[0], validation = Validation[form];
-        if(!validation.status && !_.isEmpty(validation.errors)){
-            _.forEach(validation.errors,function(invalids,field){
-                let value = getters.value(form,field), text = invalids[0];
-                commit('addInvalid',{ form,field,value,text });
-            })
-        }
-        commit('submitting',{ form,status: false })
+        _.each(Validation,(validation,form) => {
+            if(!validation.status && !_.isEmpty(validation.errors)){
+                _.forEach(validation.errors,function(invalids,field){
+                    let value = getters.value(form,field), text = invalids[0];
+                    commit('addInvalid',{ form,field,value,text });
+                })
+            }
+            commit('submitting',{ form,status: false })
+        })
     },
 
     loadOptions({ getters,commit,dispatch },payload){
