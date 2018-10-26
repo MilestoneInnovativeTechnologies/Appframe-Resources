@@ -2,19 +2,19 @@ const state = {
     store: {},
     latest: {},
     handler: {
-        FieldOption: 'newOption',
+        FieldOption: 'FieldOption',
         FieldOptionLatest: 'updateFieldOptionLatest',
     },
 };
 
 const actions = {
     fetch({ dispatch },{ id,latest }){ dispatch('post',{ action:'option',id,latest },{ root:true }) },
+    FieldOption({ state,commit },{ FieldOption }){ _.each(FieldOption,(Options,Id) => { if(!_.isEmpty(Options)) (state.store[Id]) ? commit('addOption',{ Id,Options }) : commit('newOption',{ Id,Options }); })},
 };
 
 const mutations = {
-    newOption(state,{ FieldOption }){
-        _.each(FieldOption,(Option,Id) => _.isEmpty(Option) ? Option : Vue.set(state.store,Id,Option) )
-    },
+    newOption({ store },{ Id,Options }){ Vue.set(store,Id,Options) },
+    addOption({ store },{ Id,Options }){ Object.assign({},store[Id],Options) },
     updateFieldOptionLatest(state,{ FieldOptionLatest }){
         _.each(FieldOptionLatest,(latest,id) => latest ? Vue.set(state.latest,id,latest) : null)
     }
