@@ -22,7 +22,7 @@
             }
         },
         computed: {
-            compType(){ return _.indexOf(this.textComponentTypes,this.type) > -1 ? 'text' : this.type },
+            compType(){ return _.includes(this.textComponentTypes,this.type) ? 'text' : this.type },
             component(){ return this.componentPrefix + _.capitalize(_.camelCase(this.compType)) },
             group(){ return this.prepend || this.append },
             cls(){
@@ -32,9 +32,10 @@
                 return cls;
             },
             props(){
-                let vm = this, props = { };
+                let vm = this, props = { };// console.log(vm.$props,vm.$attrs);
                 _.forEach(vm.allControlAttrs,(v) => { if(vm.$attrs.hasOwnProperty(v) && vm.$attrs[v] !== false) props[v] = v; } );
-                _.forEach(vm.forwardProps,(v) => { if(vm.$attrs.hasOwnProperty(v)) props[v] = vm.$attrs[v]; } );
+                _.forEach(vm.forwardProps,(v) => { if(vm.$props.hasOwnProperty(v)) props[v] = vm.$props[v]; } );
+                _.forEach(vm.$attrs,(v,k) => { props[k] = v; } );
                 if(_.includes(vm.textComponentTypes,this.type)) props['type'] = this.type;
                 return props;
             }
