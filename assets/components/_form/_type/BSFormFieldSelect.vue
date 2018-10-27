@@ -29,9 +29,8 @@
             options.value = value;
             $(`select[name="${this.name}"]`)
                 .select2(options)
-                .on('select2:select',function(e){
-                    vm.value = e.params.data.id;
-                })
+                .on('select2:select',function(e){ vm.value = e.params.data.id; })
+                .on('select2:unselect',function(e){ vm.unvalue = e.params.data.id; })
         },
         watch: {
             options(options){ if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options)) }
