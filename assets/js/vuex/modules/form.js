@@ -86,7 +86,8 @@ const mutations = {
         _.each(['layout','data','invalids'],(itm) => Vue.set(state[itm],id,payload[itm]));
         state.submitting = Object.assign({},state.submitting,submitting);
     },
-    updateValue(state,{ form,field,value }){ state.data[form][field] = value },
+    updateValue({ data },{ form,field,value }){ _.isArray(data[form][field]) ? data[form][field].push(value) : data[form][field] = value },
+    removeValue({ data },{ form,field,value }){ (_.isArray(data[form][field]) && _.includes(data[form][field],value)) ? data[form][field].splice(_.indexOf(data[form][field],value),1) : data[form][field] = '' },
     addInvalid(state,{ form,field,value,text }){ Vue.set(state.invalids[form][field],value,text); },
     submitting(state,{ form,status }){ state.submitting[form] = status },
     setFormRecord(state,{ form,record }){ state.formrecord = Object.assign({},state.formrecord,_.fromPairs([[form,record]])) },
@@ -159,9 +160,9 @@ function getFieldExtract(fieldsObj){
 }
 
 function getValueExtract(fields){
-    let ArrayValues = ['checkbox'];
+    let ArrayValues = ['checkbox','multiselect'];
     return _.mapValues(fields,function(obj){
-        return _.indexOf(ArrayValues,obj.type) > -1 ? [] : ''
+        return _.includes(ArrayValues,obj.type) ? [] : ''
     });
 }
 
