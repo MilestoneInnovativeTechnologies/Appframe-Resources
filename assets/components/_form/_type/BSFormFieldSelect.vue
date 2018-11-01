@@ -21,7 +21,7 @@
             ...mapActions('FOPT',{ fetchOptions:'fetch' }),
         },
         created(){
-            if(!this.options || this.option.type !== 'Enum') this.fetchOptions({ id:this.option_id,latest:this.getLatest(this.option_id) });
+            if(this.option.preload === 'Yes' && (!this.options || this.option.type !== 'Enum')) this.fetchOptions({ id:this.option_id,latest:this.getLatest(this.option_id) });
         },
         mounted(){
             let vm = this, options = { minimumResultsForSearch: 12, allowClear: true, placeholder: '' },
