@@ -9,7 +9,7 @@ const state = {
 
 const actions = {
     fetch({ dispatch },{ id,latest }){ dispatch('post',{ action:'option',id,latest },{ root:true }) },
-    FieldOption({ state,commit },{ FieldOption }){ _.each(FieldOption,(Options,Id) => { if(!_.isEmpty(Options)) (state.store[Id]) ? commit('addOption',{ Id,Options }) : commit('newOption',{ Id,Options }); })},
+    FieldOption({ state,commit },{ FieldOption,_response_data }){ let depend = _response_data.request.action === 'depend'; _.each(FieldOption,(Options,Id) => { if(depend || !state.store[Id]) commit('newOption',{ Id,Options }); else if(!_.isEmpty(Options)) commit('addOption',{ Id,Options }) })},
 };
 
 const mutations = {
