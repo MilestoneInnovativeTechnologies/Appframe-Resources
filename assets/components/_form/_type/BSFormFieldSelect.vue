@@ -19,21 +19,27 @@
         },
         methods: {
             ...mapActions('FOPT',{ fetchOptions:'fetch' }),
+            initSelect2(){
+                let vm = this, options = { minimumResultsForSearch: 12, allowClear: true, placeholder: '' },
+                    value = vm.value || ((this.option.type === 'Enum' && this.options) ? _.head(_.keys(this.options)) : null),
+                    select2 = $(`select[name="${vm.name}"]`), S2Width = null;
+                options.value = value;
+                if(select2.hasClass("select2-hidden-accessible")) { S2Width = select2.next().css('width'); try { select2.select2('destroy'); }catch(e){} }
+                select2
+                    .select2(options)
+                    .on('select2:select',function(e){ vm.value = e.params.data.id; })
+                    .on('select2:unselect',function(e){ vm.unvalue = e.params.data.id; });
+                if(S2Width) select2.next().css('width',S2Width);
+            }
         },
         created(){
             if(this.option.preload === 'Yes' && (!this.options || this.option.type !== 'Enum')) this.fetchOptions({ id:this.option_id,latest:this.getLatest(this.option_id) });
         },
         mounted(){
-            let vm = this, options = { minimumResultsForSearch: 12, allowClear: true, placeholder: '' },
-                value = vm.value || ((this.option.type === 'Enum' && this.options) ? _.head(_.keys(this.options)) : null);
-            options.value = value;
-            $(`select[name="${this.name}"]`)
-                .select2(options)
-                .on('select2:select',function(e){ vm.value = e.params.data.id; })
-                .on('select2:unselect',function(e){ vm.unvalue = e.params.data.id; })
+            this.initSelect2();
         },
         watch: {
-            options(options){ if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options)) }
+            options(options){ if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options)); if(this.depends_has) this.initSelect2(); }
         }
     }
 </script>
