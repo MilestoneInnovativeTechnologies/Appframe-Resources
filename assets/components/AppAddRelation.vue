@@ -2,24 +2,29 @@
     <transition name="fade">
         <FormLoading v-if="!form"></FormLoading>
         <FormSubmitData v-else-if="submitData" :data="submitData" :notify="true" :form="id"></FormSubmitData>
-        <BSForm v-else :name="form.name" :fields="form.fields" :layout="layout" :data-form-id="id" :data-action-text="form.action_text"></BSForm>
+        <BSForm v-else :name="form.name" :fields="fields" :layout="layout" :data-form-id="id" :data-action-text="form.action_text"></BSForm>
     </transition>
 </template>
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters } = createNamespacedHelpers('FORM');
+    const { mapGetters,mapMutations } = createNamespacedHelpers('FORM');
     export default {
         name: "AppAddRelation",
         props: ['dataIds'],
         computed: {
-            id(){ return this.dataIds['idn1'] },
+            id(){ return this.dataIds['idn2'] }, record(){ return this.$route.params.id }, list(){ return this.$route.params.list },
             ...mapGetters({ getForm:'form',getLayout:'layout',getSubmit:'getSubmit' }),
             foreign(){ return _.head(_.keys(this.form.fields)); },
             form(){ return this.getForm(this.id) },
+            fields(){ return _.omit(this.form.fields,this.foreign) },
             layout(){ return this.getLayout(this.id) },
             submitData(){ return this.getSubmit(this.id) },
-        }
+        },
+        methods: mapMutations(['updateValue']),
+        created(){
+            if(this.form) this.updateValue({ form:this.id,field:this.foreign,value:this.record })
+        },
     }
 </script>
 
