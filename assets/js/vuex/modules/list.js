@@ -37,13 +37,11 @@ const mutations = {
     },
     setLayout(state,{ ListLayout }){ state.layout = Object.assign({},state.layout,ListLayout); },
     setSelected(state,{ list,record }){ state.selected[list] = record; },
-    createRelation(state,{ list,relation,id }){
+    createRelation(state,{ list,relation,id,data }){
         if(!state.relation[list]) state.relation = Object.assign({},state.relation,_.zipObject([list],[{}]));
-        if(!state.relation[list][relation]) state.relation[list] = Object.assign({},state.relation[list],_.zipObject([relation],[{}]))
-        if(!state.relation[list][relation][id]) state.relation[list][relation] = Object.assign({},state.relation[list][relation],_.zipObject([id],[[]]))
-    },
-    setRelation(state,{ list,relation,id,data }){
-        state.relation[list][relation][id] = data
+        if(!state.relation[list][relation]) state.relation[list] = Object.assign({},state.relation[list],_.zipObject([relation],[{}]));
+        if(state.relation[list][relation][id]) state.relation[list][relation][id].splice(0);
+        state.relation[list][relation] = Object.assign({},state.relation[list][relation],_.zipObject([id],[data]));
     },
     updateRelation(state,{ list,relation,id,data,status }){
         if(status) state.relation[list][relation][id].push(data);
