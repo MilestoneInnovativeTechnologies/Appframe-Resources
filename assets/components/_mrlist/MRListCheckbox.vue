@@ -8,7 +8,7 @@
         name: "MRListCheckbox",
         props: ['list','relation','record','current','value'],
         computed: {
-            checked(){ return _.includes(_.toString(this.current),_.toString(this.value)) },
+            checked(){ return _.includes(this.current,_.toString(this.value)) },
             request(){ return { list:this.list,relation:this.relation,id:this.record,data:this.value } },
         },
         methods: {

@@ -1,14 +1,14 @@
 <template>
     <tbody>
         <tr v-if="data.length === 0"><th :colspan="columns.length+1">
-            <div class="jumbotron text-center text-info bg-transparent">No Data</div>
+            <div class="jumbotron text-center text-info bg-transparent">None Selected</div>
         </th></tr>
         <MRListTBodyTR v-else v-for="(record,id) in data"
                        :data-list-id="dataListId"
                        :data-record-id="id"
                        :record="record"
                        :columns="columns"
-                       :check="check"
+                       :properties="properties"
                        :key="['L'+dataListId,'R'+id,record.updated_at].join('-')">
         </MRListTBodyTR>
     </tbody>
@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: "MRListTBody",
-        props: ['data','columns','dataListId','check'],
+        name: "MRListSelectedTBody",
+        props: ['data','columns','dataListId','properties'],
     }
 </script>
