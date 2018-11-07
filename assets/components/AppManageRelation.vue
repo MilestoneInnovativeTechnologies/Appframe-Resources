@@ -16,7 +16,7 @@
             ...mapGetters({ getList:'list',getLayout:'layout',getRelation:'relation' }),
             data(){ return this.getList(this.list) }, layout(){ return this.getLayout(this.list) },
             action(){ return this.$route.params.action }, record(){ return this.$route.params.id },
-            current(){ return this.getRelation(this.list,this.relation,this.record) },
+            current(){ return _.map(this.getRelation(this.list,this.relation,this.record),_.toString) },
             property(){ return { list:this.list,relation:this.relation,record:this.record,current:this.current } }
         },
         methods: mapActions(['post']),
