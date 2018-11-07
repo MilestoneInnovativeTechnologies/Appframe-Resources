@@ -1,7 +1,9 @@
 <template>
     <transition name="fade">
         <ListLoading v-if="!data"></ListLoading>
-        <MRList v-else :data-list-id="list" :layout="layout" :data="data" :check="property"></MRList>
+        <template v-else>
+            <MRList :data-list-id="list" :layout="layout" :data="data" :properties="property"></MRList>
+        </template>
     </transition>
 </template>
 
