@@ -15,6 +15,7 @@
         computed: {
             id(){ return this.dataIds['idn1'] },
             ...mapGetters({ getForm:'form',getLayout:'layout',getSubmit:'getSubmit' }),
+            foreign(){ return _.head(_.keys(this.form.fields)); },
             form(){ return this.getForm(this.id) },
             layout(){ return this.getLayout(this.id) },
             submitData(){ return this.getSubmit(this.id) },
