@@ -19,9 +19,9 @@ const actions = {
     },
     post({ dispatch },request){ dispatch('post',request,{ root:true }); },
     addListRelation({ state,rootGetters,commit },{ ListRelation,_response_data }) {
-        let { action,id } = _response_data.request, rslv = rootGetters.resolution(action), relation = rslv['idn1'], list = rslv['idn2'], data = ListRelation[list][relation][id];
-        if (!state.relation[list] || !state.relation[list][relation] || !state.relation[list][relation][id]) commit('createRelation', { list,relation,id });
-        commit('setRelation',{ list,relation,id,data })
+        let { action,id } = _response_data.request, rslv = rootGetters.resolution(action), relation = rslv['idn1'], list = rslv['idn2'], data = ListRelation[list][relation][id] || [];
+        commit('createRelation', { list,relation,id,data });
+        //commit('setRelation',{ list,relation,id,data })
     },
     updateRelation({ getters,dispatch },{ action,id,list,relation }){
         let data = getters.relation(list,relation,id);
@@ -47,7 +47,10 @@ const mutations = {
     },
     updateRelation(state,{ list,relation,id,data,status }){
         if(status) state.relation[list][relation][id].push(data);
-        else _.pull(state.relation[list][relation][id],_.toString(data),_.toInteger(data));
+        else {
+            let rel = _.map(state.relation[list][relation][id],_.toString), idx = _.indexOf(rel,_.toString(data));
+            if(idx !== -1) state.relation[list][relation][id].splice(idx,1);
+        }
     },
     setListRelationUpdate(state){ state.relation_update = true; },
     delListRelationUpdate(state){ state.relation_update = false; },
