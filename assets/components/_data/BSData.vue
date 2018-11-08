@@ -11,13 +11,14 @@
     export default {
         name: "BSData",
         props: ['dataDataId','dataRecordId','dataRecord'],
+        data(){ return { fk:'__upload_file_details' } },
         computed: {
             ...mapGetters({ getSection:'section' }),
             section(){ return this.getSection(this.dataDataId) },
             sections(){ return _.isEmpty(this.section) ? this.getDefaultSections() : this.getSections(this.section) }
         },
         methods: {
-            getDefaultSections(){ return this.getSections([ { colspan:12,relation:null,title:null,title_field:null,items:this.sectionItems(_.keys(this.dataRecord)) } ]) },
+            getDefaultSections(){ return this.getSections([ { colspan:12,relation:null,title:null,title_field:null,items:this.sectionItems(_.keys(_.omit(this.dataRecord,this.fk))) } ]) },
             sectionItems(fields){ return _(fields).mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['attribute','relation'],[field,null])).value(); },
             getSections(section){
                 let rows = [], cols = [], count = 0;
