@@ -32,6 +32,6 @@
         }
     }
 
-    function getImageThumb(file) { return `<img src="${file.url}" width="20%" class="img-thumbnail rounded">`; }
+    function getImageThumb(file) { return `<a href="${file.url}" target="_blank"><img src="${file.url}" width="20%" class="img-thumbnail rounded"></a>`; }
     function getAnchorFile(file) { return `<a href="${file.url}" target="_blank">[File: ${file.name_client}]</a>`; }
 </script>
