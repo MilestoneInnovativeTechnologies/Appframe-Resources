@@ -20,6 +20,7 @@ const vuexModules = {
     'SRLS': 'searchlist',
     'DBRD': 'dashboard',
     'MTRC': 'metrics',
+    'FFRM': 'fileform',
 };
 
 const modules = {
