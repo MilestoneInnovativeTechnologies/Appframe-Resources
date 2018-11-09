@@ -24,7 +24,7 @@
                     value = vm.value || ((this.option.type === 'Enum' && this.options) ? _.head(_.keys(this.options)) : null),
                     select2 = $(`select[name="${vm.name}"]`), S2Width = null;
                 options.value = value;
-                if(select2.hasClass("select2-hidden-accessible")) { S2Width = select2.next().css('width'); try { select2.select2('destroy'); }catch(e){} }
+                if(select2.hasClass("select2-hidden-accessible")) { S2Width = select2.next().css('width'); try { select2.select2('destroy'); } catch(e){} }
                 select2
                     .select2(options)
                     .on('select2:select',function(e){ vm.value = e.params.data.id; })
