@@ -35,9 +35,11 @@ const mutations = {
 
 const actions = {
     init({ commit }){
+        let path = 'token/fresh';
+        if(!_.isEmpty(window.VuexStoreState.root_path)) path = _.trim(window.VuexStoreState.root_path,'/') + "/" + path;
         axios({
             method: 'post',
-            url: [location.origin,_.trim(window.VuexStoreState.root_path,'/'),'token/fresh'].join('/'),
+            url: [location.origin,path].join('/'),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
