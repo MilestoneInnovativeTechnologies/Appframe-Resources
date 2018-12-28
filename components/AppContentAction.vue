@@ -5,7 +5,7 @@
 <script>
     export default {
         name: "AppContentAction",
-        data(){ return { types:['List','Data'] }},
+        data(){ return { types:['List','Data','ListRelation'] }},
         computed: {
             action(){ return this.$store.getters.contentAction('AppContent'); },
             resolution(){ return this.$store.getters.resolution(this.action) },
