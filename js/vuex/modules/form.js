@@ -93,7 +93,7 @@ const mutations = {
     setFormRecord(state,{ form,record }){ state.formrecord = Object.assign({},state.formrecord,_.fromPairs([[form,record]])) },
     addFormSubmitData(state,{ FormSubmitData }){ let id = _.keys(FormSubmitData)[0]; if(!state.submit[id]) state.submit = Object.assign({},state.submit,_.fromPairs([[id,null]])); state.submit[id] = FormSubmitData[id]; },
     delFormSubmitData(state,id){ state.submit[id] = null; },
-    reset(state,id){ _.each(state.data[id],(value,field) => state.data[id][field] = (_.isArray(value)) ? [] : '') },
+    reset(state,id){ _.each(state.data[id],(value,field) => state.data[id][field] = (_.isArray(value)) ? [] : null) },
     addCollection(state,{ form,collection }){
         if(!state.collection[form]) Vue.set(state.collection,form,{});
         let cForm = collection.form.id, cRel = collection.relation ? _.snakeCase(collection.relation.method) : null, skip = collection.foreign_field ? getFieldNameFromId(collection.foreign_field,collection.form.fields) : null;
