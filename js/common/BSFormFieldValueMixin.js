@@ -15,6 +15,10 @@ export const fieldValueMixin = {
         }
     },
 
+    created(){
+        if(_.has(this.$attrs,'value')) this.value = this.$attrs.value;
+    },
+
     methods: {
         ...mapMutations('FORM',['updateValue','removeValue']),
         input(e){ this.updateValue({ form: this.dataFormId, field: this.name, value: e.target.value }) }
