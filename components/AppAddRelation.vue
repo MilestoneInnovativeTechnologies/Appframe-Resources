@@ -18,7 +18,7 @@
             foreign(){ return _.head(_.keys(this.form.fields)); },
             form(){ return this.getForm(this.id) },
             fields(){ return _.omit(this.form.fields,this.foreign) },
-            layout(){ return this.getLayout(this.id) },
+            layout(){ return _.omit(this.getLayout(this.id),this.foreign) },
             submitData(){ return this.getSubmit(this.id) },
         },
         methods: mapMutations(['updateValue']),
