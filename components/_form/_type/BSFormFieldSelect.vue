@@ -30,7 +30,6 @@
                         .on('select2:select',function(e){ vm.value = e.params.data.id; })
                         .on('select2:unselect',function(e){ vm.unvalue = e.params.data.id; });
                     if(!_.isEmpty(value)) select2.val(value).trigger('change');
-                    //select2.next().css('width','100%');
                 }
             }
         },
@@ -45,7 +44,11 @@
             this.initSelect2();
         },
         watch: {
-            options(options){ if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options)); if(this.depends_has) this.initSelect2(); }
+            options(options){
+                if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options));
+                else if(!_.isEmpty(this.value)) $(`select#${this.control_id}`).val(this.value).trigger('change');
+                if(this.depends_has) this.initSelect2();
+            }
         }
     }
 </script>
