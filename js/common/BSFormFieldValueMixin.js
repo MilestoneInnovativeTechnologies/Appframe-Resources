@@ -24,4 +24,4 @@ export const fieldValueMixin = {
         input(e){ this.updateValue({ form: this.dataFormId, field: this.name, value: e.target.value }) }
     }
 
-}
+};
