@@ -5,6 +5,7 @@
 <script>
     export default {
         name: "BSFormFieldMultiselect",
+        inheritAttrs: false,
         computed: {
             props(){ return this.$attrs },
         },
