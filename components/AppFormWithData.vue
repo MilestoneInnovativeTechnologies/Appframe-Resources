@@ -35,8 +35,9 @@
         },
         created(){
             let request = { data:this.dataId,id:this.recordId,action:this.action };
-            if(this.record){ this.setFormValue(this.record); request['last_updated'] = this.updated; this.post(request); }
-            else this.post(request);
+            // if(this.record){ this.setFormValue(this.record); request['last_updated'] = this.updated; this.post(request); }
+            // else this.post(request);
+            if(!this.record) this.post(request);
         },
         beforeDestroy(){
             this.resetForm(this.formId);
