@@ -86,7 +86,7 @@ const mutations = {
         _.each(['layout','data','invalids'],(itm) => Vue.set(state[itm],id,payload[itm]));
         state.submitting = Object.assign({},state.submitting,submitting);
     },
-    updateValue({ data },{ form,field,value }){ _.isArray(data[form][field]) ? data[form][field].push(value) : data[form][field] = value },
+    updateValue({ data },{ form,field,value }){ _.isArray(data[form][field]) ? ((_.isArray(value)) ?  Vue.set(data[form],field,_.map(_.concat(data[form][field],value),_.toString)) : data[form][field].push(_.toString(value))) : data[form][field] = value },
     removeValue({ data },{ form,field,value }){ (_.isArray(data[form][field]) && _.includes(data[form][field],value)) ? data[form][field].splice(_.indexOf(data[form][field],value),1) : data[form][field] = '' },
     addInvalid(state,{ form,field,value,text }){ Vue.set(state.invalids[form][field],value,text); },
     submitting(state,{ form,status }){ state.submitting[form] = status },
