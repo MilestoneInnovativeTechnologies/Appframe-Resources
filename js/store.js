@@ -21,6 +21,7 @@ const vuexModules = {
     'DBRD': 'dashboard',
     'MTRC': 'metrics',
     'FFRM': 'fileform',
+    'FWDM': 'formwithdatamap',
 };
 
 const modules = {
