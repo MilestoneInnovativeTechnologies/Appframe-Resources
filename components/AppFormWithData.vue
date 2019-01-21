@@ -14,33 +14,32 @@
         computed: {
             formId(){ return this.dataIds['idn1'] },
             dataId(){ return this.dataIds['idn2'] },
+            ...mapGetters('FWDM',['map']),
             recordId(){ return this.$route.params.id },
             action(){ return this.$route.params.action },
             ...mapGetters('FORM',{ getForm: 'form',getSubmit:'getSubmit' }),
-            fields(){ return _.keys(this.getForm(this.formId).fields) },
+            fields(){ return this.getForm(this.formId).fields },
             submitData(){ return this.getSubmit(this.formId) },
             ...mapGetters('DATA',{ getRecord: 'record', getUpdated: 'updated' }),
             record(){ return this.getRecord(this.dataId,this.recordId) },
             updated(){ return this.getUpdated(this.dataId,this.recordId) },
-
+            maps(){ return this.map(this.formId) },
         },
         methods: {
             ...mapMutations('FORM',{ setValue: 'updateValue', resetForm: 'reset' }),
+            ...mapMutations('FWDM',['delFormRecord']),
             ...mapActions(['post']),
             setFormValue(data){
-                let vm = this, form = vm.formId; _.forEach(vm.fields,function(field){
-                    let value = _.get(data,field); vm.setValue({ form,field,value });
+                let vm = this, form = vm.formId, maps = vm.maps; _.forEach(vm.fields,function(Obj,field){
+                    let map = maps[Obj.id], value = _.get(data,_.compact([map.relation,map.attribute]),null); vm.setValue({ form,field,value:(_.isArray(value)?_.map(value,'id'):value) });
                 });
             }
         },
-        created(){
-            let request = { data:this.dataId,id:this.recordId,action:this.action };
-            if(this.record){ this.setFormValue(this.record); request['last_updated'] = this.updated; this.post(request); }
-            else this.post(request);
+        created(){ this.post({ data:this.dataId,id:this.recordId,action:this.action,last_updated:this.updated }); },
+        beforeDestroy(){ this.resetForm(this.formId); },
+        watch: {
+            record: { immediate:true, deep:true, handler:function(data){ this.setFormValue(data); } },
         },
-        beforeDestroy(){
-            this.resetForm(this.formId);
-        }
     }
 </script>
 
