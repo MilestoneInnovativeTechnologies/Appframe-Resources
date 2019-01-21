@@ -19,13 +19,14 @@ const actions = {
 };
 
 const mutations = {
-    addData(state,{ Data,_response_data }){
-        let id = _.keys(Data)[0], Obj = {}; Obj[id] = {};
-        if(!state.store[id]) { state.store = Object.assign({},state.store,Obj); state.updated = Object.assign({},state.updated,Obj); }
-        if(_.isEmpty(Data[id])) return; let recId = Data[id].id;
-        state.store[id] = Object.assign({},state.store[id],_.fromPairs([[recId,Data[id]]]));
-        if(!_response_data.FormData)
-            state.updated[id] = Object.assign({},state.updated[id],_.fromPairs([[recId,Data[id].updated_at]]));
+    addData({ store,updated },{ Data }){
+        _.forEach(Data,(Obj,id) => {
+            if(_.isNil(store[id])) { Vue.set(store,id,{}); Vue.set(updated,id,{}); }
+            if(Obj){
+                Vue.set(store[id],_.get(Obj,'id'),Obj);
+                Vue.set(updated[id],_.get(Obj,'id'),Obj.updated_at);
+            }
+        })
     },
     addView(state,{ DataDetails }){
         let id = _.keys(DataDetails)[0], sections = getExtractSectionAndItems(DataDetails[id].sections);
@@ -34,9 +35,9 @@ const mutations = {
 };
 
 const getters = {
-    record(state){ return (data,id) => (state.store[data]) ? state.store[data][id] : null },
-    updated(state){ return (data,id) => (state.updated[data]) ? state.updated[data][id] : null },
-    section(state){ return (data) => state.sections[data] },
+    record({ store }){ return (data,id) => _.get(store,[data,id],null) },
+    updated({ updated }){ return (data,id) => _.get(updated,[data,id],null) },
+    section({ sections }){ return (data) => _.get(sections,data) },
 };
 
 export default {
