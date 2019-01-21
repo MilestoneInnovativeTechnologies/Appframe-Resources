@@ -2,7 +2,6 @@ const state = {
     handler: {
         Form: 'newForm',
         Validation: 'newValidation',
-        FormData: 'newFormData',
         FormSubmitData: ['addFormSubmitData','showResponsePage'],
         DependValue: 'addFormFieldData',
     },
@@ -11,7 +10,6 @@ const state = {
     data: {},
     invalids: {},
     submitting: {},
-    formrecord: {},
     collection: {},
     collectiondata: {},
     submit: {},
@@ -53,13 +51,6 @@ const actions = {
         dispatch('SPST/postRequestServer', null, { root:true });
     },
 
-    newFormData({ getters,commit },{ FormData,_response_data }){
-        let form = _.keys(FormData)[0], fields = _.keys(getters.form(form).fields),
-            dataId = _.keys(FormData[form])[0], record = FormData[form][dataId], data = _response_data.Data[dataId];
-        commit('setFormRecord',{ form,record }); if(!data) return;
-        _.forEach(fields,function(field){ let value = _.get(data,field); commit('updateValue',{ form,field,value }); })
-    },
-
     showResponsePage({ dispatch },{ _response_data }){
         let request = _response_data.request, name = 'form-submit-' + (request.record ? 'update' : 'new'),
             params = { action:request.action,form:request.form,record:request.record,id:request.record };
@@ -90,7 +81,6 @@ const mutations = {
     removeValue({ data },{ form,field,value }){ (_.isArray(data[form][field]) && _.includes(data[form][field],value)) ? data[form][field].splice(_.indexOf(data[form][field],value),1) : data[form][field] = '' },
     addInvalid(state,{ form,field,value,text }){ Vue.set(state.invalids[form][field],value,text); },
     submitting(state,{ form,status }){ state.submitting[form] = status },
-    setFormRecord(state,{ form,record }){ state.formrecord = Object.assign({},state.formrecord,_.fromPairs([[form,record]])) },
     addFormSubmitData(state,{ FormSubmitData }){ let id = _.keys(FormSubmitData)[0]; if(!state.submit[id]) state.submit = Object.assign({},state.submit,_.fromPairs([[id,null]])); state.submit[id] = FormSubmitData[id]; },
     delFormSubmitData(state,id){ state.submit[id] = null; },
     reset(state,id){ _.each(state.data[id],(value,field) => { if(state.forms[id].fields[field]) state.data[id][field] = (_.isEmpty(state.forms[id].fields[field].value) || _.isObject(state.forms[id].fields[field].value)) ? ((_.isArray(value)) ? [] : null) : state.forms[id].fields[field].value } ) },
