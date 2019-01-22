@@ -23,15 +23,18 @@
             ...mapGetters('DATA',{ getRecord: 'record', getUpdated: 'updated' }),
             record(){ return this.getRecord(this.dataId,this.recordId) },
             updated(){ return this.getUpdated(this.dataId,this.recordId) },
-            maps(){ return this.map(this.formId) },
+            maps(){ return this.map(this.formId,this.dataId) },
         },
         methods: {
             ...mapMutations('FORM',{ setValue: 'updateValue', resetForm: 'reset' }),
-            ...mapMutations('FWDM',['delFormRecord']),
             ...mapActions(['post']),
             setFormValue(data){
                 let vm = this, form = vm.formId, maps = vm.maps; _.forEach(vm.fields,function(Obj,field){
-                    let map = maps[Obj.id], value = _.get(data,_.compact([map.relation,map.attribute]),null); vm.setValue({ form,field,value:(_.isArray(value)?_.map(value,'id'):value) });
+                    let map = (_.isNil(maps)) ? null : _.get(maps,Obj.id,null),
+                        value = _.isNil(map) ? _.get(data,field,null) : _.get(data,_.compact(_.concat(_.split(map.relation,'.'),map.attribute)),null);
+                    value = _.isArray(value) ? _.map(value,'id') : value;
+                    console.log({ form,field:field,value });
+                    vm.setValue({ form,field:field,value });
                 });
             }
         },
