@@ -33,7 +33,6 @@
                     let map = (_.isNil(maps)) ? null : _.get(maps,Obj.id,null),
                         value = _.isNil(map) ? _.get(data,field,null) : _.get(data,_.compact(_.concat(_.split(map.relation,'.'),map.attribute)),null);
                     value = _.isArray(value) ? _.map(value,'id') : value;
-                    console.log({ form,field:field,value });
                     vm.setValue({ form,field:field,value });
                 });
             }
