@@ -18,12 +18,12 @@ const state = {
 const actions = {
 
     newForm({ commit,dispatch },{ Form }){
-        let id = _.keys(Form)[0], form = _.pick(Form[id],['name','title','action_text']);
-        form['fields'] = getFieldExtract(Form[id].fields);
-        let data = getValueExtract(form['fields']), invalids = getInvalidExtract(form['fields']), layout = getLayoutExtract(Form[id]['layout'],Form[id]['fields']),
-            type = 'storeForm', payload = { type,id,form,data,invalids,layout };
-        commit(payload);
-        if(Form[id].collections && !_.isEmpty(Form[id].collections)) dispatch('addCollection',{ form:id,Collection:Form[id].collections })
+        _.forEach(Form,(Obj,id) => {
+            let form = _.pick(Obj,['name','title','action_text']);
+            form['fields'] = getFieldExtract(Form[id].fields);
+            commit('storeForm',{ id,form,data:getValueExtract(form['fields']),invalids:getInvalidExtract(form['fields']),layout:getLayoutExtract(Form[id]['layout'],Form[id]['fields']) });
+            if(Obj.collections && !_.isEmpty(Obj.collections)) dispatch('addCollection',{ form:id,Collection:Obj.collections })
+        });
     },
 
     submit({ state,commit,dispatch },{ form,action,record }){
@@ -58,7 +58,10 @@ const actions = {
     },
 
     addCollection({ dispatch,commit },{ form,Collection }){
-        _.each(Collection,(collection) => { let Form = {}; Vue.set(Form,collection.form.id,collection.form); dispatch('newForm',{ Form }); commit('addCollection',{ form,collection }); })
+        _.each(Collection,(collection) => {
+            dispatch('newForm',{ Form:_.zipObject([collection.collection_form],[collection.form]) });
+            commit('addCollection',{ form,collection });
+        })
     },
 
     addFormFieldData({ commit },{ DependValue }){
