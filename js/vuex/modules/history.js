@@ -6,6 +6,7 @@ const state = {
 
 const actions = {
     afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
+        if(to.name === 'list-action') commit('setTitleAppend',_.get(rootGetters['LIST/list'](to.params.list),[to.params.id,'name']));
         commit('increment'); commit('addRoute',to); if(!state.count || _.includes(discardRoutes,to.name)) return;
         if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
         dispatch('addToSet',to);
@@ -25,6 +26,7 @@ const mutations = {
     addToSet(state){ let setInd = (state.set.length || 1)-1; state.set[setInd].push(state.count) },
     setTitle(state,title){ state.routes[state.count].title = title },
     setNewSet(state,set){ state.set.push(set) },
+    setTitleAppend(state,title){ Vue.set(state.routes[state.count],'append',title) },
 };
 
 const getters = {
