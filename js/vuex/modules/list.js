@@ -8,6 +8,7 @@ const state = {
     handler: {
         'ListLayout': 'setLayout',
         'List': 'mergeList',
+        'ListData': 'setDetail',
         'ListRelation': 'addListRelation',
         'ListRelationUpdated': 'setListRelationUpdate',
     },
@@ -21,7 +22,6 @@ const actions = {
     addListRelation({ state,rootGetters,commit },{ ListRelation,_response_data }) {
         let { action,id } = _response_data.request, rslv = rootGetters.resolution(action), relation = rslv['idn1'], list = rslv['idn2'], data = ListRelation[list][relation][id] || [];
         commit('createRelation', { list,relation,id,data });
-        //commit('setRelation',{ list,relation,id,data })
     },
     updateRelation({ getters,dispatch },{ action,id,list,relation }){
         let data = getters.relation(list,relation,id);
@@ -52,12 +52,14 @@ const mutations = {
     },
     setListRelationUpdate(state){ state.relation_update = true; },
     delListRelationUpdate(state){ state.relation_update = false; },
+    setDetail(state,{ ListData }){ _.forEach(ListData,(Data,List) => Vue.set(state.detail,List,Data)) },
 };
 
 const getters = {
     list(state){ return (id) => state.lists[id] },
     layout(state){ return (id) => state.layout[id] || _(_.head(_.values(state.lists[id]))).pickBy((val) => !(_.isArray(val) || _.isObject())).keys().mapKeys((field) => _.startCase(_.replace(field,/(\W|_)/g,' '))).mapValues((field) => _.zipObject(['field','path'],[field,''])).value() },
     selected(state){ return (id) => state.selected[id] },
+    detail({ detail }){ return (id) => detail[id] },
     relation(state){ return (list,relation,id) => state.relation[list][relation][id] },
 };
 
