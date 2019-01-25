@@ -6,7 +6,7 @@ const state = {
 
 const actions = {
     afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
-        if(to.name === 'list-action') commit('setTitleAppend',_.get(rootGetters['LIST/list'](to.params.list),[to.params.id,'name']));
+        if(to.name === 'list-action') dispatch('setTitleAppend',{ list:to.params.list,record:to.params.id });
         commit('increment'); commit('addRoute',to); if(!state.count || _.includes(discardRoutes,to.name)) return;
         if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
         dispatch('addToSet',to);
@@ -16,6 +16,10 @@ const actions = {
         _.forEachRight(set,function(setItem,index){ if(!index) return; if(isRouteObjectsEqual({ name,params },_.pick(setItem,['name','params']))) { route = index; return false; } })
         if(route) commit('setNewSet',state.set[state.set.length-1].slice(0,route));
         commit('addToSet')
+    },
+    setTitleAppend({ commit,rootGetters },{ list,record }){
+        let List = rootGetters['LIST/list'](list), identifier = _.split(rootGetters['LIST/detail'](list).identity,'.');
+        commit('setTitleAppend',_.get(List,_.concat(record,identifier)));
     }
 };
 
