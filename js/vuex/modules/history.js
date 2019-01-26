@@ -6,8 +6,8 @@ const state = {
 
 const actions = {
     afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
-        if(to.name === 'list-action') dispatch('setTitleAppend',{ list:to.params.list,record:to.params.id });
         commit('increment'); commit('addRoute',to); if(!state.count || _.includes(discardRoutes,to.name)) return;
+        if(to.name === 'list-action') dispatch('setTitlePrepend',{ list:to.params.list,record:to.params.id });
         if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
         dispatch('addToSet',to);
     },
@@ -17,9 +17,9 @@ const actions = {
         if(route) commit('setNewSet',state.set[state.set.length-1].slice(0,route));
         commit('addToSet')
     },
-    setTitleAppend({ commit,rootGetters },{ list,record }){
+    setTitlePrepend({ commit,rootGetters },{ list,record }){
         let List = rootGetters['LIST/list'](list), identifier = _.split(rootGetters['LIST/detail'](list).identity,'.');
-        commit('setTitleAppend',_.get(List,_.concat(record,identifier)));
+        commit('setTitlePrepend',_.get(List,_.concat(record,identifier)));
     }
 };
 
@@ -30,7 +30,7 @@ const mutations = {
     addToSet(state){ let setInd = (state.set.length || 1)-1; state.set[setInd].push(state.count) },
     setTitle(state,title){ state.routes[state.count].title = title },
     setNewSet(state,set){ state.set.push(set) },
-    setTitleAppend(state,title){ Vue.set(state.routes[state.count],'append',title) },
+    setTitlePrepend(state,title){ Vue.set(state.routes[state.count],'prepend',title) },
 };
 
 const getters = {
