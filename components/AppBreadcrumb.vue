@@ -3,7 +3,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" v-for="(route,index) in list">
                 <a v-if="!index" href="#"><icon class="breadcrumb-icon mr-2">angle-left</icon>{{ route }}</a>
-                <a v-else @click.prevent="go(route)" href="#">{{ compress(route.title,route.append) }}</a>
+                <a v-else @click.prevent="go(route)" href="#">{{ compress(route.title,route.prepend,route.append) }}</a>
             </li>
         </ol>
     </nav>
@@ -21,12 +21,18 @@
         methods: {
             ...mapActions(['navigate']),
             go({ name,params }){ this.navigate({ name,params }) },
-            compress(text,append){ if(!text) return ''; text = (append) ? [text,' (',append,')'].join('') : text;
+            compress(text,prepend,append){ text = textModify(text,prepend,append);
                 return (text.length > this.max * (1+this.threshold/100))
                     ? [ text.substr(0,this.max/2-3),text.substr(text.length-this.max/2+3) ].join('.....')
                     : text;
             }
         }
+    };
+    function textModify(text,prepend,append){
+        if(_.isEmpty(text)) return '';
+        if(!_.isEmpty(prepend)) text = ['(',prepend,') ',text].join('');
+        if(!_.isEmpty(append)) text = [text,' (',append,')'].join('');
+        return text;
     }
 </script>
 
