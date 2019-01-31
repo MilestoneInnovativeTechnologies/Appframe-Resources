@@ -1,6 +1,7 @@
 const state = {
     queue: [],
     wait: false,
+    timeout: 50,
 };
 
 const actions = {
@@ -9,7 +10,7 @@ const actions = {
     process({ state,getters,commit,dispatch,rootGetters }){
         if(getters.queue && !rootGetters.pageLoading && state.wait === false){
             server(state.queue.shift()).then(function({ data }){ dispatch('handleResponseData',data,{ root:true }) });
-            commit('wait',setTimeout(function({ dispatch,commit }){ commit('wait',false); dispatch('process') },100,{ dispatch,commit }))
+            commit('wait',setTimeout(function({ dispatch,commit }){ commit('wait',false); dispatch('process') },state.timeout,{ dispatch,commit }))
         }
     }
 };
