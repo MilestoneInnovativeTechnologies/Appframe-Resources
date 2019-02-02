@@ -13,7 +13,7 @@
                 <BSFormField v-else v-for="(props,fieldName) in fields" :key="[name,fieldName].join('-')" v-bind="props" :data-form-name="name" :data-form-id="dataFormId"></BSFormField>
                 <BSFormCollection v-if="collection" v-for="(cForm,cName) in collection" v-bind="cForm" :name="cName" :parent="dataFormId" :key="['F',dataFormId,'C',cName].join('-')"></BSFormCollection>
             </form>
-            <div class="card-title clearfix">
+            <div class="card-title clearfix" v-if="dataActionText">
                 <div class="float-right">
                     <BTN @click="submit">{{ dataActionText }}</BTN>
                 </div>
