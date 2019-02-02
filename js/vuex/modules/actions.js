@@ -1,22 +1,45 @@
 const state = {
     store: {},
+    handler: {
+        ListRelation: ['checkAndFetchAddRelation'],
+        AddRelationAction: ['setRelationFloats']
+    },
     display: {},
     menu: {},
     list: {},
     data: {},
     confirm: {},
     resource: {},
+    defaults: {},
+    float: {},
 };
 
 const actions = {
-    init({ rootGetters,commit }){
-        _.forEach(rootGetters._actions,function(action){
-            _.forEach(actionRunCommits,(mutation) => commit(mutation,action))
-        })
+    init({ rootGetters,commit,dispatch }){
+        _.forEach(rootGetters._actions,function(action){ _.forEach(actionRunCommits,(mutation) => commit(mutation,action)); });
+        commit('setDefaults',_(rootGetters._resources).map('resource.defaults').filter().keyBy('resource').mapValues((O) => _.pick(O,['list','create','read','update']) ).value());
+        dispatch('setFloats')
     },
     action({ dispatch },payload){
         dispatch('navigate',payload,{ root:true });
     },
+    setFloats({ commit,state }){
+        let actions = _(state.store).keys().map(_.toString).value(), maps = { list:'create',read:'update' };
+        _.forEach(state.defaults,(defaults) => {
+            let data = _.mapValues(defaults,_.toString);
+            _.forEach(maps,(d,s) => {
+                if(_.includes(actions, data[s]) && _.includes(actions, data[d])) commit('setFloat',{ from:data[s],to:data[d] })
+            })
+        })
+    },
+    checkAndFetchAddRelation({ dispatch },{ ListRelation,_response_data }){
+        if(!_response_data.Resolve) return;
+        _.forEach(_response_data.Resolve,(rslv) => dispatch('post',{ action:'getaddrelations',relation:rslv.idn1,referer:_response_data.request.action },{ root:true }))
+    },
+    setRelationFloats({ commit,state },{ AddRelationAction }){
+        let actns = _(state.store).keys().map(_.toString).value();
+        _.forEach(AddRelationAction,(relActionsObj,from) => _.forEach(relActionsObj,(actions) => _.map(actions,(to) => (_.includes(actns,_.toString(to))) ? commit('setFloat',{ from,to }) : null)))
+    }
 };
 
 const mutations = {
@@ -34,6 +57,8 @@ const mutations = {
         _.forEach(data,function({ resource_data }){ if(!state.data[resource_data]) state.data = Object.assign({},state.data,_.fromPairs([[resource_data,[]]])); state.data[resource_data].push(id); })
     },
     setConfirm(state,{ id,confirm }){ if(!confirm) return; state.confirm = Object.assign({},state.confirm,_.fromPairs([[id,confirm]])) },
+    setDefaults(state,data){ state.defaults = Object.assign({},state.defaults,data) },
+    setFloat(state,{ from,to }){ Vue.set(state.float,from,to) },
 };
 
 const getters = {
