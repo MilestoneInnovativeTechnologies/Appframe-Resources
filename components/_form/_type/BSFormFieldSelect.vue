@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import { mapGetters,mapActions } from 'vuex';
+    import { mapGetters,mapMutations,mapActions } from 'vuex';
     export default {
         name: "BSFormFieldSelect",
         props:['dataFormId','name','id'],
@@ -19,7 +19,7 @@
             control_id(){ return [this.name,this.dataFormId,this.id].join('_') },
         },
         methods: {
-            ...mapActions('FOPT',{ fetchOptions:'fetch' }),
+            ...mapActions('FOPT',{ fetchOptions:'fetch' }), ...mapMutations('FORM',['updateDefaultData']),
             initSelect2(){
                 let vm = this, options = { minimumResultsForSearch: 12, allowClear: true, placeholder: '' },
                     value = vm.value || ((this.option.type === 'Enum' && this.options) ? _.head(_.keys(this.options)) : (_.has(vm.$attrs,'multiple') ? [] : null)),
@@ -45,7 +45,7 @@
         },
         watch: {
             options(options){
-                if(this.option.type === 'Enum' && _.isEmpty(this.value)) this.value = _.head(_.keys(options));
+                if(this.option.type === 'Enum' && _.isEmpty(this.value)) { this.value = _.head(_.keys(options)); this.updateDefaultData({ form:this.dataFormId,field:this.name,value:this.value }) }
                 else if(!_.isEmpty(this.value)) $(`select#${this.control_id}`).val(this.value).trigger('change');
                 if(this.depends_has) this.initSelect2();
             }
