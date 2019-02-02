@@ -7,7 +7,7 @@ const state = {
 const actions = {
     afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
         commit('increment'); commit('addRoute',to); if(!state.count || _.includes(discardRoutes,to.name)) return;
-        if(to.name === 'list-action') dispatch('setTitlePrepend',{ list:to.params.list,record:to.params.id });
+        if(to.name === 'list-action' && to.params.list) dispatch('setTitlePrepend',{ list:to.params.list,record:to.params.id });
         if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
         dispatch('addToSet',to);
     },
