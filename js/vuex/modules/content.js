@@ -1,6 +1,7 @@
 const state = {
     AppContent: null,
-    resource:null,
+    resource: null,
+    FabContent: null,
 };
 
 const actions = {
