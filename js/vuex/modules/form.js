@@ -51,7 +51,8 @@ const actions = {
         dispatch('SPST/postRequestServer', null, { root:true });
     },
 
-    showResponsePage({ dispatch },{ _response_data }){
+    showResponsePage({ rootGetters,dispatch },{ _response_data }){
+        if(_response_data.request.action != rootGetters["CONT/action"]('AppContent')) return;
         let request = _response_data.request, name = 'form-submit-' + (request.record ? 'update' : 'new'),
             params = { action:request.action,form:request.form,record:request.record,id:request.record };
         dispatch('navigate', { name,params }, { root:true });
