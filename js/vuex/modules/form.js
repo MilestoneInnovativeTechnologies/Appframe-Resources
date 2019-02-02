@@ -8,6 +8,7 @@ const state = {
     forms: {},
     layout:{},
     data: {},
+    defaultdata: {},
     invalids: {},
     submitting: {},
     collection: {},
@@ -19,9 +20,9 @@ const actions = {
 
     newForm({ commit,dispatch },{ Form }){
         _.forEach(Form,(Obj,id) => {
-            let form = _.pick(Obj,['name','title','action_text']);
-            form['fields'] = getFieldExtract(Form[id].fields);
-            commit('storeForm',{ id,form,data:getValueExtract(form['fields']),invalids:getInvalidExtract(form['fields']),layout:getLayoutExtract(Form[id]['layout'],Form[id]['fields']) });
+            let form = _.pick(Obj,['name','title','action_text']), fields = getFieldExtract(Obj.fields), data = getValueExtract(fields);
+            form['fields'] = fields;
+            commit('storeForm',{ id,form,data,defaultdata:_.cloneDeep(data),invalids:getInvalidExtract(fields),layout:getLayoutExtract(Obj.layout,Obj.fields) });
             if(Obj.collections && !_.isEmpty(Obj.collections)) dispatch('addCollection',{ form:id,Collection:Obj.collections })
         });
     },
@@ -78,16 +79,17 @@ const mutations = {
         let id = payload.id, submitting = {};
         submitting[id] = false;
         Vue.set(state.forms,id,payload.form);
-        _.each(['layout','data','invalids'],(itm) => Vue.set(state[itm],id,payload[itm]));
+        _.each(['layout','data','invalids','defaultdata'],(itm) => Vue.set(state[itm],id,payload[itm]));
         state.submitting = Object.assign({},state.submitting,submitting);
     },
     updateValue({ data },{ form,field,value }){ let curVal = data[form][field]; data[form][field] = _.isArray(curVal) ? _(_.concat(curVal,value)).compact().uniq().map(_.toString).value() : value; },
+    updateDefaultData({ defaultdata },{ form,field,value }){ let curVal = defaultdata[form][field]; defaultdata[form][field] = _.isArray(curVal) ? [value] : value; },
     removeValue({ data },{ form,field,value }){ (_.isArray(data[form][field]) && _.includes(data[form][field],value)) ? data[form][field].splice(_.indexOf(data[form][field],value),1) : data[form][field] = '' },
     addInvalid(state,{ form,field,value,text }){ Vue.set(state.invalids[form][field],value,text); },
     submitting(state,{ form,status }){ state.submitting[form] = status },
     addFormSubmitData(state,{ FormSubmitData }){ let id = _.keys(FormSubmitData)[0]; if(!state.submit[id]) state.submit = Object.assign({},state.submit,_.fromPairs([[id,null]])); state.submit[id] = FormSubmitData[id]; },
     delFormSubmitData(state,id){ state.submit[id] = null; },
-    reset(state,id){ _.each(state.data[id],(value,field) => { if(state.forms[id].fields[field]) state.data[id][field] = (_.isEmpty(state.forms[id].fields[field].value) || _.isObject(state.forms[id].fields[field].value)) ? ((_.isArray(value)) ? [] : null) : state.forms[id].fields[field].value } ) },
+    reset(state,id){ Vue.set(state.data,id,_.cloneDeep(state.defaultdata[id])) },
     addCollection(state,{ form,collection }){
         if(!state.collection[form]) Vue.set(state.collection,form,{});
         let cForm = collection.form.id, cRel = collection.relation ? _.snakeCase(collection.relation.method) : null, skip = collection.foreign_field ? getFieldNameFromId(collection.foreign_field,collection.form.fields) : null;
