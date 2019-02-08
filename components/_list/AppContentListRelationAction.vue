@@ -7,7 +7,7 @@
         name: "AppContentListRelationAction",
         props: ['idns'],
         computed: {
-            listId(){ return this.idns[1] }
+            listId(){ return [this.idns[1]] }
         }
     }
 </script>
