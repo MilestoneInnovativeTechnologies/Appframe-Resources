@@ -5,15 +5,16 @@ const state = {
 };
 
 const actions = {
-    afterEachRoute({ state,rootGetters,commit,dispatch },{ to }){
+    afterEachRoute({ state,rootGetters,commit,dispatch },{ to,from }){
         commit('increment'); commit('addRoute',to); if(!state.count || _.includes(discardRoutes,to.name)) return;
         if(to.name === 'list-action' && to.params.list) dispatch('setTitlePrepend',{ list:to.params.list,record:to.params.id });
-        if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
+        else if(_.includes(discardRoutes,from.name)){  }
+        else if(to.name === 'menu-action') commit('addNewSet',rootGetters.resources[rootGetters.actionResource(to.params.action)]);
         dispatch('addToSet',to);
     },
     addToSet({ state,getters,commit },{ name,params }){
         let set = getters.set(), route = null; if(_.isEmpty(set)) commit('addNewSet','-');
-        _.forEachRight(set,function(setItem,index){ if(!index) return; if(isRouteObjectsEqual({ name,params },_.pick(setItem,['name','params']))) { route = index; return false; } })
+        _.forEachRight(set,function(setItem,index){ if(!index) return; if(isRouteObjectsEqual({ name,params },_.pick(setItem,['name','params']))) { route = index; return false; } });
         if(route) commit('setNewSet',state.set[state.set.length-1].slice(0,route));
         commit('addToSet')
     },
@@ -25,7 +26,7 @@ const actions = {
 
 const mutations = {
     increment(state){ state.count++ },
-    addRoute(state,to){ state.routes = Object.assign({},state.routes,_.zipObject([state.count],[{ name:to.name,params:to.params,title:null }])) },
+    addRoute(state,to){ state.routes = Object.assign({},state.routes,_.zipObject([state.count],valuesToString([{ name:to.name,params:to.params,title:null }]))) },
     addNewSet(state,resource){ state.set.push([resource]) },
     addToSet(state){ let setInd = (state.set.length || 1)-1; state.set[setInd].push(state.count) },
     setTitle(state,title){ state.routes[state.count].title = title },
@@ -37,6 +38,7 @@ const getters = {
     set(state){ return (n = null) => _.map(state.set[n === null ? state.set.length-1 : n],function(route,index){ return (index) ? state.routes[route] : route}) },
 };
 
+import { valuesToString } from '../../common/Vuex';
 export default {
     namespaced: true,
     state, getters, actions, mutations
