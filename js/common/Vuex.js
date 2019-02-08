@@ -18,3 +18,17 @@ export function getKeyedObject(Obj,Key,Values){
     Values = Values || _.keys(_.head(Obj));
     return _(Obj).keyBy(Key).mapValues(obj => _.pick(obj,Values)).value();
 }
+
+//
+// Convert all the elements into string of an array
+// Converts all the values of a object into string
+// Converts into string
+// Accepts nested or plain array,object,string,numeric
+//
+export function valuesToString(Obj){
+    return _.isObject(Obj)
+        ? _.isArray(Obj)
+                ? _.map(Obj,(el) => valuesToString(el))
+                : (_.isPlainObject(Obj)) ? _.mapValues(Obj,(val) => valuesToString(val)) : Obj
+        : _.toString(Obj);
+}
