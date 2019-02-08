@@ -64,7 +64,7 @@ const mutations = {
 const getters = {
     actions(state){ return (content,id) => _.mapValues(state[_.lowerCase(content)][id],(action) => state.display[action]); },
     confirm(state){ return (id) => state.confirm[id] },
-    resource(state){ return (action) => _.findKey(state.resource,(actions) => _.includes(actions,action)); },
+    resource(state){ return (action) => _.findKey(state.resource,(actions) => _.includes(actions,_.toInteger(action))); },
 };
 
 export default {
