@@ -12,10 +12,12 @@
     export default {
         name: "FormSubmitDataList",
         props: ['title','description'],
+        data(){ return {
+            removeHeads: ['created_at','updated_at','pivot','created_by','updated_by'],
+        }},
         computed: {
             data(){ return this.description; },
-            removeHeads(){ return ['created_at','updated_at','pivot'] },
-            heads(){ let omit = this.removeHeads; return _.filter(_.keys(_.head(this.data)),function(hd){ return !_.includes(omit,hd); }); },
+            heads() { return _.difference(_.keys(_.head(this.data)), this.removeHeads); }
         },
         methods: {
             content(Obj,Hd){ let cnt = _.get(Obj,Hd); return _.isObject(cnt) ? '' : cnt }
