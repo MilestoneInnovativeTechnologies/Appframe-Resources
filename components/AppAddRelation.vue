@@ -13,17 +13,17 @@
         name: "AppAddRelation",
         props: ['dataIds'],
         computed: {
-            id(){ return this.dataIds['idn2'] }, record(){ return this.$route.params.id }, list(){ return this.$route.params.list },
+            id(){ return this.dataIds['idn2'] }, record(){ return this.$route.params.id }, list(){ return this.$route.params.list }, foreign_field_id(){ return _.get(this.dataIds,'idn3') },
             ...mapGetters({ getForm:'form',getLayout:'layout',getSubmit:'getSubmit' }),
-            foreign(){ return _.head(_.keys(this.form.fields)); },
             form(){ return this.getForm(this.id) },
+            foreign(){ return _.findKey(this.form.fields,Obj => Obj.id == this.foreign_field_id) },
             fields(){ return _.omit(this.form.fields,this.foreign) },
             layout(){ return _.omit(this.getLayout(this.id),this.foreign) },
             submitData(){ return this.getSubmit(this.id) },
         },
         methods: mapMutations(['updateValue']),
         created(){
-            if(this.form) this.updateValue({ form:this.id,field:this.foreign,value:this.record })
+            if(this.form && this.foreign) this.updateValue({ form:this.id,field:this.foreign,value:this.record })
         },
     }
 </script>
