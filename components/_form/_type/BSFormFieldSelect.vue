@@ -1,5 +1,5 @@
 <template>
-    <select :name="name" v-model="value" class="custom-select" :id="control_id">
+    <select data-toggle="select2" :name="name" v-model="value" class="custom-select" :id="control_id">
         <option v-for="(label,value) in options" :value="value" :key="['SO',dataFormId,name,value].join('-')">{{ label }}</option>
     </select>
 </template>
@@ -21,6 +21,7 @@
         methods: {
             ...mapActions('FOPT',{ fetchOptions:'fetch' }), ...mapMutations('FORM',['updateDefaultData']),
             initSelect2(){
+                return;
                 let vm = this, options = { minimumResultsForSearch: 12, allowClear: true, placeholder: '' },
                     value = vm.value || ((this.option.type === 'Enum' && this.options) ? _.head(_.keys(this.options)) : (_.has(vm.$attrs,'multiple') ? [] : null)),
                     select2 = $(`select#${this.control_id}`);
