@@ -1,5 +1,5 @@
 <template>
-    <h1 class="page-title mr-sm-auto"> {{ title }} </h1>
+    <div class="d-md-flex align-items-md-start"><h1 class="page-title"> {{ title }} </h1></div>
 </template>
 
 <script>

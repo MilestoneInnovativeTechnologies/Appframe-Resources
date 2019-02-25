@@ -21,8 +21,6 @@
             return {
                 comp: 'Resources',
                 navs: ['Resources'/*,'User','Theme'*/],
-                //menu: mapState('ACTN',['menu']),
-                //resources: this.$store.getters.resources,
             }
         },
         computed: {
