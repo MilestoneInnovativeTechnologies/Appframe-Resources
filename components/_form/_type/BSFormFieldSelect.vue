@@ -35,6 +35,7 @@
             }
         },
         created(){
+            if(!$('script[name="select2"]').length) $('head:first').append([$('<script>').attr({ name:'select2',src:this.asset_root+'js/select2.min.js' }),$('<link>').attr({ name:'select2',rel:'stylesheet',href:this.asset_root+'css/select2.min.css' })]);
             if(this.option.preload === 'Yes' && (!this.options || this.option.type !== 'Enum')) this.fetchOptions({ id:this.option_id,latest:this.getLatest(this.option_id) });
         },
         beforeDestroy () {
