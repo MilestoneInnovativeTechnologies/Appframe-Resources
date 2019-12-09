@@ -61,6 +61,7 @@ const getters = {
     selected(state){ return (id) => state.selected[id] },
     detail({ detail }){ return (id) => detail[id] },
     relation(state){ return (list,relation,id) => state.relation[list][relation][id] },
+    record(state,{ list }){ return (listId,recordId) => list(listId)[recordId] },
 };
 
 export default {

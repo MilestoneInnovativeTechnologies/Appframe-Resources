@@ -1,5 +1,5 @@
 <template>
-    <BTN :disabled="disabled" class="ml-1" :icon="icon" :type="type" size="xs" @click="clicked">{{ title }}</BTN>
+    <BTN :disabled="disabled" v-show="show" class="ml-1" :icon="icon" :type="type" size="xs" @click="clicked">{{ title }}</BTN>
 </template>
 
 <script>
@@ -8,8 +8,10 @@
         name: "ListAction",
         props: ['listId','id','type','icon','title','confirm'],
         computed: {
-            ...mapGetters('LIST',{ getSelected:'selected' }),
+            ...mapGetters({ getSelected:'LIST/selected',onStatement:'ACTN/on',selectedRecord:'LIST/record' }),
             selected(){ return this.getSelected(this.listId) },
+            record(){ return this.selectedRecord(this.listId,this.selected) },
+            show(){ return this.onFunction(this.record || {}); },
             disabled(){ return this.selected ? false : 'disabled'; },
         },
         methods: {
@@ -23,6 +25,9 @@
                     modal.find('.warning-msg').text(msg);
                     modal.find('#ListWarningDismiss').bind('click',{ btnActn,modal },function({ data }){ data.btnActn(); data.modal.modal('hide') });
                 }).modal('show') }
+        },
+        created(){
+            this.onFunction = new Function('record','return !!(' + (this.onStatement(this.id) || 'true') + ');');
         }
     }
 </script>

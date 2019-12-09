@@ -12,6 +12,7 @@ const state = {
     resource: {},
     defaults: {},
     float: {},
+    on: {},
 };
 
 const actions = {
@@ -57,6 +58,7 @@ const mutations = {
         _.forEach(data,function({ resource_data }){ if(!state.data[resource_data]) state.data = Object.assign({},state.data,_.fromPairs([[resource_data,[]]])); state.data[resource_data].push(id); })
     },
     setConfirm(state,{ id,confirm }){ if(!confirm) return; state.confirm = Object.assign({},state.confirm,_.fromPairs([[id,confirm]])) },
+    setOnStatement(state,{ id,on }){ if(!on) return; state.on = Object.assign({},state.on,_.fromPairs([[id,on]])) },
     setDefaults(state,data){ state.defaults = Object.assign({},state.defaults,data) },
     setFloat(state,{ from,to }){ Vue.set(state.float,from,to) },
 };
@@ -64,6 +66,7 @@ const mutations = {
 const getters = {
     actions(state){ return (content,id) => _.mapValues(state[_.lowerCase(content)][id],(action) => state.display[action]); },
     confirm(state){ return (id) => state.confirm[id] },
+    on(state){ return (id) => state.on[id] },
     resource(state){ return (action) => _.findKey(state.resource,(actions) => _.includes(actions,_.toInteger(action))); },
 };
 
@@ -73,5 +76,5 @@ export default {
 }
 
 const actionRunCommits = [
-    'storeAction','setDisplay','setMenu','setResourceActions','setListActions','setDataActions','setConfirm'
+    'storeAction','setDisplay','setMenu','setResourceActions','setListActions','setDataActions','setConfirm','setOnStatement'
 ];
