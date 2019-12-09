@@ -11,7 +11,7 @@
             ...mapGetters({ getSelected:'LIST/selected',onStatement:'ACTN/on',selectedRecord:'LIST/record' }),
             selected(){ return this.getSelected(this.listId) },
             record(){ return this.selectedRecord(this.listId,this.selected) },
-            show(){ return this.onFunction(this.record || {}); },
+            show(){ return this.record ? this.onFunction(this.record) : false; },
             disabled(){ return this.selected ? false : 'disabled'; },
         },
         methods: {
@@ -27,7 +27,7 @@
                 }).modal('show') }
         },
         created(){
-            this.onFunction = new Function('record','return !!(' + (this.onStatement(this.id) || 'true') + ');');
+            this.onFunction = new Function('record',' try { return !!(' + (this.onStatement(this.id) || 'true') + ') } catch(e){ console.error("Resource action - ON STATEMENT - throws error.",record) };');
         }
     }
 </script>
