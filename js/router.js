@@ -1,7 +1,7 @@
 
 const components = {
-    appcontent: require('../components/AppContent'),
-    fabcontent: require('../components/FABContent'),
+    appcontent: require('../components/AppContent').default,
+    fabcontent: require('../components/FABContent').default,
 };
 
 const props = new Object({ ..._.mapValues(components,()=>true) });
