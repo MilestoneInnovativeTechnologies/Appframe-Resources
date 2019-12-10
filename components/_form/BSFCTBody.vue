@@ -1,7 +1,7 @@
 <template>
     <tbody>
         <tr v-if="empty"><td :colspan="names.length+2" class="text-center">no data, start adding..</td></tr>
-        <tr v-else v-for="(values,id,no) in collectiondata" :key="['FCD',this.form,this.name,id].join('-')">
+        <tr v-else v-for="(values,id,no) in collectiondata" :key="['FCD',form,name,id].join('-')">
             <th>{{ no+1 }}</th>
             <td v-for="(value,name) in values">{{ displayText(name,value) }}</td>
             <th><BTN size="xs" type="outline-warning" @click.prevent="del(id)">Del</BTN></th>
