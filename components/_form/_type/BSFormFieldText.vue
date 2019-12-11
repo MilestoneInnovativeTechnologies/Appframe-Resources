@@ -1,5 +1,5 @@
 <template>
-    <input :type="type" :name="name" v-model.lazy="value" class="form-control" />
+    <input :type="type" :name="name" v-model.lazy="value" class="form-control" autocomplete="off" />
 </template>
 
 <script>
