@@ -1,10 +1,10 @@
 <template>
-    <textarea class="form-control" v-model.lazy="value"></textarea>
+    <textarea readonly class="form-control-plaintext">{{ value }}</textarea>
 </template>
 
 <script>
     export default {
-        name: "BSFormFieldTextarea",
+        name: "BSFormFieldStatictextarea",
         mixins: [require('./../../../js/common/BSFormFieldValueMixin').fieldValueMixin],
         inheritAttrs: false,
     }
