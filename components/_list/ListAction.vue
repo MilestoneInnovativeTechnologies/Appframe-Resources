@@ -10,7 +10,7 @@
         computed: {
             ...mapGetters({ getSelected:'LIST/selected',onStatement:'ACTN/on',selectedRecord:'LIST/record' }),
             selected(){ return this.getSelected(this.listId) },
-            record(){ return this.selectedRecord(this.listId,this.selected) },
+            record(){ return this.selected ? this.selectedRecord(this.listId,this.selected) : null },
             show(){ return this.record ? this.onFunction(this.record) : false; },
             disabled(){ return this.selected ? false : 'disabled'; },
         },
